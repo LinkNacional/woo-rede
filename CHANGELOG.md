@@ -1,3 +1,7 @@
+# 5.4.11 - 10/09/2026
+* Ajuste: Logs dos gateways adequados às normas ABECS.
+* Ajuste: Textos do analytics ajustados para tradução.
+
 # 5.4.10 - 26/08/2026
 * Ajuste: Cancelamento ou timeout no desafio 3D Secure agora recusa a transação (onFailure sempre "decline").
 * Ajuste: Cartões não registrados no 3DS (returnCode 204) são reenviados sem 3DS quando "Continuar sem 3DS" está habilitado.
