@@ -408,18 +408,20 @@ final class LknIntegrationRedeForWoocommerceWcMaxipagoDebit extends LknIntegrati
             $order->update_meta_data('lknWcRedeOrderLogs', $orderLogs);
 
             // Adiciona nota de status do pagamento estilo Maxipago[Success.] ou Maxipago[Failed.]
+            $maxipago_processor_code = $xml_decode['processorCode'] ?? '';
+            $maxipago_processor_message = LknIntegrationRedeForWoocommerceAbecsCodes::translate($maxipago_processor_code, $xml_decode['processorMessage'] ?? '');
             if (isset($xml_decode['responseCode']) && "0" == $xml_decode['responseCode']) {
                 $order->add_order_note(
                     '[' . $this->id . '] ' . sprintf(
                         'Maxipago[Success.] %s',
-                        $xml_decode['processorMessage'] ?? ''
+                        $maxipago_processor_message
                     )
                 );
             } else {
                 $order->add_order_note(
                     '[' . $this->id . '] ' . sprintf(
                         'Maxipago[Failed.] %s',
-                        $xml_decode['processorMessage'] ?? ''
+                        $maxipago_processor_message
                     )
                 );
             }
@@ -675,7 +677,7 @@ final class LknIntegrationRedeForWoocommerceWcMaxipagoDebit extends LknIntegrati
                 $order->update_status('processing');
                 apply_filters("integration_rede_for_woocommerce_change_order_status", $order, $this);
             } elseif (isset($xml_decode['responseCode']) && "1" == $xml_decode['responseCode']) {
-                throw new Exception($xml_decode['processorMessage']);
+                throw new Exception(LknIntegrationRedeForWoocommerceAbecsCodes::translate($xml_decode['processorCode'] ?? '', $xml_decode['processorMessage'] ?? ''));
             }
 
             if ("INVALID REQUEST" == $xml_decode['responseMessage']) {

@@ -1252,7 +1252,9 @@ class LknIntegrationRedeForWoocommerceHelper
         $httpStatusDescription = self::getHttpStatusDescription($httpStatus);
         $httpStatusFormatted = $httpStatus && $httpStatus !== 'N/A' ? $httpStatus . ' - ' . $httpStatusDescription : 'N/A';
 
-        $returnCodeFormatted = !empty($returnCode) && !empty($returnMessage) ? $returnCode . ' - ' . $returnMessage : 'N/A';
+        $translatedReturnMessage = LknIntegrationRedeForWoocommerceAbecsCodes::translate($returnCode, $returnMessage);
+        $returnCodeRaw = !empty($returnCode) ? (string) $returnCode : '';
+        $returnCodeFormatted = '' !== $returnCodeRaw ? $returnCodeRaw . ' - ' . $translatedReturnMessage : 'N/A';
 
         // Environment baseado no gateway
         $environment = 'Sandbox';
@@ -1366,6 +1368,7 @@ class LknIntegrationRedeForWoocommerceHelper
             'response' => [
                 'http_status' => $httpStatusFormatted,
                 'return_code' => $returnCodeFormatted,
+                'return_message' => $translatedReturnMessage,
             ]
         ];
 

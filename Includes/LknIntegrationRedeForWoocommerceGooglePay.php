@@ -837,7 +837,10 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
             }
         }
 
-        return array('success' => false, 'message' => $response_data['returnMessage'] ?? __('Payment processing failed', 'woo-rede'));
+        $returnCode = $response_data['returnCode'] ?? '';
+        $returnMessage = $response_data['returnMessage'] ?? __('Payment processing failed', 'woo-rede');
+
+        return array('success' => false, 'message' => LknIntegrationRedeForWoocommerceAbecsCodes::translate($returnCode, $returnMessage));
     }
 
     private function decryptGooglePayToken($encrypted_token_string)

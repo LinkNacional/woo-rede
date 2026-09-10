@@ -717,7 +717,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
 
         // Adiciona notas ao pedido
         /* translators: %s: return message from payment processor */
-        $status_note = sprintf('Rede[%s]', $return_message);
+        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $return_message));
         $order->add_order_note('[' . $this->id . '] ' . $status_note . ' ' . $note);
 
         if ($return_code == '00') {
@@ -816,11 +816,18 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
         }
         
         if ($response_code !== 200 && $response_code !== 201) {
-            $error_message = 'Erro na transação';
+            $error_message = 'Transaction error';
+            $return_code = $response_data['returnCode'] ?? '';
+
             if (isset($response_data['returnMessage'])) {
                 $error_message = $response_data['returnMessage'];
             } elseif (isset($response_data['errors']) && is_array($response_data['errors'])) {
                 $error_message = implode(', ', $response_data['errors']);
+            }
+
+            $error_message = LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $error_message);
+            if ('' !== $return_code) {
+                $error_message .= ' (Error code: ' . $return_code . ')';
             }
             
             // Salvar metadados em caso de erro HTTP
@@ -844,7 +851,12 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
         }
         
         if (!isset($response_data['returnCode']) || $response_data['returnCode'] !== '00') {
-            $error_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : 'Transação recusada';
+            $return_code = $response_data['returnCode'] ?? '';
+            $raw_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : 'Transaction declined';
+            $error_message = LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $raw_message);
+            if ('' !== $return_code) {
+                $error_message .= ' (Error code: ' . $return_code . ')';
+            }
             
             // Salvar metadados em caso de transação recusada
             if ($order) {
@@ -945,14 +957,14 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                 // Salvar metadados da transação com dados customizados para erro de validação
                 $customErrorResponse = LknIntegrationRedeForWoocommerceHelper::createCustomErrorResponse(
                     400,
-                    07,
+                    38,
                     __('CardNumber: Required parameter missing', 'woo-rede')
                 );
                 LknIntegrationRedeForWoocommerceHelper::saveTransactionMetadata(
                     $order, $customErrorResponse, $cardData['card_number'], $creditExpiry, $cardData['card_holder'],
                     $installments, $order->get_total(), $order_currency, '', $this->pv, $this->token,
                     $orderId . '-' . time(), $orderId, $this->auto_capture, 'Credit', $cardData['card_cvv'],
-                    $this, '', '', '', 07, __('CardNumber: Required parameter missing', 'woo-rede')
+                    $this, '', '', '', 38, __('CardNumber: Required parameter missing', 'woo-rede')
                 );
                 $order->save();
                 
@@ -964,14 +976,14 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                 // Salvar metadados da transação com dados customizados para erro de validação
                 $customErrorResponse = LknIntegrationRedeForWoocommerceHelper::createCustomErrorResponse(
                     400,
-                    '09',
+                    37,
                     __('CardNumber: Invalid parameter format', 'woo-rede')
                 );
                 LknIntegrationRedeForWoocommerceHelper::saveTransactionMetadata(
                     $order, $customErrorResponse, $cardData['card_number'], $creditExpiry, $cardData['card_holder'],
                     $installments, $order->get_total(), $order_currency, '', $this->pv, $this->token,
                     $orderId . '-' . time(), $orderId, $this->auto_capture, 'Credit', $cardData['card_cvv'],
-                    $this, '', '', '', '09', __('CardNumber: Invalid parameter format', 'woo-rede')
+                    $this, '', '', '', 37, __('CardNumber: Invalid parameter format', 'woo-rede')
                 );
                 $order->save();
                 
@@ -983,14 +995,14 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                 // Salvar metadados da transação com dados customizados para erro de validação
                 $customErrorResponse = LknIntegrationRedeForWoocommerceHelper::createCustomErrorResponse(
                     400,
-                    36,
+                    50,
                     __('Invalid installments number', 'woo-rede')
                 );
                 LknIntegrationRedeForWoocommerceHelper::saveTransactionMetadata(
                     $order, $customErrorResponse, $cardData['card_number'], $creditExpiry, $cardData['card_holder'],
                     $installments, $order->get_total(), $order_currency, '', $this->pv, $this->token,
                     $orderId . '-' . time(), $orderId, $this->auto_capture, 'Credit', $cardData['card_cvv'],
-                    $this, '', '', '', 36, __('Invalid installments', 'woo-rede')
+                    $this, '', '', '', 50, __('Invalid installments', 'woo-rede')
                 );
                 $order->save();
                 
