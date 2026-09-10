@@ -988,7 +988,7 @@ final class LknIntegrationRedeForWoocommerceWcEndpoint
         
         // Adiciona informação sobre o tipo de cartão detectado na nota
         $card_type_note = sprintf(' [Card Type: %s, Capture: %s]', $saved_card_type, $capture ? 'Yes' : 'No');
-        $status_note = sprintf('Rede[%s]', $return_message);
+        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $return_message));
         $order->add_order_note('[' . $order->get_payment_method() . '] ' . $status_note . ' ' . $note . $card_type_note);
 
         if ($return_code == '00') {

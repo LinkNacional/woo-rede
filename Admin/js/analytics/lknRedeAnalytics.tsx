@@ -3,41 +3,47 @@
  * Página de analytics das transações Rede com Grid.js
  */
 import React, { useEffect, useRef, useState } from 'react';
-import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 import { Grid, html } from 'gridjs';
 import { decode } from '@toon-format/toon';
 import 'gridjs/dist/theme/mermaid.css';
 
+// Traduções enviadas pelo PHP via wp_localize_script (lknRedeAnalyticsI18n).
+// A chave é o texto original e o valor é a tradução ativa do site.
+const t = (text: string): string => {
+    const i18n = (window as any).lknRedeAnalyticsI18n || {};
+    return typeof i18n[text] === 'string' && i18n[text] !== '' ? i18n[text] : text;
+};
+
 // Definição das colunas padrão
 const DEFAULT_COLUMNS = [
-    { id: 'gateway', name: 'Card/PIX', visible: true },
-    { id: 'cvv_sent', name: 'CVV Enviado', visible: true },
-    { id: 'type', name: 'Tipo', visible: true },
-    { id: 'installments', name: 'Parcelas', visible: true },
-    { id: 'installment_amount', name: 'Vlr. Parcela', visible: true },
-    { id: 'brand', name: 'Bandeira', visible: true },
-    { id: 'expiry', name: 'Vencimento', visible: true },
-    { id: 'datetime', name: 'Data/Hora', visible: true },
-    { id: 'total', name: 'Total', visible: true },
-    { id: 'subtotal', name: 'Subtotal', visible: true },
-    { id: 'shipping', name: 'Frete', visible: true },
-    { id: 'interest_discount', name: 'Juros/Desc.', visible: true },
-    { id: 'currency', name: 'Moeda', visible: true },
-    { id: 'capture', name: 'Captura', visible: true },
-    { id: 'recurrent', name: 'Recorrente', visible: true },
-    { id: 'auth_3ds', name: '3DS Auth', visible: true },
-    { id: 'tid', name: 'TID/PaymentId', visible: true },
-    { id: 'environment', name: 'Ambiente', visible: true },
-    { id: 'payment_gateway', name: 'Gateway', visible: true },
-    { id: 'order_id', name: 'Order ID', visible: true },
-    { id: 'reference', name: 'Reference', visible: true },
-    { id: 'pv', name: 'PV', visible: true },
-    { id: 'token', name: 'Token', visible: true },
-    { id: 'return_code', name: 'Return Code', visible: true },
-    { id: 'http_status', name: 'HTTP Status', visible: true },
-    { id: 'holder_name', name: 'Portador', visible: true },
-    { id: 'whatsapp', name: 'Suporte', visible: true }
+    { id: 'gateway', name: t('Card/PIX'), visible: true },
+    { id: 'cvv_sent', name: t('CVV Sent'), visible: true },
+    { id: 'type', name: t('Type'), visible: true },
+    { id: 'installments', name: t('Installments'), visible: true },
+    { id: 'installment_amount', name: t('Installment Value'), visible: true },
+    { id: 'brand', name: t('Brand'), visible: true },
+    { id: 'expiry', name: t('Expiry'), visible: true },
+    { id: 'datetime', name: t('Date/Time'), visible: true },
+    { id: 'total', name: t('Total'), visible: true },
+    { id: 'subtotal', name: t('Subtotal'), visible: true },
+    { id: 'shipping', name: t('Shipping'), visible: true },
+    { id: 'interest_discount', name: t('Interest/Discount'), visible: true },
+    { id: 'currency', name: t('Currency'), visible: true },
+    { id: 'capture', name: t('Capture'), visible: true },
+    { id: 'recurrent', name: t('Recurrent'), visible: true },
+    { id: 'auth_3ds', name: t('3DS Auth'), visible: true },
+    { id: 'tid', name: t('TID/PaymentId'), visible: true },
+    { id: 'environment', name: t('Environment'), visible: true },
+    { id: 'payment_gateway', name: t('Gateway'), visible: true },
+    { id: 'order_id', name: t('Order ID'), visible: true },
+    { id: 'reference', name: t('Reference'), visible: true },
+    { id: 'pv', name: t('PV'), visible: true },
+    { id: 'token', name: t('Token'), visible: true },
+    { id: 'return_code', name: t('Return Code'), visible: true },
+    { id: 'http_status', name: t('HTTP Status'), visible: true },
+    { id: 'holder_name', name: t('Holder'), visible: true },
+    { id: 'whatsapp', name: t('Support'), visible: true }
 ];
 
 // Componente principal para Analytics do Rede
@@ -213,7 +219,7 @@ const RedeAnalyticsPage = () => {
         try {
             return decode(toonString);
         } catch (e) {
-            console.error('Erro ao decodificar TOON:', e);
+            console.error('Error decoding TOON:', e);
             return null;
         }
     };
@@ -245,7 +251,7 @@ const RedeAnalyticsPage = () => {
                 return mergedConfig;
             }
         } catch (e) {
-            console.error('Erro ao carregar configuração de colunas:', e);
+            console.error('Error loading column configuration:', e);
         }
         return DEFAULT_COLUMNS;
     };
@@ -431,48 +437,48 @@ const RedeAnalyticsPage = () => {
 
         const fields = [
             // Sistema
-            `Pedido: ${transactionData.system?.order_id || 'N/A'}`,
-            `Data/Hora: ${transactionData.system?.request_datetime || 'N/A'}`,
-            `Ambiente: ${transactionData.system?.environment || 'N/A'}`,
-            `Plugin: lkn-integration-rede-for-woocommerce v${transactionData.system?.version_free || 'N/A'} (Lançamento v${analyticsData.version_free || 'N/A'})`,
-            `Plugin dependente: ${transactionData.system?.version_pro && transactionData.system?.version_pro !== 'N/A' ? `rede-for-woocommerce-pro v${transactionData.system?.version_pro || 'N/A'} (Lançamento v${analyticsData.version_pro || 'N/A'})` : 'N/A'}`,
-            `Site: ${analyticsData.site_domain || 'N/A'}`,
-            `Gateway: ${transactionData.system?.gateway || 'N/A'}`,
-            `Reference: ${transactionData.system?.reference || 'N/A'}`,
+            `${t('Order:')} ${transactionData.system?.order_id || 'N/A'}`,
+            `${t('Date/Time:')} ${transactionData.system?.request_datetime || 'N/A'}`,
+            `${t('Environment:')} ${transactionData.system?.environment || 'N/A'}`,
+            `${t('Plugin:')} lkn-integration-rede-for-woocommerce v${transactionData.system?.version_free || 'N/A'} (${t('Release')} v${analyticsData.version_free || 'N/A'})`,
+            `${t('Dependent plugin:')} ${transactionData.system?.version_pro && transactionData.system?.version_pro !== 'N/A' ? `rede-for-woocommerce-pro v${transactionData.system?.version_pro || 'N/A'} (${t('Release')} v${analyticsData.version_pro || 'N/A'})` : 'N/A'}`,
+            `${t('Site:')} ${analyticsData.site_domain || 'N/A'}`,
+            `${t('Gateway:')} ${transactionData.system?.gateway || 'N/A'}`,
+            `${t('Reference:')} ${transactionData.system?.reference || 'N/A'}`,
             
             // Dados do cartão
-            `Cartão/PIX: ${transactionData.gateway?.masked || 'N/A'}`,
-            `CVV Enviado: ${transactionData.transaction?.cvv_sent || 'N/A'}`,
-            `Tipo do Cartão: ${transactionData.gateway?.type || 'N/A'}`,
-            `Bandeira: ${transactionData.gateway?.brand || 'N/A'}`,
-            `Vencimento: ${transactionData.gateway?.expiry || 'N/A'}`,
-            `Portador: ${transactionData.gateway?.holder_name || 'N/A'}`,
+            `${t('Card/PIX:')} ${transactionData.gateway?.masked || 'N/A'}`,
+            `${t('CVV Sent:')} ${transactionData.transaction?.cvv_sent || 'N/A'}`,
+            `${t('Card Type:')} ${transactionData.gateway?.type || 'N/A'}`,
+            `${t('Brand:')} ${transactionData.gateway?.brand || 'N/A'}`,
+            `${t('Expiry:')} ${transactionData.gateway?.expiry || 'N/A'}`,
+            `${t('Holder:')} ${transactionData.gateway?.holder_name || 'N/A'}`,
             
             // Dados da transação
-            `Parcelas: ${transactionData.transaction?.installments || 'N/A'}`,
-            `Valor Parcela: ${transactionData.transaction?.installment_amount || 'N/A'}`,
-            `Captura: ${transactionData.transaction?.capture || 'N/A'}`,
-            `Recorrente: ${transactionData.transaction?.recurrent || 'N/A'}`,
-            `3DS Auth: ${transactionData.transaction?.['3ds_auth'] || 'N/A'}`,
-            `TID/PaymentId: ${maskValue(transactionData.transaction?.tid) || 'N/A'}`,
+            `${t('Installments:')} ${transactionData.transaction?.installments || 'N/A'}`,
+            `${t('Installment Value:')} ${transactionData.transaction?.installment_amount || 'N/A'}`,
+            `${t('Capture:')} ${transactionData.transaction?.capture || 'N/A'}`,
+            `${t('Recurrent:')} ${transactionData.transaction?.recurrent || 'N/A'}`,
+            `${t('3DS Auth:')} ${transactionData.transaction?.['3ds_auth'] || 'N/A'}`,
+            `${t('TID/PaymentId:')} ${maskValue(transactionData.transaction?.tid) || 'N/A'}`,
             
             // Valores
-            `Total: ${transactionData.amounts?.total || 'N/A'}`,
-            `Subtotal: ${transactionData.amounts?.subtotal || 'N/A'}`,
-            `Frete: ${transactionData.amounts?.shipping || 'N/A'}`,
-            `Juros/Desc: ${transactionData.amounts?.interest_discount || 'N/A'}`,
-            `Moeda: ${transactionData.amounts?.currency || 'N/A'}`,
+            `${t('Total:')} ${transactionData.amounts?.total || 'N/A'}`,
+            `${t('Subtotal:')} ${transactionData.amounts?.subtotal || 'N/A'}`,
+            `${t('Shipping:')} ${transactionData.amounts?.shipping || 'N/A'}`,
+            `${t('Interest/Discount:')} ${transactionData.amounts?.interest_discount || 'N/A'}`,
+            `${t('Currency:')} ${transactionData.amounts?.currency || 'N/A'}`,
             
             // Credentials
-            `PV: ${transactionData.credentials?.pv_masked || 'N/A'}`,
-            `Token: ${transactionData.credentials?.token_masked || 'N/A'}`,
+            `${t('PV:')} ${transactionData.credentials?.pv_masked || 'N/A'}`,
+            `${t('Token:')} ${transactionData.credentials?.token_masked || 'N/A'}`,
             
             // Resposta da API (essencial para debug)
-            `Return Code: ${transactionData.response?.return_code || 'N/A'}`,
-            `HTTP Status: ${transactionData.response?.http_status || 'N/A'}`
+            `${t('Return Code:')} ${transactionData.response?.return_code || 'N/A'}`,
+            `${t('HTTP Status:')} ${transactionData.response?.http_status || 'N/A'}`
         ];
         
-        return `#suporte Olá! Preciso de suporte com meu gateway de pagamento Rede. Estou com problemas na transação e segue os dados para verificação: ${fields.join(' | ')}. Aguardo retorno, obrigado!`;
+        return `${t('#support Hello! I need support with my Rede payment gateway. I am having problems with the transaction and here are the data for verification:')} ${fields.join(' | ')}. ${t('Awaiting your reply, thank you!')}`;
     };
 
     // Função para gerar link do WhatsApp
@@ -527,7 +533,7 @@ const RedeAnalyticsPage = () => {
                 result = decodeToonData(responseText);
                 
                 if (!result) {
-                    throw new Error('Falha ao decodificar resposta TOON');
+                    throw new Error(t('Failed to decode TOON response'));
                 }
             } else if (isJsonResponse) {
                 // Resposta em formato JSON padrão do WordPress
@@ -549,7 +555,7 @@ const RedeAnalyticsPage = () => {
                     result = decodeToonData(responseText);
                     
                     if (!result) {
-                        throw new Error('Formato de resposta não reconhecido');
+                        throw new Error(t('Unrecognized response format'));
                     }
                 }
             }
@@ -571,7 +577,7 @@ const RedeAnalyticsPage = () => {
                         return order;
                     }).filter(item => item !== null && item !== undefined);
                 } else {
-                    console.warn('Formato de dados inesperado:', result.data);
+                    console.warn('Unexpected data format:', result.data);
                     formattedData = [];
                 }
                 
@@ -590,12 +596,12 @@ const RedeAnalyticsPage = () => {
                 setTotalCount(pagination.total_count);
                 
             } else {
-                setError(result.data?.message || 'Erro ao carregar dados');
+                setError(result.data?.message || t('Error loading data'));
             }
         } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Erro de conexão ao carregar dados';
+            const errorMessage = err instanceof Error ? err.message : t('Connection error while loading data');
             setError(errorMessage);
-            console.error('Erro na requisição AJAX:', err);
+            console.error('Error in AJAX request:', err);
         } finally {
             setLoading(false);
             setLoadingMore(false);
@@ -687,7 +693,7 @@ const RedeAnalyticsPage = () => {
     // Função para exportar dados em CSV
     const exportToCSV = () => {
         if (transactionData.length === 0) {
-            alert(__('No data to export', 'woo-rede'));
+            alert(t('No data to export'));
             return;
         }
 
@@ -806,7 +812,7 @@ const RedeAnalyticsPage = () => {
     // Função para exportar dados em XLS (Excel)
     const exportToXLS = () => {
         if (transactionData.length === 0) {
-            alert(__('No data to export', 'woo-rede'));
+            alert(t('No data to export'));
             return;
         }
 
@@ -991,11 +997,11 @@ const RedeAnalyticsPage = () => {
                 transaction[24] || 'N/A', // HTTP Status
                 transaction[25] || 'N/A', // Portador
                 transaction[26] || html(
-                    `<a href="#" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; padding: 6px 12px; background-color: #25D366; color: white; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; transition: background-color 0.3s;" title="${escapeHtml(__('Open WhatsApp for support', 'woo-rede'))}" onmouseover="this.style.backgroundColor='#128C7E'" onmouseout="this.style.backgroundColor='#25D366'">
+                    `<a href="#" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; padding: 6px 12px; background-color: #25D366; color: white; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; transition: background-color 0.3s;" title="${escapeHtml(t('Open WhatsApp for support'))}" onmouseover="this.style.backgroundColor='#128C7E'" onmouseout="this.style.backgroundColor='#25D366'">
                         <svg style="width: 16px; height: 16px; margin-right: 4px; fill: currentColor;" viewBox="0 0 24 24">
                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.087z"/>
                         </svg>
-                        ${escapeHtml(__('Support', 'woo-rede'))}
+                        ${escapeHtml(t('Support'))}
                     </a>`
                 ) // Suporte
             ];
@@ -1090,7 +1096,7 @@ const RedeAnalyticsPage = () => {
                         const orderUrl = `${siteDomain}/wp-admin/admin.php?page=wc-orders&action=edit&id=${orderId}`;
                         value = html(
                             `<a href="${orderUrl}" target="_blank" rel="noopener noreferrer" style="color: #0073aa; text-decoration: none; font-weight: 500;" 
-                                title="${escapeHtml(__('Edit order in WooCommerce', 'woo-rede'))}" 
+                                title="${escapeHtml(t('Edit order in WooCommerce'))}" 
                                 onmouseover="this.style.textDecoration='underline'" 
                                 onmouseout="this.style.textDecoration='none'">
                                 ${escapeHtml(orderId)}
@@ -1120,11 +1126,11 @@ const RedeAnalyticsPage = () => {
                     break;
                 case 'whatsapp':
                     value = html(
-                        `<a href="${generateWhatsAppLink(transaction)}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; padding: 6px 12px; background-color: #25D366; color: white; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; transition: background-color 0.3s;" title="${escapeHtml(__('Open WhatsApp for support', 'woo-rede'))}" onmouseover="this.style.backgroundColor='#128C7E'" onmouseout="this.style.backgroundColor='#25D366'">
+                        `<a href="${generateWhatsAppLink(transaction)}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; padding: 6px 12px; background-color: #25D366; color: white; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; transition: background-color 0.3s;" title="${escapeHtml(t('Open WhatsApp for support'))}" onmouseover="this.style.backgroundColor='#128C7E'" onmouseout="this.style.backgroundColor='#25D366'">
                             <svg style="width: 16px; height: 16px; margin-right: 4px; fill: currentColor;" viewBox="0 0 24 24">
                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.087z"/>
                             </svg>
-                            ${escapeHtml(__('Support', 'woo-rede'))}
+                            ${escapeHtml(t('Support'))}
                         </a>`
                     );
                     break;
@@ -1167,7 +1173,7 @@ const RedeAnalyticsPage = () => {
                         }
                         
                         if ((col.id === 'return_code' || col.id === 'http_status') && cell !== 'N/A') {
-                            const label = col.id === 'return_code' ? 'Return Code' : 'HTTP Status';
+                            const label = col.id === 'return_code' ? t('Return Code') : t('HTTP Status');
                             return html(generateCodeTooltipHTML(cell, label));
                         }
                         
@@ -1199,21 +1205,21 @@ const RedeAnalyticsPage = () => {
                 },
                 language: {
                     search: {
-                        placeholder: __('Search transactions...', 'woo-rede')
+                        placeholder: t('Search transactions...')
                     },
                     pagination: {
-                        previous: __('Previous', 'woo-rede'),
-                        next: __('Next', 'woo-rede'),
-                        navigate: (page: number, pages: number) => `${__('Page', 'woo-rede')} ${page} ${__('of', 'woo-rede')} ${pages}`,
-                        page: (page: number) => `${__('Page', 'woo-rede')} ${page}`,
-                        showing: __('Showing', 'woo-rede'),
-                        of: __('of', 'woo-rede'),
-                        to: __('to', 'woo-rede'),
-                        results: () => __('records', 'woo-rede')
+                        previous: t('Previous'),
+                        next: t('Next'),
+                        navigate: (page: number, pages: number) => `${t('Page')} ${page} ${t('of')} ${pages}`,
+                        page: (page: number) => `${t('Page')} ${page}`,
+                        showing: t('Showing'),
+                        of: t('of'),
+                        to: t('to'),
+                        results: () => t('records')
                     },
-                    loading: __('Loading...', 'woo-rede'),
-                    noRecordsFound: __('No transactions found', 'woo-rede'),
-                    error: __('An error occurred while loading data', 'woo-rede')
+                    loading: t('Loading...'),
+                    noRecordsFound: t('No transactions found'),
+                    error: t('An error occurred while loading data')
                 }
             });
 
@@ -1283,7 +1289,7 @@ const RedeAnalyticsPage = () => {
                         >
                             <img 
                                 src={analyticsData.screenshot_url} 
-                                alt={__('Click to upgrade to Rede Analytics PRO', 'woo-rede')}
+                                alt={t('Click to upgrade to Rede Analytics PRO')}
                                 style={{
                                     width: '100%',
                                     height: 'auto',
@@ -1323,7 +1329,7 @@ const RedeAnalyticsPage = () => {
                                     fontSize: '16px',
                                     minWidth: 'max-content'
                                 }}>
-                                    {__('Column Configuration', 'woo-rede')}
+                                    {t('Column Configuration')}
                                 </h3>
                                 <div style={{ 
                                     display: 'flex', 
@@ -1343,7 +1349,7 @@ const RedeAnalyticsPage = () => {
                                             borderRadius: '3px'
                                         }}
                                     >
-                                        {__('Restore Default', 'woo-rede')}
+                                        {t('Restore Default')}
                                     </button>
                                     <button
                                         onClick={() => setShowColumnConfig(false)}
@@ -1357,7 +1363,7 @@ const RedeAnalyticsPage = () => {
                                             borderRadius: '3px'
                                         }}
                                     >
-                                        {__('Close', 'woo-rede')}
+                                        {t('Close')}
                                     </button>
                                 </div>
                             </div>
@@ -1437,7 +1443,7 @@ const RedeAnalyticsPage = () => {
                                                     fontSize: '10px',
                                                     opacity: index === 0 ? 0.5 : 1
                                                 }}
-                                                title={__('Move up', 'woo-rede')}
+                                                title={t('Move up')}
                                             >
                                                 ↑
                                             </button>
@@ -1456,7 +1462,7 @@ const RedeAnalyticsPage = () => {
                                                     fontSize: '10px',
                                                     opacity: index === columnConfig.length - 1 ? 0.5 : 1
                                                 }}
-                                                title={__('Move down', 'woo-rede')}
+                                                title={t('Move down')}
                                             >
                                                 ↓
                                             </button>
@@ -1474,10 +1480,10 @@ const RedeAnalyticsPage = () => {
                                 color: '#1565c0',
                                 border: '1px solid #bbdefb'
                             }}>
-                                <strong>{__('💡 Tips:', 'woo-rede')}</strong><br/>
-                                • {__('Check/uncheck boxes to show/hide columns', 'woo-rede')}<br/>
-                                • {__('Use ↑↓ or drag cards to reorder columns', 'woo-rede')}<br/>
-                                • {__('Settings are saved automatically', 'woo-rede')}
+                                <strong>{t('💡 Tips:')}</strong><br/>
+                                • {t('Check/uncheck boxes to show/hide columns')}<br/>
+                                • {t('Use ↑↓ or drag cards to reorder columns')}<br/>
+                                • {t('Settings are saved automatically')}
                             </div>
                         </div>
                     )}
@@ -1486,7 +1492,7 @@ const RedeAnalyticsPage = () => {
                     <div className="woocommerce-card">
                         <div className="woocommerce-card__header">
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', flexWrap: 'wrap', gap: '10px' }}>
-                                <h2>{__('Rede Transactions', 'woo-rede')}</h2>
+                                <h2>{t('Rede Transactions')}</h2>
                                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                                     <button
                                         onClick={() => setShowColumnConfig(!showColumnConfig)}
@@ -1500,9 +1506,9 @@ const RedeAnalyticsPage = () => {
                                             borderRadius: '3px',
                                             cursor: 'pointer'
                                         }}
-                                        title={__('Configure column order and visibility', 'woo-rede')}
+                                        title={t('Configure column order and visibility')}
                                     >
-                                        ⚙️ {__('Configure Columns', 'woo-rede')}
+                                        ⚙️ {t('Configure Columns')}
                                     </button>
                                     <button
                                         onClick={exportToCSV}
@@ -1518,9 +1524,9 @@ const RedeAnalyticsPage = () => {
                                             cursor: loading || transactionData.length === 0 ? 'not-allowed' : 'pointer',
                                             opacity: loading || transactionData.length === 0 ? 0.6 : 1
                                         }}
-                                        title={__('Export data in CSV format', 'woo-rede')}
+                                        title={t('Export data in CSV format')}
                                     >
-                                        📄 {__('Export CSV', 'woo-rede')}
+                                        📄 {t('Export CSV')}
                                     </button>
                                     <button
                                         onClick={exportToXLS}
@@ -1536,9 +1542,9 @@ const RedeAnalyticsPage = () => {
                                             cursor: loading || transactionData.length === 0 ? 'not-allowed' : 'pointer',
                                             opacity: loading || transactionData.length === 0 ? 0.6 : 1
                                         }}
-                                        title={__('Export data in Excel format', 'woo-rede')}
+                                        title={t('Export data in Excel format')}
                                     >
-                                        📊 {__('Export XLS', 'woo-rede')}
+                                        📊 {t('Export XLS')}
                                     </button>
                                 </div>
                             </div>
@@ -1554,14 +1560,14 @@ const RedeAnalyticsPage = () => {
                                     borderBottom: '1px solid #ddd',
                                     paddingBottom: '5px'
                                 }}>
-                                    {__('Recent transactions:', 'woo-rede')}
+                                    {t('Recent transactions:')}
                                 </h3>
                                 
                                 {/* Limite de consultas por sessão */}
                                 <div style={{ marginBottom: '15px' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                                         <label htmlFor="query-limit-input" style={{ fontSize: '14px', fontWeight: '500', color: '#666' }}>
-                                            {__('Load up to:', 'woo-rede')}
+                                            {t('Load up to:')}
                                         </label>
                                         <input
                                             id="query-limit-input"
@@ -1588,12 +1594,12 @@ const RedeAnalyticsPage = () => {
                                         marginBottom: '10px',
                                         color: '#666'
                                     }}>
-                                        {__('Query Dates:', 'woo-rede')}
+                                        {t('Query Dates:')}
                                     </h4>
                                     <form onSubmit={(e) => { e.preventDefault(); applyDateFilters(); }} style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                             <label style={{ fontSize: '14px', fontWeight: '500' }}>
-                                                {__('Start Date:', 'woo-rede')}
+                                                {t('Start Date:')}
                                             </label>
                                             <input
                                                 type="date"
@@ -1604,7 +1610,7 @@ const RedeAnalyticsPage = () => {
                                         </div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                             <label style={{ fontSize: '14px', fontWeight: '500' }}>
-                                                {__('End Date:', 'woo-rede')}
+                                                {t('End Date:')}
                                             </label>
                                             <input
                                                 type="date"
@@ -1619,7 +1625,7 @@ const RedeAnalyticsPage = () => {
                                             className="button button-primary"
                                             style={{ padding: '5px 15px', fontSize: '14px' }}
                                         >
-                                            {__('Filter', 'woo-rede')}
+                                            {t('Filter')}
                                         </button>
                                     </form>
                                 </div>
@@ -1643,21 +1649,21 @@ const RedeAnalyticsPage = () => {
                                                 className={`button ${activeFilter === 'hoje' ? 'button-primary' : ''}`}
                                                 style={{ padding: '6px 12px', fontSize: '13px' }}
                                             >
-                                                {__('Today', 'woo-rede')}
+                                                {t('Today')}
                                             </button>
                                             <button
                                                 onClick={() => setDateFilter('7dias')}
                                                 className={`button ${activeFilter === '7dias' ? 'button-primary' : ''}`}
                                                 style={{ padding: '6px 12px', fontSize: '13px' }}
                                             >
-                                                {__('Last 7 days', 'woo-rede')}
+                                                {t('Last 7 days')}
                                             </button>
                                             <button
                                                 onClick={() => setDateFilter('30dias')}
                                                 className={`button ${activeFilter === '30dias' ? 'button-primary' : ''}`}
                                                 style={{ padding: '6px 12px', fontSize: '13px' }}
                                             >
-                                                {__('Last 30 days', 'woo-rede')}
+                                                {t('Last 30 days')}
                                             </button>
                                             <button
                                                 onClick={() => setActiveFilter('personalizado')}
@@ -1670,7 +1676,7 @@ const RedeAnalyticsPage = () => {
                                                 }}
                                                 disabled={activeFilter !== 'personalizado'}
                                             >
-                                                {__('Personalizado', 'woo-rede')}
+                                                {t('Custom')}
                                             </button>
                                             <button
                                                 onClick={clearDateFilters}
@@ -1678,7 +1684,7 @@ const RedeAnalyticsPage = () => {
                                                 className="button"
                                                 style={{ padding: '6px 12px', fontSize: '13px' }}
                                             >
-                                                {__('Reset Default', 'woo-rede')}
+                                                {t('Reset Default')}
                                             </button>
                                         </div>
                                     </div>
@@ -1686,7 +1692,7 @@ const RedeAnalyticsPage = () => {
                                     {/* Transações por página */}
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
                                         <label htmlFor="per-page-limit-input" style={{ fontSize: '14px', fontWeight: '500' }}>
-                                            {__('Items per page:', 'woo-rede')}
+                                            {t('Items per page:')}
                                         </label>
                                         <input
                                             id="per-page-limit-input"
@@ -1709,14 +1715,14 @@ const RedeAnalyticsPage = () => {
                         <div className="woocommerce-card__body">
                             {loading && (
                                 <div className="loading-indicator">
-                                    <p>{__('Loading transactions...', 'woo-rede')}</p>
+                                    <p>{t('Loading transactions...')}</p>
                                 </div>
                             )}
                             {error && (
                                 <div className="error-message">
-                                    <p>{__('Erro:', 'woo-rede')} {error}</p>
+                                    <p>{t('Error:')} {error}</p>
                                     <button onClick={() => fetchTransactionData(1)} className="button">
-                                        {__('Tentar novamente', 'woo-rede')}
+                                        {t('Try again')}
                                     </button>
                                 </div>
                             )}
@@ -1724,10 +1730,10 @@ const RedeAnalyticsPage = () => {
                                 <>
                                     {/* Informações de paginação */}
                                     <div style={{ marginBottom: '15px', fontSize: '14px', color: '#666', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '4px' }}>
-                                        {__('Showing', 'woo-rede')} {transactionData.length} {__('of total', 'woo-rede')} {totalCount} {__('transactions', 'woo-rede')}
+                                        {t('Showing')} {transactionData.length} {t('of total')} {totalCount} {t('transactions')}
                                         {currentPage > 1 && (
                                             <span style={{ marginLeft: '10px' }}>
-                                                ({__('Page', 'woo-rede')} {currentPage})
+                                                ({t('Page')} {currentPage})
                                             </span>
                                         )}
                                     </div>
@@ -1748,7 +1754,7 @@ const RedeAnalyticsPage = () => {
                                                     opacity: loadingMore ? 0.6 : 1
                                                 }}
                                             >
-                                                {loadingMore ? __('Loading...', 'woo-rede') : __('Load more transactions', 'woo-rede')}
+                                                {loadingMore ? t('Loading...') : t('Load more transactions')}
                                             </button>
                                         </div>
                                     )}
@@ -1772,7 +1778,7 @@ function initRedeAnalytics() {
             ...reports,
             {
                 report: 'rede-transactions',
-                title: __('Rede Transactions', 'woo-rede'),
+                title: t('Rede Transactions'),
                 component: RedeAnalyticsPage
             }
         ]

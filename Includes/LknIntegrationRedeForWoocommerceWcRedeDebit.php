@@ -226,7 +226,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         }
         
         /* translators: %s: return message from payment processor */
-        $status_note = sprintf('Rede[%s]', $return_message);
+        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $return_message));
         $order->add_order_note('[' . $this->id . '] ' . $status_note . ' ' . $note);
 
         if ($return_code == '00') {
@@ -363,7 +363,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             }
             
             // Salvar metadados em caso de erro da requisição
-            $error_message = 'Erro na requisição: ' . $response->get_error_message();
+            $error_message = 'Request error: ' . $response->get_error_message();
             $translated_error_message = $this->translateRedeErrorMessage(44, $error_message);
             
             if ($order) {
@@ -415,7 +415,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         }
 
         if ($response_code !== 200 && $response_code !== 201) {
-            $error_message = 'Erro na transação';
+            $error_message = 'Transaction error';
             $return_code = $response_data['returnCode'] ?? 500;
 
             if (isset($response_data['returnMessage'])) {
@@ -459,7 +459,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
 
         // Se não há 3DS requerido, verificar se a transação foi aprovada
         if (!isset($response_data['threeDSecure']) && (!isset($response_data['returnCode']) || $response_data['returnCode'] !== '00')) {
-            $error_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : 'Transação recusada';
+            $error_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : 'Transaction declined';
             $return_code = $response_data['returnCode'] ?? 33;
             
             // Traduzir mensagem de erro se disponível
@@ -1418,7 +1418,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                     $installments, $order->get_total(), $order_currency, '', $this->pv, $this->token,
                     $orderId . '-' . time(), $orderId, $card_type === 'debit' ? true : $this->auto_capture, 
                     $card_type === 'debit' ? 'Debit' : 'Credit', $cardData['card_cvv'],
-                    $this, '', '', '', 07, __('CardNumber: Required parameter missing', 'woo-rede')
+                    $this, '', '', '', 38, __('CardNumber: Required parameter missing', 'woo-rede')
                 );
                 $order->save();
                 
@@ -1433,7 +1433,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 // Salvar metadados da transação com dados customizados para erro de validação
                 $customErrorResponse = LknIntegrationRedeForWoocommerceHelper::createCustomErrorResponse(
                     400,
-                    '09',
+                    37,
                     __('CardNumber: Invalid parameter format', 'woo-rede')
                 );
                 LknIntegrationRedeForWoocommerceHelper::saveTransactionMetadata(
@@ -1441,7 +1441,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                     $installments, $order->get_total(), $order_currency, '', $this->pv, $this->token,
                     $orderId . '-' . time(), $orderId, $card_type === 'debit' ? true : $this->auto_capture,
                     $card_type === 'debit' ? 'Debit' : 'Credit', $cardData['card_cvv'],
-                    $this, '', '', '', '09', __('CardNumber: Invalid parameter format', 'woo-rede')
+                    $this, '', '', '', 37, __('CardNumber: Invalid parameter format', 'woo-rede')
                 );
                 $order->save();
                 
@@ -1598,61 +1598,11 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
     }
 
     /**
-     * Traduz mensagens de erro da Rede baseado no código de retorno
+     * Traduz mensagens de erro da Rede baseado no código de retorno (ABECS/3DS).
      */
     private function translateRedeErrorMessage($returnCode, $originalMessage)
     {
-        $error_translations = array(
-            '200' => 'Autenticação realizada com sucesso',
-            '201' => 'Autenticação não exigida',
-            '202' => 'Portador não autenticado',
-            '203' => 'Serviço não habilitado. Por favor, contate a Rede',
-            '204' => 'Portador não registrado no programa de autenticação da central do cartão',
-            '220' => 'Pedido de transação com autenticação recebida. URL de redirecionamento enviada',
-            '250' => 'Parâmetro obrigatório não está presente',
-            '251' => 'Formato do parâmetro inválido',
-            '252' => 'Parâmetro obrigatório não está presente',
-            '253' => 'Parâmetro enviado com tamanho inválido',
-            '254' => 'Formato do parâmetro inválido',
-            '255' => 'Parâmetro obrigatório não está presente',
-            '256' => 'Parâmetro enviado com tamanho inválido',
-            '257' => 'Formato do parâmetro inválido',
-            '258' => 'Parâmetro obrigatório não está presente',
-            '259' => 'Parâmetro obrigatório não está presente',
-            '260' => 'Parâmetro obrigatório não está presente',
-            '261' => 'Parâmetro obrigatório não está presente',
-            '269' => 'ChallengePreference: Formato do parâmetro inválido',
-            '3000' => 'ColorDepth: Parâmetro obrigatório não está presente',
-            '3001' => 'DeviceType3ds: Parâmetro obrigatório não está presente',
-            '3002' => 'JavaEnabled: Parâmetro obrigatório não está presente',
-            '3003' => 'Language: Parâmetro obrigatório não está presente',
-            '3004' => 'TimeZoneOffset: Parâmetro obrigatório não está presente',
-            '3005' => 'ScreenHeight: Parâmetro obrigatório não está presente',
-            '3006' => 'ScreenWidth: Parâmetro obrigatório não está presente',
-            '3007' => 'ColorDepth: Tamanho do parâmetro inválido',
-            '3008' => 'DeviceType3ds: Tamanho do parâmetro inválido',
-            '3009' => 'Language: Tamanho do parâmetro inválido',
-            '3010' => 'TimeZoneOffset: Tamanho do parâmetro inválido',
-            '3011' => 'ScreenHeight: Tamanho do parâmetro inválido',
-            '3012' => 'ScreenWidth: Formato do parâmetro inválido',
-            '3013' => 'ColorDepth: Formato do parâmetro inválido',
-            '3014' => 'DeviceType3ds: Formato do parâmetro inválido',
-            '3015' => 'JavaEnabled: Formato do parâmetro inválido',
-            '3016' => 'Language: Formato do parâmetro inválido',
-            '3017' => 'TimeZoneOffset: Formato do parâmetro inválido',
-            '3018' => 'ScreenHeight: Formato do parâmetro inválido',
-            '3019' => 'ScreenWidth: Formato do parâmetro inválido'
-        );
-        
-        $return_code_str = (string) $returnCode;
-        
-        // Se existe tradução para este código, retorna a tradução
-        if (isset($error_translations[$return_code_str])) {
-            return $error_translations[$return_code_str];
-        }
-        
-        // Caso contrário, retorna a mensagem original da API
-        return $originalMessage;
+        return LknIntegrationRedeForWoocommerceAbecsCodes::translate($returnCode, $originalMessage);
     }
 
     /**

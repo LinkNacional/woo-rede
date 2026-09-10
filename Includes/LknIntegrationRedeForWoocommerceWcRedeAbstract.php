@@ -245,7 +245,7 @@ abstract class LknIntegrationRedeForWoocommerceWcRedeAbstract extends WC_Payment
     final public function process_order_status($order, $transaction, $note = ''): void
     {
         /* translators: %s: return message from payment processor */
-        $status_note = sprintf('Rede[%s]', $transaction->getReturnMessage());
+        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::translate($transaction->getReturnCode(), $transaction->getReturnMessage()));
 
         $order->add_order_note('[' . $this->id . '] ' . $status_note . ' ' . $note);
 
