@@ -38,6 +38,13 @@ final class LknIntegrationRedeForWoocommerceAbecsCodes
      */
     public static function translate($returnCode, $fallback = '')
     {
+        // Camada de licença: o catálogo ABECS é um recurso do plano PRO.
+        // Sem licença PRO ativa, todos os gateways caem para a mensagem original
+        // (fallback) devolvida pela Rede, em vez da mensagem traduzida.
+        if (! self::isProLicenseActive()) {
+            return self::resolveFallback($fallback);
+        }
+
         $code = trim((string) $returnCode);
         $codes = self::codes();
 
@@ -45,6 +52,18 @@ final class LknIntegrationRedeForWoocommerceAbecsCodes
             return $codes[$code];
         }
 
+        return self::resolveFallback($fallback);
+    }
+
+    /**
+     * Resolve the message to use when the code is not translated (or the
+     * ABECS catalog is unavailable).
+     *
+     * @param string $fallback Original message returned by Rede.
+     * @return string
+     */
+    private static function resolveFallback($fallback)
+    {
         $fallback = trim((string) $fallback);
 
         if ('' !== $fallback) {
@@ -52,6 +71,39 @@ final class LknIntegrationRedeForWoocommerceAbecsCodes
         }
 
         return __('Unknown error', 'woo-rede');
+    }
+
+    /**
+     * Whether the ABECS catalog may be used (the PRO license is active).
+     *
+     * Result is memoized per request to avoid repeated option/plugin checks.
+     *
+     * @return bool
+     */
+    private static function isProLicenseActive(): bool
+    {
+        static $active = null;
+
+        if (null !== $active) {
+            return $active;
+        }
+
+        $helperClass = LknIntegrationRedeForWoocommerceHelper::class;
+
+        if (! class_exists($helperClass) || ! method_exists($helperClass, 'isProLicenseValid')) {
+            $active = false;
+
+            return $active;
+        }
+
+        // Garante que is_plugin_active() exista mesmo em contextos de frontend.
+        if (! function_exists('is_plugin_active') && defined('ABSPATH')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
+        $active = (bool) $helperClass::isProLicenseValid();
+
+        return $active;
     }
 
     /**
