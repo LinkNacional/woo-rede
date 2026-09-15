@@ -19,6 +19,37 @@ class LknIntegrationRedeForWoocommerceHelper
         return 0;
     }
 
+    /**
+     * Verifica se o nome de uma taxa (fee) foi criada pelo próprio plugin (juros/desconto).
+     *
+     * É necessário comparar contra os dois text domains: este plugin usa 'woo-rede'
+     * (ex.: "Interest"), enquanto o add-on PRO cria a taxa com 'rede-for-woocommerce-pro'
+     * (ex.: "Juros" em pt_BR). Sem isso, a taxa própria era somada novamente ao
+     * valor das parcelas, inflando o label no checkout de Blocks.
+     */
+    final public static function isOwnInterestDiscountFee($feeName): bool
+    {
+        $ownNames = array(
+            __('Interest', 'woo-rede'),
+            __('Discount', 'woo-rede'),
+            __('Interest', 'rede-for-woocommerce-pro'),
+            __('Discount', 'rede-for-woocommerce-pro'),
+        );
+
+        $feeName = strtolower(trim((string) $feeName));
+        if ($feeName === '') {
+            return false;
+        }
+
+        foreach ($ownNames as $ownName) {
+            if ($feeName === strtolower(trim((string) $ownName))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     final public static function updateFixLoadScriptOption($id): void
     {
         $wpnonce = isset($_POST['_wpnonce']) ? sanitize_text_field(wp_unslash($_POST['_wpnonce'])) : '';
@@ -524,9 +555,9 @@ class LknIntegrationRedeForWoocommerceHelper
                 // Pegar fees externos (não criados por este plugin)
                 $additional_fees = 0;
                 foreach (WC()->cart->get_fees() as $fee) {
-                    // Ignorar fees criados pelo próprio plugin
-                    if ($fee->name !== __('Interest', 'woo-rede') && 
-                        $fee->name !== __('Discount', 'woo-rede')) {
+                    // Ignorar fees criados pelo próprio plugin (juros/desconto),
+                    // comparando também com o text domain do PRO (evita duplicar em pt_BR)
+                    if (!self::isOwnInterestDiscountFee($fee->name)) {
                         $additional_fees += $fee->total;
                     }
                 }
@@ -549,9 +580,9 @@ class LknIntegrationRedeForWoocommerceHelper
                     // Pegar fees externos do pedido (não criados por este plugin)
                     $additional_fees = 0;
                     foreach ($order->get_fees() as $fee) {
-                        // Ignorar fees criados pelo próprio plugin
-                        if ($fee->get_name() !== __('Interest', 'woo-rede') && 
-                            $fee->get_name() !== __('Discount', 'woo-rede')) {
+                        // Ignorar fees criados pelo próprio plugin (juros/desconto),
+                        // comparando também com o text domain do PRO (evita duplicar em pt_BR)
+                        if (!self::isOwnInterestDiscountFee($fee->get_name())) {
                             $additional_fees += $fee->get_total();
                         }
                     }
