@@ -372,10 +372,7 @@ final class LknIntegrationRedeForWoocommerce
             $fees_objects = WC()->cart->get_fees();
             $extra_fees = 0;
             foreach ($fees_objects as $fee) {
-                if (
-                    strtolower($fee->name) !== strtolower(__('Interest', 'woo-rede')) &&
-                    strtolower($fee->name) !== strtolower(__('Discount', 'woo-rede'))
-                ) {
+                if (!LknIntegrationRedeForWoocommerceHelper::isOwnInterestDiscountFee($fee->name)) {
                     $extra_fees += floatval($fee->amount);
                 }
             }
@@ -487,10 +484,7 @@ final class LknIntegrationRedeForWoocommerce
             $fees_objects = WC()->cart->get_fees();
             $extra_fees = 0;
             foreach ($fees_objects as $fee) {
-                if (
-                    strtolower($fee->name) !== strtolower(__('Interest', 'woo-rede')) &&
-                    strtolower($fee->name) !== strtolower(__('Discount', 'woo-rede'))
-                ) {
+                if (!LknIntegrationRedeForWoocommerceHelper::isOwnInterestDiscountFee($fee->name)) {
                     $extra_fees += floatval($fee->amount);
                 }
             }
@@ -624,10 +618,7 @@ final class LknIntegrationRedeForWoocommerce
             $fees_objects = WC()->cart->get_fees();
             $extra_fees = 0;
             foreach ($fees_objects as $fee) {
-                if (
-                    strtolower($fee->name) !== strtolower(__('Interest', 'woo-rede')) &&
-                    strtolower($fee->name) !== strtolower(__('Discount', 'woo-rede'))
-                ) {
+                if (!LknIntegrationRedeForWoocommerceHelper::isOwnInterestDiscountFee($fee->name)) {
                     $extra_fees += floatval($fee->amount);
                 }
             }
@@ -870,10 +861,7 @@ final class LknIntegrationRedeForWoocommerce
             $fees_objects = WC()->cart->get_fees();
             $extra_fees = 0;
             foreach ($fees_objects as $fee) {
-                if (
-                    strtolower($fee->name) !== strtolower(__('Interest', 'woo-rede')) &&
-                    strtolower($fee->name) !== strtolower(__('Discount', 'woo-rede'))
-                ) {
+                if (!LknIntegrationRedeForWoocommerceHelper::isOwnInterestDiscountFee($fee->name)) {
                     $extra_fees += floatval($fee->amount);
                 }
             }
