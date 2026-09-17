@@ -226,7 +226,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         }
         
         /* translators: %s: return message from payment processor */
-        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $return_message));
+        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $return_code, $return_message));
         $order->add_order_note('[' . $this->id . '] ' . $status_note . ' ' . $note);
 
         if ($return_code == '00') {
@@ -363,7 +363,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             }
             
             // Salvar metadados em caso de erro da requisição
-            $error_message = 'Request error: ' . $response->get_error_message();
+            $error_message = 'Erro na requisição: ' . $response->get_error_message();
             $translated_error_message = $this->translateRedeErrorMessage(44, $error_message);
             
             if ($order) {
@@ -415,7 +415,8 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         }
 
         if ($response_code !== 200 && $response_code !== 201) {
-            $error_message = 'Transaction error';
+            $abecs_enabled = LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id);
+            $error_message = $abecs_enabled ? __('Transaction error', 'woo-rede') : 'Erro na transação';
             $return_code = $response_data['returnCode'] ?? 500;
 
             if (isset($response_data['returnMessage'])) {
@@ -459,7 +460,8 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
 
         // Se não há 3DS requerido, verificar se a transação foi aprovada
         if (!isset($response_data['threeDSecure']) && (!isset($response_data['returnCode']) || $response_data['returnCode'] !== '00')) {
-            $error_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : 'Transaction declined';
+            $abecs_enabled = LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id);
+            $error_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : ($abecs_enabled ? __('Transaction declined', 'woo-rede') : 'Transação recusada');
             $return_code = $response_data['returnCode'] ?? 33;
             
             // Traduzir mensagem de erro se disponível
@@ -831,7 +833,9 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'convert_to_brl' => 'no',
                 'auto_capture' => 'yes',
                 '3ds_template_style' => 'basic',
-                'payment_complete_status' => 'processing'
+                'payment_complete_status' => 'processing',
+                'abecs_norms' => 'no',
+                'hide_card_type_selector' => 'no'
             );
 
             // Forçar campos PRO básicos para valores padrão
@@ -1065,6 +1069,19 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 )
             ),
 
+            'hide_card_type_selector' => array(
+                'title' => esc_attr__('Hide Card Type Selector', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => esc_attr__('Do not show the card type selector on the checkout', 'woo-rede'),
+                'description' => esc_attr__('When enabled, the card type selector is hidden on the checkout. Available only when a single card type is accepted ("Debit Cards Only" or "Credit Cards Only").', 'woo-rede'),
+                'desc_tip' => esc_attr__('Hide the card type selector from customers on the checkout page. It is only available when only debit or only credit cards are accepted.', 'woo-rede'),
+                'default' => 'no',
+                'custom_attributes' => array_merge(array(
+                    'data-title-description' => esc_attr__('Hide the card type selector on the checkout. Available only when only debit or only credit cards are accepted.', 'woo-rede'),
+                    'merge-top' => "woocommerce_{$this->id}_card_type_restriction",
+                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+            ),
+
             'auto_capture' => array(
                 'title' => esc_attr__('Auto Capture', 'woo-rede'),
                 'label' => esc_attr__('Enable automatic capture for credit card transactions', 'woo-rede'),
@@ -1107,6 +1124,21 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__('Choose between basic and modern 3DS authentication templates. Modern template provides enhanced visual design and better user experience during payment authentication.', 'woo-rede')
                 ), !$isProValid ? array('lkn-is-pro' => 'true') : array())
+            ),
+
+            'abecs_norms' => array(
+                'title' => esc_attr__('ABECS standard messages', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => __('Enable ABECS-standard return messages', 'woo-rede'),
+                'default' => LknIntegrationRedeForWoocommerceHelper::isAbecsEnabled($this->id) ? 'yes' : 'no',
+                'desc_tip' => esc_attr__('Use the official e.Rede (ABECS) return messages instead of the default messages.', 'woo-rede'),
+                'description' => esc_attr__('Default: enabled when the PRO license is active.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array(
+                        'data-title-description' => esc_attr__('Use the official e.Rede (ABECS) return messages. Disable to keep the previous default messages.', 'woo-rede')
+                    ),
+                    !$isProValid ? array('lkn-is-pro' => 'true') : array()
+                ),
             ),
 
             'installment' => array(
@@ -1326,8 +1358,9 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             wp_enqueue_style('rede-debit-style', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceCardShortcode.css', array(), '1.0.0', 'all');
         }
 
-        // Enfileira CSS do template moderno apenas se PRO estiver ativo e template configurado como modern
-        if (LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() && $this->get_option('3ds_template_style') === 'modern') {
+        // Enfileira CSS do template moderno apenas se o estilo efetivo for "modern"
+        // (recurso PRO — sem licença ativa get3dsTemplateStyle() força "basic")
+        if (LknIntegrationRedeForWoocommerceHelper::get3dsTemplateStyle($this->id) === 'modern') {
             wp_enqueue_style('lknwoo-modern-template', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceModernTemplate.css', array(), '1.0.0', 'all');
         }
 
@@ -1381,8 +1414,30 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             );
         }
 
-        // Captura o tipo de cartão selecionado
-        $card_type = isset($_POST['rede_debit_card_type']) ? sanitize_text_field(wp_unslash($_POST['rede_debit_card_type'])) : 'debit';
+        // Tipo de cartão. Anti-manipulação: recusa (exceção) valores fora de
+        // credit/debit ou divergentes da restrição de um único tipo — evita gerar
+        // uma transação de crédito/débito indevida a partir de POST adulterado.
+        $card_type_restriction = $this->get_option('card_type_restriction', 'debit_only');
+        $required_card_type = null;
+        if ($card_type_restriction === 'credit_only') {
+            $required_card_type = 'credit';
+        } elseif ($card_type_restriction === 'debit_only') {
+            $required_card_type = 'debit';
+        }
+
+        $posted_card_type = isset($_POST['rede_debit_card_type']) ? strtolower(sanitize_text_field(wp_unslash($_POST['rede_debit_card_type']))) : '';
+        if ('' !== $posted_card_type) {
+            if (!in_array($posted_card_type, array('credit', 'debit'), true)) {
+                throw new Exception(esc_html__('Invalid card type.', 'woo-rede'));
+            }
+            if (null !== $required_card_type && $posted_card_type !== $required_card_type) {
+                throw new Exception(esc_html__('The selected card type is not accepted by this gateway.', 'woo-rede'));
+            }
+            $card_type = $posted_card_type;
+        } else {
+            // Sem valor enviado (ex.: seletor oculto): usa o tipo exigido pela restrição.
+            $card_type = (null !== $required_card_type) ? $required_card_type : 'debit';
+        }
         
         // Captura o número de parcelas (apenas para crédito)
         $installments = 1;
@@ -1598,11 +1653,66 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
     }
 
     /**
-     * Traduz mensagens de erro da Rede baseado no código de retorno (ABECS/3DS).
+     * Traduz mensagens de erro da Rede baseado no código de retorno.
+     *
+     * Com as normas ABECS habilitadas usa o catálogo oficial e.Rede (inglês).
+     * Com as normas desabilitadas mantém as mensagens padrão da v5.4.10 (pt-BR).
      */
     private function translateRedeErrorMessage($returnCode, $originalMessage)
     {
-        return LknIntegrationRedeForWoocommerceAbecsCodes::translate($returnCode, $originalMessage);
+        if (LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id)) {
+            return LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $returnCode, $originalMessage);
+        }
+
+        $error_translations = array(
+            '200' => 'Autenticação realizada com sucesso',
+            '201' => 'Autenticação não exigida',
+            '202' => 'Portador não autenticado',
+            '203' => 'Serviço não habilitado. Por favor, contate a Rede',
+            '204' => 'Portador não registrado no programa de autenticação da central do cartão',
+            '220' => 'Pedido de transação com autenticação recebida. URL de redirecionamento enviada',
+            '250' => 'Parâmetro obrigatório não está presente',
+            '251' => 'Formato do parâmetro inválido',
+            '252' => 'Parâmetro obrigatório não está presente',
+            '253' => 'Parâmetro enviado com tamanho inválido',
+            '254' => 'Formato do parâmetro inválido',
+            '255' => 'Parâmetro obrigatório não está presente',
+            '256' => 'Parâmetro enviado com tamanho inválido',
+            '257' => 'Formato do parâmetro inválido',
+            '258' => 'Parâmetro obrigatório não está presente',
+            '259' => 'Parâmetro obrigatório não está presente',
+            '260' => 'Parâmetro obrigatório não está presente',
+            '261' => 'Parâmetro obrigatório não está presente',
+            '269' => 'ChallengePreference: Formato do parâmetro inválido',
+            '3000' => 'ColorDepth: Parâmetro obrigatório não está presente',
+            '3001' => 'DeviceType3ds: Parâmetro obrigatório não está presente',
+            '3002' => 'JavaEnabled: Parâmetro obrigatório não está presente',
+            '3003' => 'Language: Parâmetro obrigatório não está presente',
+            '3004' => 'TimeZoneOffset: Parâmetro obrigatório não está presente',
+            '3005' => 'ScreenHeight: Parâmetro obrigatório não está presente',
+            '3006' => 'ScreenWidth: Parâmetro obrigatório não está presente',
+            '3007' => 'ColorDepth: Tamanho do parâmetro inválido',
+            '3008' => 'DeviceType3ds: Tamanho do parâmetro inválido',
+            '3009' => 'Language: Tamanho do parâmetro inválido',
+            '3010' => 'TimeZoneOffset: Tamanho do parâmetro inválido',
+            '3011' => 'ScreenHeight: Tamanho do parâmetro inválido',
+            '3012' => 'ScreenWidth: Formato do parâmetro inválido',
+            '3013' => 'ColorDepth: Formato do parâmetro inválido',
+            '3014' => 'DeviceType3ds: Formato do parâmetro inválido',
+            '3015' => 'JavaEnabled: Formato do parâmetro inválido',
+            '3016' => 'Language: Formato do parâmetro inválido',
+            '3017' => 'TimeZoneOffset: Formato do parâmetro inválido',
+            '3018' => 'ScreenHeight: Formato do parâmetro inválido',
+            '3019' => 'ScreenWidth: Formato do parâmetro inválido'
+        );
+
+        $return_code_str = (string) $returnCode;
+
+        if (isset($error_translations[$return_code_str])) {
+            return $error_translations[$return_code_str];
+        }
+
+        return $originalMessage;
     }
 
     /**
@@ -1887,6 +1997,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'installments' => $this->getInstallments($order_total),
                 'installments_number' => $installments_number,
                 'card_type_restriction' => $this->get_option('card_type_restriction', 'debit_only'),
+                'hide_card_type_selector' => LknIntegrationRedeForWoocommerceHelper::isHideCardTypeSelectorEnabled($this->id) ? 'yes' : 'no',
                 'card_type' => $card_type,
             ),
             'woocommerce/rede/',

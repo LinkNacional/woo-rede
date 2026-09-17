@@ -23,14 +23,17 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebitBlocks extends AbstractPa
 
     public function get_payment_method_script_handles()
     {
-        // Registra o CSS do template moderno
-        wp_enqueue_style(
-            'rede-modern-template-style',
-            plugin_dir_url(__FILE__) . '../Public/css/rede/LknIntegrationRedeForWoocommerceModernTemplate.css',
-            array(),
-            '1.0.0',
-            'all'
-        );
+        // Registra o CSS do template moderno apenas quando o estilo efetivo é "modern"
+        // (recurso PRO — sem licença ativa get3dsTemplateStyle() força "basic").
+        if (LknIntegrationRedeForWoocommerceHelper::get3dsTemplateStyle($this->name) === 'modern') {
+            wp_enqueue_style(
+                'rede-modern-template-style',
+                plugin_dir_url(__FILE__) . '../Public/css/rede/LknIntegrationRedeForWoocommerceModernTemplate.css',
+                array(),
+                '1.0.0',
+                'all'
+            );
+        }
         
         wp_register_script(
             'rede_debit-blocks-integration',
@@ -85,9 +88,10 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebitBlocks extends AbstractPa
             'minInstallmentsRede' => $this->gateway->get_option('min_parcels_value', '5'),
             'cartTotal' => $cart_total,
             'cardTypeRestriction' => $this->gateway->get_option('card_type_restriction', 'debit_only'),
+            'hideCardTypeSelector' => LknIntegrationRedeForWoocommerceHelper::isHideCardTypeSelectorEnabled($this->name) ? 'yes' : 'no',
             'maxParcels' => $this->gateway->get_option('max_parcels_number', '12'),
             'minParcelsValue' => $this->gateway->get_option('min_parcels_value', '5'),
-            '3dsTemplateStyle' => $this->gateway->get_option('3ds_template_style', 'basic'),
+            '3dsTemplateStyle' => LknIntegrationRedeForWoocommerceHelper::get3dsTemplateStyle($this->name),
             'gatewayDescription' => $this->gateway->get_option('description', __('Pay for your purchase with a debit card through', 'woo-rede')),
             'translations' => array(
                 'fieldsNotFilled' => __('Please fill in all fields correctly.', 'woo-rede'),

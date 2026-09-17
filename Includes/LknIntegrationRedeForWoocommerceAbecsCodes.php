@@ -27,7 +27,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 final class LknIntegrationRedeForWoocommerceAbecsCodes
 {
     /**
-     * Translate a return code into the official e.Rede message.
+     * Translate a return code using the PRO-license gate (no gateway context).
+     *
+     * Kept for the PRO plugin and internal callers that have no gateway id.
+     * Gateway code should use {@see resolveForGateway()} so the per-gateway
+     * "ABECS norms" option is honored.
      *
      * When the code is not mapped, the original Rede message is returned.
      * When there is no message at all, a generic "Unknown error" is returned.
@@ -38,11 +42,27 @@ final class LknIntegrationRedeForWoocommerceAbecsCodes
      */
     public static function translate($returnCode, $fallback = '')
     {
-        // Camada de licença: o catálogo ABECS é um recurso do plano PRO.
-        // Sem licença PRO ativa, todos os gateways caem para a mensagem original
-        // (fallback) devolvida pela Rede, em vez da mensagem traduzida.
-        if (! self::isProLicenseActive()) {
-            return self::resolveFallback($fallback);
+        return self::resolveForGateway('', $returnCode, $fallback);
+    }
+
+    /**
+     * Resolve a return message honoring the "ABECS standard messages" option.
+     *
+     * ABECS is a PRO-only feature. When the PRO license is not active — or the
+     * gateway option is disabled — the legacy message (previous plugin release)
+     * is returned. When enabled (PRO with the option on), the official e.Rede
+     * catalog is used, falling back to $abecsFallback.
+     *
+     * @param string      $gatewayId     Gateway id (e.g. rede_credit). Empty uses the PRO license.
+     * @param string|int  $returnCode    Return code (returnCode).
+     * @param string      $abecsFallback Fallback used when ABECS is enabled and the code is unmapped.
+     * @param string|null $legacyMessage Fallback used when ABECS is disabled. Defaults to $abecsFallback.
+     * @return string
+     */
+    public static function resolveForGateway($gatewayId, $returnCode, $abecsFallback, $legacyMessage = null)
+    {
+        if (! self::isAbecsEnabled($gatewayId)) {
+            return self::resolveFallback(null !== $legacyMessage ? $legacyMessage : $abecsFallback);
         }
 
         $code = trim((string) $returnCode);
@@ -52,7 +72,33 @@ final class LknIntegrationRedeForWoocommerceAbecsCodes
             return $codes[$code];
         }
 
-        return self::resolveFallback($fallback);
+        return self::resolveFallback($abecsFallback);
+    }
+
+    /**
+     * Whether the ABECS catalog may be used (PRO license active + option enabled).
+     *
+     * Delegates to {@see LknIntegrationRedeForWoocommerceHelper::isAbecsEnabled()},
+     * which enforces the PRO license gate. Falls back to the license check when
+     * the helper is unavailable (older FREE versions).
+     *
+     * @param string $gatewayId
+     * @return bool
+     */
+    public static function isAbecsEnabled($gatewayId = ''): bool
+    {
+        $helperClass = LknIntegrationRedeForWoocommerceHelper::class;
+
+        if (! class_exists($helperClass) || ! method_exists($helperClass, 'isAbecsEnabled')) {
+            return self::isProLicenseActive();
+        }
+
+        // Garante que is_plugin_active() exista mesmo em contextos de frontend.
+        if (! function_exists('is_plugin_active') && defined('ABSPATH')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
+        return (bool) $helperClass::isAbecsEnabled($gatewayId);
     }
 
     /**

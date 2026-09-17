@@ -348,46 +348,88 @@
                         if (fieldId === 'woocommerce_rede_debit_3ds_template_style' && typeof lknWcRedeLayoutSettings !== 'undefined') {
                             const previewContainer = document.createElement('div');
                             previewContainer.style.marginTop = '10px';
-                            
-                            const previewLabel = document.createElement('p');
-                            previewLabel.textContent = 'Preview:';
-                            previewLabel.style.margin = '5px 0';
-                            previewLabel.style.fontWeight = 'bold';
-                            
-                            const previewImage = document.createElement('img');
-                            previewImage.style.maxWidth = '200px';
-                            previewImage.style.width = '100%';
-                            previewImage.style.border = '1px solid #ddd';
-                            previewImage.style.borderRadius = '4px';
-                            
-                            // Função para atualizar a imagem
-                            function updatePreviewImage() {
-                                const selectedValue = fieldConfig.value;
-                                if (selectedValue === 'basic' && lknWcRedeLayoutSettings.basic) {
-                                    previewImage.src = lknWcRedeLayoutSettings.basic;
-                                    previewImage.alt = 'Basic Template Preview';
-                                } else if (selectedValue === 'modern' && lknWcRedeLayoutSettings.modern) {
-                                    previewImage.src = lknWcRedeLayoutSettings.modern;
-                                    previewImage.alt = 'Modern Template Preview';
+
+                            const buildImage = (src, alt) => {
+                                const img = document.createElement('img');
+                                img.src = src || '';
+                                img.alt = alt || '';
+                                img.style.maxWidth = '200px';
+                                img.style.width = '100%';
+                                img.style.border = '1px solid #ddd';
+                                img.style.borderRadius = '4px';
+                                return img;
+                            };
+
+                            // Rótulo localizado lido do próprio <select> (ex.: "Modelo Básico").
+                            const optionLabel = (value) => {
+                                const opt = Array.from(fieldConfig.options).find(o => o.value === value);
+                                return opt ? opt.textContent.trim() : value;
+                            };
+
+                            const isProField = fieldConfig.getAttribute('lkn-is-pro') === 'true';
+
+                            if (isProField) {
+                                // PRO desabilitado: exibe os dois modelos para comparação.
+                                previewContainer.style.display = 'flex';
+                                previewContainer.style.flexWrap = 'wrap';
+                                previewContainer.style.gap = '16px';
+
+                                const buildItem = (src, caption) => {
+                                    const item = document.createElement('div');
+                                    item.style.textAlign = 'center';
+                                    if (src) {
+                                        item.appendChild(buildImage(src, caption));
+                                        const cap = document.createElement('p');
+                                        cap.textContent = caption;
+                                        cap.style.margin = '6px 0 0';
+                                        cap.style.fontWeight = 'bold';
+                                        cap.style.fontSize = '13px';
+                                        item.appendChild(cap);
+                                    }
+                                    return item;
+                                };
+
+                                previewContainer.appendChild(buildItem(lknWcRedeLayoutSettings.basic, optionLabel('basic')));
+                                previewContainer.appendChild(buildItem(lknWcRedeLayoutSettings.modern, optionLabel('modern')));
+                            } else {
+                                // PRO ativo: preview único que segue a opção escolhida.
+                                const previewLabel = document.createElement('p');
+                                previewLabel.textContent = 'Preview:';
+                                previewLabel.style.margin = '5px 0';
+                                previewLabel.style.fontWeight = 'bold';
+
+                                const previewImage = buildImage('', '');
+                                previewImage.style.display = 'block';
+
+                                // Função para atualizar a imagem
+                                function updatePreviewImage() {
+                                    const selectedValue = fieldConfig.value;
+                                    if (selectedValue === 'basic' && lknWcRedeLayoutSettings.basic) {
+                                        previewImage.src = lknWcRedeLayoutSettings.basic;
+                                        previewImage.alt = 'Basic Template Preview';
+                                    } else if (selectedValue === 'modern' && lknWcRedeLayoutSettings.modern) {
+                                        previewImage.src = lknWcRedeLayoutSettings.modern;
+                                        previewImage.alt = 'Modern Template Preview';
+                                    }
                                 }
+
+                                // Configurar imagem inicial
+                                updatePreviewImage();
+
+                                // Adicionar evento de mudança usando Select2 event
+                                $(fieldConfig).on('select2:select', function() {
+                                    updatePreviewImage();
+                                });
+
+                                // Fallback para mudanças diretas no select (caso Select2 não esteja ativo)
+                                fieldConfig.addEventListener('change', function() {
+                                    updatePreviewImage();
+                                });
+
+                                previewContainer.appendChild(previewLabel);
+                                previewContainer.appendChild(previewImage);
                             }
-                            
-                            // Configurar imagem inicial
-                            updatePreviewImage();
-                            
-                            // Adicionar evento de mudança usando Select2 event
-                            $(fieldConfig).on('select2:select', function() {
-                                updatePreviewImage();
-                            });
-                            
-                            // Fallback para mudanças diretas no select (caso Select2 não esteja ativo)
-                            fieldConfig.addEventListener('change', function() {
-                                updatePreviewImage();
-                            });
-                            
-                            // Montar a estrutura
-                            previewContainer.appendChild(previewLabel);
-                            previewContainer.appendChild(previewImage);
+
                             divBody.appendChild(previewContainer);
                         }
                     }
@@ -512,6 +554,61 @@
             };
         }
         // === LÓGICA DO WHATSAPP - FIM ===
+
+        // === CONDIÇÃO: esconder seletor de tipo de cartão (apenas restrição de um único tipo) ===
+        const lknRestrictionField = document.getElementById('woocommerce_rede_debit_card_type_restriction');
+        const lknHideSelectorField = document.getElementById('woocommerce_rede_debit_hide_card_type_selector');
+
+        if (lknRestrictionField && lknHideSelectorField) {
+            const setHideSelectorAvailability = () => {
+                const isBoth = lknRestrictionField.value === 'both';
+                const label = lknHideSelectorField.closest('label') || lknHideSelectorField.parentElement;
+
+                // NÃO usar 'disabled': o formulário ignora campos com esse atributo no submit.
+                // "Fingimos" o estado desabilitado com atributo próprio + estilo + bloqueio de clique.
+                if (isBoth) {
+                    lknHideSelectorField.setAttribute('data-lkn-fake-disabled', 'true');
+                    lknHideSelectorField.style.pointerEvents = 'none';
+                    lknHideSelectorField.style.opacity = '0.5';
+                    if (label) {
+                        label.setAttribute('data-lkn-fake-disabled', 'true');
+                        label.style.pointerEvents = 'none';
+                        label.style.opacity = '0.5';
+                        label.style.cursor = 'not-allowed';
+                    }
+                } else {
+                    lknHideSelectorField.removeAttribute('data-lkn-fake-disabled');
+                    lknHideSelectorField.style.pointerEvents = '';
+                    lknHideSelectorField.style.opacity = '';
+                    if (label) {
+                        label.removeAttribute('data-lkn-fake-disabled');
+                        label.style.pointerEvents = '';
+                        label.style.opacity = '';
+                        label.style.cursor = '';
+                    }
+                }
+            };
+
+            // Bloqueia o toggle quando "fake disabled" (pointer-events cobre o mouse; isto cobre teclado).
+            const blockWhenFakeDisabled = (event) => {
+                if (lknHideSelectorField.getAttribute('data-lkn-fake-disabled') !== 'true') {
+                    return;
+                }
+                // Só impede a ativação (Espaço/Enter); não bloqueia Tab ou outros atalhos.
+                if (event.type === 'keydown' && event.key !== ' ' && event.key !== 'Enter' && event.key !== 'Spacebar') {
+                    return;
+                }
+                event.preventDefault();
+                event.stopPropagation();
+            };
+            lknHideSelectorField.addEventListener('click', blockWhenFakeDisabled, true);
+            lknHideSelectorField.addEventListener('keydown', blockWhenFakeDisabled, true);
+
+            // Aplica o estado inicial e reage a mudanças no select (inclui select2).
+            setHideSelectorAvailability();
+            jQuery('#woocommerce_rede_debit_card_type_restriction').on('change select2:select', setHideSelectorAvailability);
+        }
+        // === FIM CONDIÇÃO ===
 
     })
 })(jQuery)

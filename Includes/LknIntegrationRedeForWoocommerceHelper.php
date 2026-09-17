@@ -952,6 +952,11 @@ class LknIntegrationRedeForWoocommerceHelper
      */
     final public static function isProLicenseValid(): bool
     {
+        // Garante que is_plugin_active() exista mesmo em contextos de frontend.
+        if (! function_exists('is_plugin_active') && defined('ABSPATH')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
         // Verifica se o plugin PRO está ativo
         if (!is_plugin_active('rede-for-woocommerce-pro/rede-for-woocommerce-pro.php')) {
             return false;
@@ -976,6 +981,98 @@ class LknIntegrationRedeForWoocommerceHelper
     }
 
     /**
+     * Verifica se o gateway deve usar as mensagens padronizadas ABECS.
+     *
+     * Recurso exclusivo do plano PRO: sem licença PRO ativa, o resultado é sempre
+     * falso (fluxo legado), independentemente do valor salvo na opção. Com licença
+     * ativa, vale o valor da opção por gateway; se ainda não salva, fica habilitado
+     * por padrão.
+     *
+     * @param string $gateway_id ID do gateway (rede_credit, rede_debit, ...).
+     * @return bool
+     */
+    final public static function isAbecsEnabled($gateway_id = ''): bool
+    {
+        // Camada de licença: ABECS é um recurso do plano PRO. Sem licença ativa,
+        // todos os gateways caem para o fluxo legado — mesmo que a opção esteja
+        // como "yes" na base (ex.: HTML manipulado pelo lojista).
+        if (! self::isProLicenseValid()) {
+            return false;
+        }
+
+        $gateway_id = (string) $gateway_id;
+
+        // Sem gateway definido, o resultado segue a licença PRO (uso interno/PRO).
+        if ('' === $gateway_id) {
+            return true;
+        }
+
+        $settings = get_option("woocommerce_{$gateway_id}_settings", array());
+
+        if (is_array($settings) && array_key_exists('abecs_norms', $settings)) {
+            return 'yes' === $settings['abecs_norms'];
+        }
+
+        // Opção ainda não salva: com PRO ativo fica habilitado por padrão.
+        return true;
+    }
+
+    /**
+     * Verifica se o seletor de tipo de cartão deve ser escondido no checkout (Rede Débito).
+     *
+     * Recurso exclusivo do plano PRO: sem licença PRO ativa o resultado é sempre
+     * falso, ignorando qualquer valor salvo na opção (ex.: HTML do painel manipulado
+     * pelo lojista para forçar a ativação). Com licença ativa, vale o valor da opção;
+     * se ainda não salva, fica desabilitado por padrão (seletor exibido).
+     *
+     * @param string $gateway_id ID do gateway (ex.: rede_debit).
+     * @return bool
+     */
+    final public static function isHideCardTypeSelectorEnabled($gateway_id = ''): bool
+    {
+        // Camada de licença: sem PRO ativo, o recurso não se aplica.
+        if (! self::isProLicenseValid()) {
+            return false;
+        }
+
+        $gateway_id = (string) $gateway_id;
+
+        if ('' === $gateway_id) {
+            return false;
+        }
+
+        $settings = get_option("woocommerce_{$gateway_id}_settings", array());
+
+        return is_array($settings) && isset($settings['hide_card_type_selector']) && 'yes' === $settings['hide_card_type_selector'];
+    }
+
+    /**
+     * Retorna o estilo de template 3DS efetivo do gateway.
+     *
+     * O template "modern" é um recurso exclusivo do plano PRO. Sem licença PRO ativa o
+     * resultado é sempre 'basic', ignorando o valor salvo na opção (ex.: valor antigo
+     * persistido ou HTML do painel manipulado pelo lojista). Com licença ativa vale o
+     * valor da opção ('basic' ou 'modern').
+     *
+     * @param string $gateway_id ID do gateway (ex.: rede_debit).
+     * @return string 'basic' ou 'modern'.
+     */
+    final public static function get3dsTemplateStyle($gateway_id = ''): string
+    {
+        $gateway_id = (string) $gateway_id;
+
+        // Camada de licença: sem PRO ativo o recurso não se aplica.
+        if (! self::isProLicenseValid() || '' === $gateway_id) {
+            return 'basic';
+        }
+
+        $settings = get_option("woocommerce_{$gateway_id}_settings", array());
+        $style = (is_array($settings) && isset($settings['3ds_template_style'])) ? $settings['3ds_template_style'] : 'basic';
+
+        return 'modern' === $style ? 'modern' : 'basic';
+    }
+
+    /**
      * Força valores padrão para campos PRO se a licença não for válida (com notificação)
      * 
      * @param string $gateway_id ID do gateway (rede_credit, rede_debit, etc.)
@@ -995,7 +1092,9 @@ class LknIntegrationRedeForWoocommerceHelper
             'convert_to_brl' => 'no',
             'auto_capture' => 'yes',
             '3ds_template_style' => 'basic',
-            'payment_complete_status' => 'processing'
+            'payment_complete_status' => 'processing',
+            'abecs_norms' => 'no',
+            'hide_card_type_selector' => 'no'
         );
 
         // Reset campos de parcelas específicas
@@ -1036,7 +1135,9 @@ class LknIntegrationRedeForWoocommerceHelper
             'convert_to_brl' => 'no',
             'auto_capture' => 'yes',
             '3ds_template_style' => 'basic',
-            'payment_complete_status' => 'processing'
+            'payment_complete_status' => 'processing',
+            'abecs_norms' => 'no',
+            'hide_card_type_selector' => 'no'
         );
 
         // Reset campos de parcelas específicas
@@ -1283,7 +1384,8 @@ class LknIntegrationRedeForWoocommerceHelper
         $httpStatusDescription = self::getHttpStatusDescription($httpStatus);
         $httpStatusFormatted = $httpStatus && $httpStatus !== 'N/A' ? $httpStatus . ' - ' . $httpStatusDescription : 'N/A';
 
-        $translatedReturnMessage = LknIntegrationRedeForWoocommerceAbecsCodes::translate($returnCode, $returnMessage);
+        $abecs_gateway_id = (is_object($gatewayInstance) && isset($gatewayInstance->id)) ? $gatewayInstance->id : '';
+        $translatedReturnMessage = LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($abecs_gateway_id, $returnCode, $returnMessage);
         $returnCodeRaw = !empty($returnCode) ? (string) $returnCode : '';
         $returnCodeFormatted = '' !== $returnCodeRaw ? $returnCodeRaw . ' - ' . $translatedReturnMessage : 'N/A';
 

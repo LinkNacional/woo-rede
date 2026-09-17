@@ -459,6 +459,21 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                 )
             ),
 
+            'abecs_norms' => array(
+                'title' => esc_attr__('ABECS standard messages', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => __('Enable ABECS-standard return messages', 'woo-rede'),
+                'default' => LknIntegrationRedeForWoocommerceHelper::isAbecsEnabled($this->id) ? 'yes' : 'no',
+                'desc_tip' => esc_attr__('Use the official e.Rede (ABECS) return messages instead of the default messages.', 'woo-rede'),
+                'description' => esc_attr__('Default: enabled when the PRO license is active.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array(
+                        'data-title-description' => esc_attr__('Use the official e.Rede (ABECS) return messages. Disable to keep the previous default messages.', 'woo-rede')
+                    ),
+                    ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() ? array('lkn-is-pro' => 'true') : array()
+                ),
+            ),
+
             'developers' => array(
                 'title' => esc_attr__('Developer', 'woo-rede'),
                 'type' => 'title',
@@ -717,7 +732,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
 
         // Adiciona notas ao pedido
         /* translators: %s: return message from payment processor */
-        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $return_message));
+        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $return_code, $return_message));
         $order->add_order_note('[' . $this->id . '] ' . $status_note . ' ' . $note);
 
         if ($return_code == '00') {
@@ -816,17 +831,22 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
         }
         
         if ($response_code !== 200 && $response_code !== 201) {
-            $error_message = 'Transaction error';
+            $abecs_enabled = LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id);
+            $abecs_fallback = __('Transaction error', 'woo-rede');
+            // Legado (v5.4.10): usa a mensagem da Rede quando existir, senão 'Erro na transação'.
+            $legacy_message = 'Erro na transação';
             $return_code = $response_data['returnCode'] ?? '';
 
             if (isset($response_data['returnMessage'])) {
-                $error_message = $response_data['returnMessage'];
+                $abecs_fallback = $response_data['returnMessage'];
+                $legacy_message = $response_data['returnMessage'];
             } elseif (isset($response_data['errors']) && is_array($response_data['errors'])) {
-                $error_message = implode(', ', $response_data['errors']);
+                $abecs_fallback = implode(', ', $response_data['errors']);
+                $legacy_message = $abecs_fallback;
             }
 
-            $error_message = LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $error_message);
-            if ('' !== $return_code) {
+            $error_message = LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $return_code, $abecs_fallback, $legacy_message);
+            if ($abecs_enabled && '' !== $return_code) {
                 $error_message .= ' (Error code: ' . $return_code . ')';
             }
             
@@ -851,10 +871,14 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
         }
         
         if (!isset($response_data['returnCode']) || $response_data['returnCode'] !== '00') {
+            $abecs_enabled = LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id);
             $return_code = $response_data['returnCode'] ?? '';
-            $raw_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : 'Transaction declined';
-            $error_message = LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $raw_message);
-            if ('' !== $return_code) {
+            $raw_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : '';
+            $abecs_fallback = '' !== $raw_message ? $raw_message : __('Transaction declined', 'woo-rede');
+            // Legado (v5.4.10): usa a mensagem da Rede quando existir, senão 'Transação recusada'.
+            $legacy_message = '' !== $raw_message ? $raw_message : 'Transação recusada';
+            $error_message = LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $return_code, $abecs_fallback, $legacy_message);
+            if ($abecs_enabled && '' !== $return_code) {
                 $error_message .= ' (Error code: ' . $return_code . ')';
             }
             

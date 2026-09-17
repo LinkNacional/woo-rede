@@ -256,6 +256,20 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
                             'data-title-description' => esc_attr__('PEM private key for Google Pay. This key is used to decrypt card data on the back-end and should never be exposed.', 'woo-rede')
                         ),
                     ),
+                    'abecs_norms' => array(
+                        'title' => esc_attr__('ABECS standard messages', 'woo-rede'),
+                        'type' => 'checkbox',
+                        'label' => __('Enable ABECS-standard return messages', 'woo-rede'),
+                        'default' => LknIntegrationRedeForWoocommerceHelper::isAbecsEnabled($this->id) ? 'yes' : 'no',
+                        'desc_tip' => esc_attr__('Use the official e.Rede (ABECS) return messages instead of the default messages.', 'woo-rede'),
+                        'description' => esc_attr__('Default: enabled when the PRO license is active.', 'woo-rede'),
+                        'custom_attributes' => array_merge(
+                            array(
+                                'data-title-description' => esc_attr__('Use the official e.Rede (ABECS) return messages. Disable to keep the previous default messages.', 'woo-rede')
+                            ),
+                            ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() ? array('lkn-is-pro' => 'true') : array()
+                        )
+                    ),
                     'google_pay_pro' => array(
                         'title' => esc_attr__('Pro Settings', 'woo-rede'),
                         'type' => 'title',
@@ -840,7 +854,8 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
         $returnCode = $response_data['returnCode'] ?? '';
         $returnMessage = $response_data['returnMessage'] ?? __('Payment processing failed', 'woo-rede');
 
-        return array('success' => false, 'message' => LknIntegrationRedeForWoocommerceAbecsCodes::translate($returnCode, $returnMessage));
+        // Legado (v5.4.10): usa a mensagem da Rede quando existir, senão a genérica.
+        return array('success' => false, 'message' => LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $returnCode, $returnMessage));
     }
 
     private function decryptGooglePayToken($encrypted_token_string)

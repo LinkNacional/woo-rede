@@ -7,6 +7,24 @@ const labelRedeDebit = window.wp.htmlEntities.decodeEntities(settingsRedeDebit.t
 const nonceRedeDebit = settingsRedeDebit.nonceRedeDebit;
 const translationsRedeDebit = settingsRedeDebit.translations;
 const cardTypeRestriction = settingsRedeDebit.cardTypeRestriction || 'debit_only';
+const hideCardTypeSelector = settingsRedeDebit.hideCardTypeSelector || 'no';
+// Mostra o seletor sempre que a restrição permite ambos os tipos; com um único tipo, só mostra se a opção de escondê-lo não estiver habilitada.
+const showCardTypeSelector = cardTypeRestriction === 'both' ? true : hideCardTypeSelector !== 'yes';
+// Com um único tipo, o seletor aparece porém "travado" (cinza/aparentando disabled).
+// O bloqueio é puramente visual (CSS + atributos ARIA); NÃO usamos o atributo disabled
+// para o valor continuar sendo enviado no checkout.
+const lockCardTypeSelector = cardTypeRestriction !== 'both' && showCardTypeSelector;
+// O background-color não vai aqui: alguns temas sobrescrevem o inline style, então ele é
+// aplicado com !important via setProperty em um efeito (ver ContentRedeDebit).
+const lockedSelectStyle = lockCardTypeSelector
+  ? { color: '#767676', pointerEvents: 'none', cursor: 'not-allowed' }
+  : undefined;
+// Opções do seletor de tipo de cartão (tipo fixo quando a restrição é de um único tipo).
+const cardTypeOptions = cardTypeRestriction === 'credit_only'
+  ? [['credit', translationsRedeDebit.creditCard]]
+  : cardTypeRestriction === 'debit_only'
+    ? [['debit', translationsRedeDebit.debitCard]]
+    : [['debit', translationsRedeDebit.debitCard], ['credit', translationsRedeDebit.creditCard]];
 const minInstallmentsRede = settingsRedeDebit.minInstallmentsRede ? settingsRedeDebit.minInstallmentsRede.replace(',', '.') : '5.00';
 const templateStyle = settingsRedeDebit['3dsTemplateStyle'] || 'basic';
 const gatewayDescription = settingsRedeDebit.gatewayDescription || '';
@@ -218,6 +236,19 @@ const ContentRedeDebit = props => {
     sessionStorage.removeItem(REDE_CHECKOUT_SESSION_KEY);
     redeCheckoutSubmitted = false;
   }, []);
+
+  // Aplica o background-color do seletor travado com !important (alguns temas
+  // sobrescrevem o inline style sem prioridade). Não usamos o atributo disabled
+  // para o valor continuar sendo enviado no checkout.
+  window.wp.element.useEffect(() => {
+    const select = document.getElementById('card_type_selector');
+    if (!select) return;
+    if (lockCardTypeSelector) {
+      select.style.setProperty('background-color', '#f0f0f1', 'important');
+    } else {
+      select.style.removeProperty('background-color');
+    }
+  }, [lockCardTypeSelector, templateStyle]);
 
   // Função para buscar dados atualizados do backend e gerar as opções de installments (com debounce)
   let installmentTimeout = null;
@@ -773,7 +804,7 @@ const ContentRedeDebit = props => {
               <img src={cardTemplateAssets.lock} alt="" className="modern-field-icon" />
             )}
           </div>
-          {cardTypeRestriction === 'both' && (
+          {showCardTypeSelector && (
             <div className="modern-select-wrapper">
               <select
                 id="card_type_selector"
@@ -783,9 +814,14 @@ const ContentRedeDebit = props => {
                   updateDebitObject('card_type', value);
                 }}
                 className="modern-select"
+                style={lockedSelectStyle}
+                aria-disabled={lockCardTypeSelector ? 'true' : undefined}
+                tabIndex={lockCardTypeSelector ? -1 : undefined}
+                data-lkn-locked={lockCardTypeSelector ? 'true' : undefined}
               >
-                <option value="debit">{translationsRedeDebit.debitCard}</option>
-                <option value="credit">{translationsRedeDebit.creditCard}</option>
+                {cardTypeOptions.map(([value, label]) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
               </select>
             </div>
           )}
@@ -1003,7 +1039,7 @@ const ContentRedeDebit = props => {
         inputMode="numeric"
         pattern="[0-9]*"
       />
-      {cardTypeRestriction === 'both' && (
+      {showCardTypeSelector && (
         <div className="lknIntegrationRedeForWoocommerceSelectBlocks lknIntegrationRedeForWoocommerceSelect3dsInstallments">
           <label htmlFor="card_type_selector">{translationsRedeDebit.cardType}</label>
           <select
@@ -1013,9 +1049,14 @@ const ContentRedeDebit = props => {
               const value = e.target.value;
               updateDebitObject('card_type', value);
             }}
+            style={lockedSelectStyle}
+            aria-disabled={lockCardTypeSelector ? 'true' : undefined}
+            tabIndex={lockCardTypeSelector ? -1 : undefined}
+            data-lkn-locked={lockCardTypeSelector ? 'true' : undefined}
           >
-            <option value="debit">{translationsRedeDebit.debitCard}</option>
-            <option value="credit">{translationsRedeDebit.creditCard}</option>
+            {cardTypeOptions.map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
           </select>
         </div>
       )}

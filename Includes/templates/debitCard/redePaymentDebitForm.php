@@ -107,8 +107,35 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
                     style="font-size: 1.5em; padding: 8px 30px 8px 35px;" />
             </div>
 
-            <?php if ($card_type_restriction === 'both') : ?>
-            <div class="form-row form-row">
+            <?php
+            // Tipos de cartão permitidos conforme a restrição configurada.
+            if ($card_type_restriction === 'both') {
+                $lkn_card_type_options = array(
+                    'debit' => __('Debit Card', 'woo-rede'),
+                    'credit' => __('Credit Card', 'woo-rede'),
+                );
+                $lkn_card_type_selected = ($card_type === 'credit') ? 'credit' : 'debit';
+            } elseif ($card_type_restriction === 'credit_only') {
+                $lkn_card_type_options = array('credit' => __('Credit Card', 'woo-rede'));
+                $lkn_card_type_selected = 'credit';
+            } else {
+                $lkn_card_type_options = array('debit' => __('Debit Card', 'woo-rede'));
+                $lkn_card_type_selected = 'debit';
+            }
+
+            // Esconde o seletor apenas quando restrito a um único tipo e a opção estiver habilitada.
+            $lkn_hide_card_type_selector = ($card_type_restriction !== 'both' && (isset($hide_card_type_selector) ? $hide_card_type_selector : 'no') === 'yes');
+
+            // Com um único tipo, o seletor é exibido porém "travado": fica cinza com cara de
+            // disabled (SEM usar o atributo disabled, que faria o campo ser ignorado no envio).
+            $lkn_lock_card_type_selector = ($card_type_restriction !== 'both' && !$lkn_hide_card_type_selector);
+
+            $lkn_card_type_select_style = 'font-size: 1.5em; padding: 10px; width: 100%;';
+            if ($lkn_lock_card_type_selector) {
+                $lkn_card_type_select_style .= ' background-color: #f0f0f1; color: #767676; pointer-events: none; cursor: not-allowed;';
+            }
+            ?>
+            <div class="form-row form-row" id="rede-debit-card-type-wrapper"<?php echo $lkn_hide_card_type_selector ? ' style="display: none;"' : ''; ?>>
                 <label for="rede-debit-card-type">
                     <?php esc_attr_e('Card Type', 'woo-rede'); ?>
                     <span class="required">*</span>
@@ -117,13 +144,14 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
                     id="rede-debit-card-type"
                     name="rede_debit_card_type"
                     class="input-select lknIntegrationRedeForWoocommerceSelect"
-                    style="font-size: 1.5em; padding: 10px; width: 100%;"
-                    autocomplete="off">
-                    <option value="debit" <?php echo ($card_type === 'debit') ? 'selected' : ''; ?>><?php esc_attr_e('Debit Card', 'woo-rede'); ?></option>
-                    <option value="credit" <?php echo ($card_type === 'credit') ? 'selected' : ''; ?>><?php esc_attr_e('Credit Card', 'woo-rede'); ?></option>
+                    style="<?php echo esc_attr($lkn_card_type_select_style); ?>"
+                    autocomplete="off"
+                    <?php if ($lkn_lock_card_type_selector) : ?>data-lkn-locked="true" aria-disabled="true" tabindex="-1"<?php endif; ?>>
+                    <?php foreach ($lkn_card_type_options as $lkn_card_type_value => $lkn_card_type_label) : ?>
+                        <option value="<?php echo esc_attr($lkn_card_type_value); ?>" <?php echo ($lkn_card_type_selected === $lkn_card_type_value) ? 'selected' : ''; ?>><?php echo esc_html($lkn_card_type_label); ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
-            <?php endif; ?>
 
             <?php if (($card_type_restriction === 'credit_only' || $card_type_restriction === 'both') && is_array($installments) && count($installments) > 1) : ?>
             <div class="form-row form-row" id="rede-debit-installments-wrapper" <?php echo ($card_type_restriction === 'both' && $card_type === 'debit') ? 'style="display: none;"' : ''; ?>>
