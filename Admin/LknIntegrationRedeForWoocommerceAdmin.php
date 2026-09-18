@@ -74,44 +74,12 @@ final class LknIntegrationRedeForWoocommerceAdmin
      */
     public function enqueue_scripts(): void
     {
-        wp_enqueue_script('lknIntegrationRedeForWoocommerceProFields', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-pro-fields.js', array('jquery'), $this->version, false);
+        // Dependência de exibição dos campos PRO (reais e fakes).
+        wp_enqueue_script('lknIntegrationRedeForWoocommerceProInstallments', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-pro-installments.js', array('jquery'), $this->version, false);
 
-        // Só enfileira o script se a versão PRO estiver desativada
-        if (!is_plugin_active('rede-for-woocommerce-pro/rede-for-woocommerce-pro.php')) {
-            wp_enqueue_script('lknIntegrationRedeForWoocommerceProInstallments', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-pro-installments.js', array('jquery'), $this->version, false);
-        }
-
-        wp_localize_script('lknIntegrationRedeForWoocommerceProFields', 'lknPhpProFieldsVariables', array(
-            'proSettings' => __('PRO Settings', 'woo-rede'),
-            'license' => __('License', 'woo-rede'),
-            'currency' => __('Currency Converter', 'woo-rede'),
-            'currencyQuote' => __('Currency Quote', 'woo-rede'),
-            'autoCapture' => __('Auto Capture', 'woo-rede'),
-            'autoCaptureLabel' => __('Enables auto capture', 'woo-rede'),
-            'customCssShortcode' => __('Custom CSS (Shortcode)', 'woo-rede'),
-            'customCssBlockEditor' => __('Custom CSS (Block Editor)', 'woo-rede'),
-            'interestOnInstallments' => __('Interest on installments', 'woo-rede'),
-            'interestOnInstallmentsDescTip' => __('Select the option interest or discount. Save to continue configuration.', 'woo-rede'),
-            'licenseDescTip' => __('License for Rede for WooCommerce plugin extensions.', 'woo-rede'),
-            'currencyDescTip' => __('If enabled, automatically converts the order amount to BRL when processing payment.', 'woo-rede'),
-            'currencyQuoteDescTip' => __('These are the real-time exchange rates, indicating the value of each listed foreign currency in Brazilian Reais (BRL).', 'woo-rede'),
-            'autoCaptureDescTip' => __('By enabling automatic capture, payment is automatically captured immediately after the transaction.', 'woo-rede'),
-            'customCssShortcodeDescTip' => __('Possibility to customize the shortcode CSS. Enter the selector and rules, example: .checkout{color:green;}.', 'woo-rede'),
-            'customCssBlockEditorDescTip' => __('Possibility to customize the CSS in the block editor checkout. Enter the selector and rules, example: .checkout{color:green;}.', 'woo-rede'),
+        wp_localize_script('lknIntegrationRedeForWoocommerceProInstallments', 'lknPhpProFieldsVariables', array(
             'becomePRO' => __('PRO', 'woo-rede'),
-            'licenseDescription' => __('License for Rede plugin extensions.', 'woo-rede'),
-            'currencyDescription' => __('Automatically converts payment amounts to BRL.', 'woo-rede'),
-            'autoCaptureDescription' => __('Automatically captures the payment once authorized by Rede.', 'woo-rede'),
-            'autoCaptureDebitLabel' => __('Enable automatic capture for credit card transactions', 'woo-rede'),
-            'customCssShortcodeDescription' => __('Define CSS rules for the shortcode.', 'woo-rede'),
-            'customCssBlockEditorDescription' => __('Define CSS rules for the block editor.', 'woo-rede'),
-            'interestOnInstallmentsDescription' => __('Enables payment with interest in installments. Save to continue configuration. After enabling installment interest, you can define the amount of interest according to the installment.', 'woo-rede'),
-            'licenseDataDescription' => __('Save to enable other options.', 'woo-rede'),
-            'quoteDataDescription' => __('These are the real-time exchange rates, indicating the value of each listed foreign currency in Brazilian Reais (BRL).', 'woo-rede'),
-            'autoCaptureDataDescription' => __('Automatically captures the payment once authorized by Rede.', 'woo-rede'),
-            'cssShortcodeDataDescription' => __('Customize the Shortcode CSS using selectors and rules.', 'woo-rede'),
-            'cssBlockEditorDataDescription' => __('Customize the Block Editor CSS using selectors and rules.', 'woo-rede'),
-            'installmentInterestDataDescription' => __('Applies an interest rate to each installment. Use this if you want to charge extra per installment.', 'woo-rede'),
+            'fakeProNotice' => __('The features marked with the PRO badge are a preview in the free plan. You can adjust them freely to explore them, but they only take effect with an active PRO license.', 'woo-rede'),
         ));
 
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin.js', array('jquery'), $this->version, false);
@@ -122,6 +90,7 @@ final class LknIntegrationRedeForWoocommerceAdmin
             'install_nonce' => wp_create_nonce('install-plugin_invoice-payment-for-woocommerce'),
             'invoice_plugin_installed' => is_plugin_active('invoice-payment-for-woocommerce/invoice-payment-for-woocommerce.php'),
             'isProActive' => is_plugin_active('rede-for-woocommerce-pro/rede-for-woocommerce-pro.php'),
+            'isProLicenseValid' => LknIntegrationRedeForWoocommerceHelper::isProLicenseValid(),
             'whatsapp_number' => LKN_WC_REDE_WPP_NUMBER,
             'site_url' => get_site_url(),
         ));

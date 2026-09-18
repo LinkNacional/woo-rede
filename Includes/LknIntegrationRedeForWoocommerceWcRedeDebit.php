@@ -1032,7 +1032,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 ),
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__('Choose the status that approved payments should have. "Processing" is recommended for most cases.', 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array())
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array())
             ),
 
             'enabled_fix_load_script' => array(
@@ -1058,14 +1058,17 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'class' => 'wc-enhanced-select',
                 'description' => esc_attr__('Choose which card types are accepted for payment. This setting controls whether customers can use credit cards, debit cards, or both.', 'woo-rede'),
                 'desc_tip' => esc_attr__('Select the card types that will be accepted during payment processing. This helps control the payment flow based on your business needs.', 'woo-rede'),
-                'default' => 'debit_only',
+                'default' => $isProValid ? 'debit_only' : 'both',
                 'options' => array(
                     'debit_only' => esc_attr__('Debit Cards Only', 'woo-rede'),
                     'credit_only' => esc_attr__('Credit Cards Only', 'woo-rede'),
                     'both' => esc_attr__('Both Credit and Debit Cards', 'woo-rede'),
                 ),
-                'custom_attributes' => array(
-                    'data-title-description' => esc_attr__('Control which card types customers can use for payment. Choose "Debit Only" for the current debit gateway configuration.', 'woo-rede')
+                'custom_attributes' => array_merge(
+                    array(
+                        'data-title-description' => esc_attr__('Control which card types customers can use for payment. Choose "Debit Only" for the current debit gateway configuration.', 'woo-rede')
+                    ),
+                    !$isProValid ? array('lkn-pro-badge' => 'true') : array()
                 )
             ),
 
@@ -1079,7 +1082,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__('Hide the card type selector on the checkout. Available only when only debit or only credit cards are accepted.', 'woo-rede'),
                     'merge-top' => "woocommerce_{$this->id}_card_type_restriction",
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
             ),
 
             'auto_capture' => array(
@@ -1091,7 +1094,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'default' => 'yes',
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__("Automatically captures the payment once authorized by Rede.", 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
             ),
 
             '3ds_fallback_behavior' => array(
@@ -1123,7 +1126,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 ),
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__('Choose between basic and modern 3DS authentication templates. Modern template provides enhanced visual design and better user experience during payment authentication.', 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array())
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array())
             ),
 
             'abecs_norms' => array(
@@ -1137,7 +1140,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                     array(
                         'data-title-description' => esc_attr__('Use the official e.Rede (ABECS) return messages. Disable to keep the previous default messages.', 'woo-rede')
                     ),
-                    !$isProValid ? array('lkn-is-pro' => 'true') : array()
+                    !$isProValid ? array('lkn-pro-badge' => 'true') : array()
                 ),
             ),
 
@@ -1194,14 +1197,14 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'description' => esc_attr__('Allows the user to select discount or interest on credit card installments.', 'woo-rede'),
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__("Defines whether the installment will apply interest or offer a discount. Save to load more settings.", 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
             ),
             'interest_show_percent' => array(
                 'title' => __('Display interest percentage', 'woo-rede'),
                 'label' => __('Display interest percentage.', 'woo-rede'),
                 'type' => 'checkbox',
                 'description' => __('By enabling this feature, the percentage applied to each installment will be displayed to the customer during checkout.', 'woo-rede'),
-                'custom_attributes' => !$isProValid ? array('lkn-is-pro' => 'true') : array(),
+                'custom_attributes' => !$isProValid ? array('lkn-pro-badge' => 'true') : array(),
                 'default' => 'yes'
             ),
             'installment_interest' => array(
@@ -1213,7 +1216,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'description' => esc_attr__('Allows payment with interest in installments. Save to continue configuration.', 'woo-rede'),
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__("Applies an interest rate to each installment. Use this if you want to charge extra per installment.", 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
             ),
             'installment_discount' => array(
                 'title' => __('Discount on installments', 'woo-rede'),
@@ -1222,7 +1225,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'description' => esc_attr__('Enables payment with discount on installments.', 'woo-rede'),
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__("Applies a discount per installment when selected. Useful to encourage multi-payment options.", 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
                 'default' => 'no',
             )
         ));
@@ -1238,7 +1241,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'max' => '100',
                 'merge-top' => "woocommerce_{$this->id}_installment_interest",
                 'data-title-description' => esc_attr__('Minimum interest percentage that will be applied regardless of installment number.', 'woo-rede')
-            ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+            ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
             'description' => __('Minimum interest percentage that will be applied regardless of installment number.', 'woo-rede'),
         );
 
@@ -1259,7 +1262,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                     'merge-top' => "woocommerce_{$this->id}_installment_interest",
                     // translators: %d is the number of installments
                     'data-title-description' => sprintf(esc_attr__('Interest applied when customer selects to pay in %dx. Leave 0 for no interest.', 'woo-rede'), $i)
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
                 'description' => __('This option defines the interest on the installment as a percentage. Only accepts numbers. For example, for 10% interest, enter 10. Leave it blank or enter zero for an installment without an interest rate.', 'woo-rede'),
             );
 
@@ -1276,7 +1279,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                     'merge-top' => "woocommerce_{$this->id}_installment_discount",
                     // translators: %d is the number of installments
                     'data-title-description' => sprintf(esc_attr__('Discount applied when customer selects to pay in %dx. Leave 0 for no discount.', 'woo-rede'), $i)
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
                 'description' => __('This option defines the discount on the installment as a percentage. Only accepts numbers. For example, for 10% discount, enter 10. Leave it blank or enter zero for an installment without a discount rate.', 'woo-rede'),
             );
         }
@@ -1320,6 +1323,23 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             );
         }
 
+        // Suporte WhatsApp: funcional só no PRO; no plano gratuito fica cinza (badge PRO).
+        $this->form_fields['send_configs'] = array(
+            'title' => __('WhatsApp Support', 'woo-rede'),
+            'type'  => 'button',
+            'id'    => 'sendConfigs',
+            'description' => __('Enable Debug Mode and click Save Changes to get quick support via WhatsApp.', 'woo-rede'),
+            'desc_tip' => '',
+            'disabled' => ! $isProValid,
+            'custom_attributes' => array_merge(
+                array(
+                    'merge-top' => "woocommerce_{$this->id}_debug",
+                    'data-title-description' => __('Send the settings for this payment method to WordPress Support.', 'woo-rede')
+                ),
+                ! $isProValid ? array('lkn-pro-badge' => 'true') : array()
+            )
+        );
+
         $this->form_fields['transactions'] = array(
             'title' => esc_attr__('Transactions', 'woo-rede'),
             'id' => 'transactions_title',
@@ -1328,8 +1348,13 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
 
         $customConfigs = apply_filters('integration_rede_for_woocommerce_get_custom_configs', $this->form_fields, array(), $this->id);
 
-        if (! empty($customConfigs)) {
-            $this->form_fields = array_merge($this->form_fields, $customConfigs);
+        if (LknIntegrationRedeForWoocommerceHelper::isProLicenseValid()) {
+            if (! empty($customConfigs)) {
+                $this->form_fields = array_merge($this->form_fields, $customConfigs);
+            }
+        } else {
+            // Licença PRO inativa: replica os campos PRO como fakes interativos (selo PRO).
+            $this->form_fields = array_merge($this->form_fields, LknIntegrationRedeForWoocommerceHelper::lknRedeGetFakeProFields($this->id, $customConfigs, array_keys($this->form_fields)));
         }
     }
 
@@ -1417,7 +1442,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         // Tipo de cartão. Anti-manipulação: recusa (exceção) valores fora de
         // credit/debit ou divergentes da restrição de um único tipo — evita gerar
         // uma transação de crédito/débito indevida a partir de POST adulterado.
-        $card_type_restriction = $this->get_option('card_type_restriction', 'debit_only');
+        $card_type_restriction = LknIntegrationRedeForWoocommerceHelper::getCardTypeRestriction($this->id);
         $required_card_type = null;
         if ($card_type_restriction === 'credit_only') {
             $required_card_type = 'credit';
@@ -1900,7 +1925,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
     public function getInstallments($order_total = 0)
     {
         $installments = array();
-        $card_type_restriction = $this->get_option('card_type_restriction', 'debit_only');
+        $card_type_restriction = LknIntegrationRedeForWoocommerceHelper::getCardTypeRestriction($this->id);
         
         // Só gera parcelas se permitir crédito
         if ($card_type_restriction === 'credit_only' || $card_type_restriction === 'both') {
@@ -1996,7 +2021,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             array(
                 'installments' => $this->getInstallments($order_total),
                 'installments_number' => $installments_number,
-                'card_type_restriction' => $this->get_option('card_type_restriction', 'debit_only'),
+                'card_type_restriction' => LknIntegrationRedeForWoocommerceHelper::getCardTypeRestriction($this->id),
                 'hide_card_type_selector' => LknIntegrationRedeForWoocommerceHelper::isHideCardTypeSelectorEnabled($this->id) ? 'yes' : 'no',
                 'card_type' => $card_type,
             ),

@@ -199,7 +199,7 @@ final class LknIntegrationRedeForWoocommerceWcPixRede extends WC_Payment_Gateway
                             array(
                                 'data-title-description' => esc_attr__('Use the official e.Rede (ABECS) return messages. Disable to keep the previous default messages.', 'woo-rede')
                             ),
-                            ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() ? array('lkn-is-pro' => 'true') : array()
+                            ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() ? array('lkn-pro-badge' => 'true') : array()
                         ),
                     ),
                     'developers' => array(

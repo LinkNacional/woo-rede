@@ -140,14 +140,29 @@
       cardContainer.appendChild(promotionalCard);
     }
 
-    // Inserir campos PRO se estiver em uma página de plugin e não for versão PRO ativa
+    // Aviso: os campos marcados como PRO são apenas demonstração no plano gratuito —
+    // o lojista pode ajustá-los à vontade, mas só têm efeito com licença PRO ativa.
     if (adminPage && pluginPages.includes(adminPage)) {
       const wcForm = document.getElementById('mainform')
-      
-      if (!lknPhpVariables.isProActive) {
-        const submitButton = wcForm.querySelector('button[type="submit"]').parentElement
-        if (submitButton && typeof lknIntegrationRedeForWoocommerceProFields === 'function') {
-          submitButton.insertAdjacentHTML('beforebegin', lknIntegrationRedeForWoocommerceProFields(adminPage))
+
+      if (typeof lknPhpVariables !== 'undefined' && !lknPhpVariables.isProLicenseValid && wcForm && !document.getElementById('lknRedeFakeProNotice')) {
+        const notice = document.createElement('div')
+        notice.id = 'lknRedeFakeProNotice'
+        notice.className = 'notice notice-info inline'
+        notice.setAttribute('style', 'margin: 10px 0; padding: 8px 12px; border-left-color: #2271b1;')
+
+        const p = document.createElement('p')
+        p.setAttribute('style', 'margin: 4px 0;')
+        p.textContent = (typeof lknPhpProFieldsVariables !== 'undefined' && lknPhpProFieldsVariables.fakeProNotice)
+          ? lknPhpProFieldsVariables.fakeProNotice
+          : 'The features marked with the PRO badge are a preview in the free plan. You can adjust them freely to explore them, but they only take effect with an active PRO license.'
+        notice.appendChild(p)
+
+        const header = wcForm.querySelector('h2') || wcForm.firstElementChild
+        if (header && header.parentNode) {
+          header.parentNode.insertBefore(notice, header.nextSibling)
+        } else {
+          wcForm.insertBefore(notice, wcForm.firstChild)
         }
       }
     }

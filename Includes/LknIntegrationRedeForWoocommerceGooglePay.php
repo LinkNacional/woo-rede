@@ -44,10 +44,10 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
 
         $this->autoGenerateKeysIfNeeded();
 
-        // Lista dinâmica de campos PRO (identificados pelo atributo customizado 'lkn-is-pro')
+        // Lista dinâmica de campos PRO (identificados pelo atributo customizado 'lkn-pro-badge')
         $this->pro_fields = array();
         foreach ($this->form_fields as $key => $field) {
-            if (isset($field['custom_attributes']['lkn-is-pro']) && $field['custom_attributes']['lkn-is-pro'] === 'true') {
+            if (isset($field['custom_attributes']['lkn-pro-badge']) && $field['custom_attributes']['lkn-pro-badge'] === 'true') {
                 $this->pro_fields[] = $key;
             }
         }
@@ -216,7 +216,7 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
                                 'merge-top' => "woocommerce_{$this->id}_google_merchant_name",
                                 'data-title-description' => esc_attr__('Choose the text to display on the Google Pay button.', 'woo-rede')
                             ),
-                            !$proVersionActive ? array('lkn-is-pro' => 'true') : array()
+                            !$proVersionActive ? array('lkn-pro-badge' => 'true') : array()
                         ),
                     ),
                     'require_3ds' => array(
@@ -231,7 +231,7 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
                                 'merge-top' => "woocommerce_{$this->id}_google_merchant_name",
                                 'data-title-description' => esc_attr__('Requires 3D Secure authentication for greater security.', 'woo-rede')
                             ),
-                            !$proVersionActive ? array('lkn-is-pro' => 'true') : array()
+                            !$proVersionActive ? array('lkn-pro-badge' => 'true') : array()
                         ),
                     ),
                     'google_pay_public_key' => array(
@@ -267,7 +267,7 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
                             array(
                                 'data-title-description' => esc_attr__('Use the official e.Rede (ABECS) return messages. Disable to keep the previous default messages.', 'woo-rede')
                             ),
-                            ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() ? array('lkn-is-pro' => 'true') : array()
+                            ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() ? array('lkn-pro-badge' => 'true') : array()
                         )
                     ),
                     'google_pay_pro' => array(
@@ -286,7 +286,7 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
                         array(
                             'data-title-description' => esc_attr__('When enabled, orders in other currencies will be automatically converted to BRL during payment processing.', 'woo-rede')
                         ),
-                        !$proVersionActive ? array('lkn-is-pro' => 'true') : array()
+                        !$proVersionActive ? array('lkn-pro-badge' => 'true') : array()
                     )
                 );
                 $this->form_fields['payment_complete_status'] = array(
@@ -301,7 +301,7 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
                         array(
                             'data-title-description' => esc_attr__('Select the order status that should be set after payment is successfully completed.', 'woo-rede')
                         ),
-                        !$proVersionActive ? array('lkn-is-pro' => 'true') : array()
+                        !$proVersionActive ? array('lkn-pro-badge' => 'true') : array()
                     ),
                 );
                 $this->form_fields['auto_capture'] = array(
@@ -315,7 +315,7 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
                         array(
                             'data-title-description' => esc_attr__('For Google Pay, automatic capture is recommended to provide immediate payment confirmation.', 'woo-rede')
                         ),
-                        !$proVersionActive ? array('lkn-is-pro' => 'true') : array()
+                        !$proVersionActive ? array('lkn-pro-badge' => 'true') : array()
                     )
                 );
 
@@ -349,16 +349,20 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
                     $current_debug_value = $this->get_option('debug', 'no');
                 }
 
-                if ($proVersionActive && ($current_debug_value === true || $current_debug_value == 1 || $current_debug_value == 'yes')) {
+                if ($current_debug_value === true || $current_debug_value == 1 || $current_debug_value == 'yes') {
                     $this->form_fields['send_configs'] = array(
                         'title' => __('WhatsApp Support', 'woo-rede'),
                         'type'  => 'button',
                         'id'    => 'sendConfigs',
                         'description' => __('Enable Debug Mode and click Save Changes to get quick support via WhatsApp.', 'woo-rede'),
                         'desc_tip' => null,
-                        'custom_attributes' => array(
-                            'merge-top' => "woocommerce_{$this->id}_debug",
-                            'data-title-description' => __('Send the settings for this payment method to WordPress Support.', 'woo-rede')
+                        'disabled' => ! $proVersionActive,
+                        'custom_attributes' => array_merge(
+                            array(
+                                'merge-top' => "woocommerce_{$this->id}_debug",
+                                'data-title-description' => __('Send the settings for this payment method to WordPress Support.', 'woo-rede')
+                            ),
+                            ! $proVersionActive ? array('lkn-pro-badge' => 'true') : array()
                         )
                     );
                 }

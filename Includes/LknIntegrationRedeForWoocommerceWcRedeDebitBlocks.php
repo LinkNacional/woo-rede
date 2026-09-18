@@ -87,7 +87,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebitBlocks extends AbstractPa
             'nonceRedeDebit' => wp_create_nonce('redeCardNonce'),
             'minInstallmentsRede' => $this->gateway->get_option('min_parcels_value', '5'),
             'cartTotal' => $cart_total,
-            'cardTypeRestriction' => $this->gateway->get_option('card_type_restriction', 'debit_only'),
+            'cardTypeRestriction' => LknIntegrationRedeForWoocommerceHelper::getCardTypeRestriction($this->gateway->id),
             'hideCardTypeSelector' => LknIntegrationRedeForWoocommerceHelper::isHideCardTypeSelectorEnabled($this->name) ? 'yes' : 'no',
             'maxParcels' => $this->gateway->get_option('max_parcels_number', '12'),
             'minParcelsValue' => $this->gateway->get_option('min_parcels_value', '5'),

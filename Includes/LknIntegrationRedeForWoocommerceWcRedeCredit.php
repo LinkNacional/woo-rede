@@ -470,7 +470,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                     array(
                         'data-title-description' => esc_attr__('Use the official e.Rede (ABECS) return messages. Disable to keep the previous default messages.', 'woo-rede')
                     ),
-                    ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() ? array('lkn-is-pro' => 'true') : array()
+                    ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() ? array('lkn-pro-badge' => 'true') : array()
                 ),
             ),
 
@@ -494,19 +494,22 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
 
         // PRO section (send configs)
         $pro_plugin_active = LknIntegrationRedeForWoocommerceHelper::isProLicenseValid();
-        if ($pro_plugin_active && $this->get_option('debug') == 'yes') {
-            $this->form_fields['send_configs'] = array(
-                'title' => __('WhatsApp Support', 'woo-rede'),
-                'type'  => 'button',
-                'id'    => 'sendConfigs',
-                'description' => __('Enable Debug Mode and click Save Changes to get quick support via WhatsApp.', 'woo-rede'),
-                'desc_tip' => '',
-                'custom_attributes' => array(
+        // Suporte WhatsApp: funcional só no PRO; no plano gratuito fica cinza (badge PRO).
+        $this->form_fields['send_configs'] = array(
+            'title' => __('WhatsApp Support', 'woo-rede'),
+            'type'  => 'button',
+            'id'    => 'sendConfigs',
+            'description' => __('Enable Debug Mode and click Save Changes to get quick support via WhatsApp.', 'woo-rede'),
+            'desc_tip' => '',
+            'disabled' => ! $pro_plugin_active,
+            'custom_attributes' => array_merge(
+                array(
                     'merge-top' => "woocommerce_{$this->id}_debug",
                     'data-title-description' => __('Send the settings for this payment method to WordPress Support.', 'woo-rede')
-                )
-            );
-        }
+                ),
+                ! $pro_plugin_active ? array('lkn-pro-badge' => 'true') : array()
+            )
+        );
 
         if ($this->get_option('debug') == 'yes') {
             $this->form_fields['show_order_logs'] =  array(
@@ -544,8 +547,14 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
             'max_parcels_number' => $this->get_option('max_parcels_number'),
         ), $this->id);
 
-        if (! empty($customConfigs)) {
-            $this->form_fields = array_merge($this->form_fields, $customConfigs);
+        if (LknIntegrationRedeForWoocommerceHelper::isProLicenseValid()) {
+            if (! empty($customConfigs)) {
+                $this->form_fields = array_merge($this->form_fields, $customConfigs);
+            }
+        } else {
+            // Licença PRO inativa: replica os campos PRO como fakes interativos
+            // (selo PRO). Preserva os campos reais de licença quando o PRO está presente.
+            $this->form_fields = array_merge($this->form_fields, LknIntegrationRedeForWoocommerceHelper::lknRedeGetFakeProFields($this->id, $customConfigs, array_keys($this->form_fields)));
         }
     }
 

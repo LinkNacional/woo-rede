@@ -981,6 +981,408 @@ class LknIntegrationRedeForWoocommerceHelper
     }
 
     /**
+     * Retorna o modo efetivo de restrição de tipo de cartão de um gateway.
+     * Recurso PRO: sem licença ativa, o gateway não restringe o tipo — aceita
+     * crédito e débito (equivale a "both", independentemente do valor salvo).
+     *
+     * @param string $gatewayId ID do gateway (ex.: rede_debit).
+     * @return string 'both' | 'credit_only' | 'debit_only'
+     */
+    final public static function getCardTypeRestriction(string $gatewayId): string
+    {
+        if (! self::isProLicenseValid()) {
+            return 'both';
+        }
+
+        $settings = get_option('woocommerce_' . $gatewayId . '_settings', array());
+        if (is_array($settings) && ! empty($settings['card_type_restriction'])) {
+            return $settings['card_type_restriction'];
+        }
+
+        return 'debit_only';
+    }
+
+    /**
+     * Monta o bloco "fake" dos campos PRO de um gateway.
+     *
+     * Quando a licença PRO não está ativa, o plugin gratuito replica os campos
+     * exclusivos do PRO (mesmos títulos, tipos, opções e dependências de exibição),
+     * porém com chave própria (sufixo _fake) e marcados com o selo "PRO"
+     * (lkn-pro-badge). São inertes: o lojista pode interagir à vontade para explorar
+     * os recursos, mas nada é gravado nas opções reais do PRO.
+     *
+     * @param string $gatewayId ID do gateway (ex.: rede_credit, rede_debit, maxipago_credit, maxipago_debit).
+     * @param array  $proFields Campos retornados pelo PRO (para preservar os campos reais de licença).
+     * @param array  $existing  Chaves já presentes no formulário do FREE (para não duplicar campos).
+     * @return array Campos fake no formato de form_fields do WooCommerce.
+     */
+    final public static function lknRedeGetFakeProFields(string $gatewayId, array $proFields = array(), array $existing = array()): array
+    {
+        $badge = array('lkn-pro-badge' => 'true');
+        $badgeTop = function (string $target) use ($badge): array {
+            return array_merge(array('merge-top' => 'woocommerce_' . $target . '_fake'), $badge);
+        };
+
+        $fields = array();
+
+        $fields['PRO_fake'] = array(
+            'title' => esc_attr__('PRO', 'woo-rede'),
+            'type' => 'title',
+        );
+
+        // Preserva os campos reais de licença (quando o plugin PRO está presente) para
+        // permitir inserir/validar a chave; caso contrário, exibe um campo fake.
+        if (isset($proFields['license'])) {
+            $fields['license'] = $proFields['license'];
+            if (isset($proFields['validate_license'])) {
+                $fields['validate_license'] = $proFields['validate_license'];
+            } else {
+                // PRO presente, porém sem botão de validação ainda (licença vazia):
+                // exibe um botão inerte para o recurso ficar visível.
+                $fields['validate_license_fake'] = array(
+                    'title' => esc_attr__('Validate License', 'woo-rede'),
+                    'type' => 'button',
+                    'id' => 'validateLicenseFake',
+                    'class' => 'woocommerce-save-button components-button',
+                    'default' => __('Validate License', 'woo-rede'),
+                    'disabled' => true,
+                    'description' => __('Click the button to validate your license.', 'woo-rede'),
+                    'custom_attributes' => array_merge(
+                        array('data-title-description' => esc_attr__('Validates your license key to unlock all PRO features.', 'woo-rede')),
+                        $badge
+                    ),
+                );
+            }
+        } else {
+            $fields['license_fake'] = array(
+                'title' => esc_attr__('License', 'woo-rede'),
+                'type' => 'password',
+                'description' => esc_attr__('License for Rede for WooCommerce plugin extensions.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Enter your Link Nacional license key to activate PRO features.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Save to enable other options.', 'woo-rede')),
+                    $badge
+                ),
+            );
+
+            $fields['validate_license_fake'] = array(
+                'title' => esc_attr__('Validate License', 'woo-rede'),
+                'type' => 'button',
+                'id' => 'validateLicenseFake',
+                'class' => 'woocommerce-save-button components-button',
+                'default' => __('Validate License', 'woo-rede'),
+                'disabled' => true,
+                'description' => __('Click the button to validate your license.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Save to enable other options.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Validates your license key to unlock all PRO features.', 'woo-rede')),
+                    $badge
+                ),
+            );
+        }
+
+        // Conversor de moeda.
+        $fields['convert_to_brl_fake'] = array(
+            'title' => __('Currency Converter', 'woo-rede'),
+            'type' => 'checkbox',
+            'label' => __('Convert to BRL', 'woo-rede'),
+            'default' => 'no',
+            'description' => __('Automatically converts payment amounts to BRL.', 'woo-rede'),
+            'desc_tip' => __('If enabled, automatically converts the order amount to BRL when processing payment.', 'woo-rede'),
+            'custom_attributes' => array_merge(
+                array('data-title-description' => __('Automatically converts the order amount to BRL.', 'woo-rede')),
+                $badge
+            ),
+        );
+
+        $fields['currency_quote_fake'] = array(
+            'title' => __('Currency Quote', 'woo-rede'),
+            'type' => 'text',
+            'description' => sprintf(
+                '<a href="%s" target="_blank">%s</a>',
+                esc_url(plugins_url('integration-rede-for-woocommerce/Includes/files/linkCurrencies.json')),
+                __('View Currencies and Quotes', 'woo-rede')
+            ),
+            'desc_tip' => esc_attr__('These are the real-time exchange rates, indicating the value of each listed foreign currency in Brazilian Reais (BRL).', 'woo-rede'),
+            'custom_attributes' => array_merge(array('readonly' => 'readonly'), $badge),
+        );
+
+        // Extras (cartão de crédito tem auto-capture; maxipago_debit também expõe status).
+        if (in_array($gatewayId, array('rede_credit', 'maxipago_credit'), true)) {
+            $fields['auto_capture_fake'] = array(
+                'title' => __('Automatic Capture', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => __('Enable automatic capture', 'woo-rede'),
+                'default' => 'yes',
+                'description' => __('Automatically captures the payment once authorized.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Allows the transaction to be captured after authentication automatically.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => __('Automatically captures the payment once authorized by Rede.', 'woo-rede')),
+                    $badge
+                ),
+            );
+        }
+
+        $fields['custom_css_short_code_fake'] = array(
+            'title' => __('Custom CSS (Shortcode)', 'woo-rede'),
+            'type' => 'textarea',
+            'default' => '',
+            'description' => __('Define CSS rules for the shortcode.', 'woo-rede'),
+            'desc_tip' => __('Possibility to customize the shortcode CSS.', 'woo-rede'),
+            'custom_attributes' => array_merge(
+                array('data-title-description' => __('Customize the Shortcode CSS using selectors and rules.', 'woo-rede')),
+                $badge
+            ),
+        );
+
+        $fields['custom_css_block_editor_fake'] = array(
+            'title' => __('Custom CSS (Block Editor)', 'woo-rede'),
+            'type' => 'textarea',
+            'default' => '',
+            'description' => __('Define CSS rules for the block editor.', 'woo-rede'),
+            'desc_tip' => __('Possibility to customize the block editor CSS.', 'woo-rede'),
+            'custom_attributes' => array_merge(
+                array('data-title-description' => __('Customize the Block Editor CSS using selectors and rules.', 'woo-rede')),
+                $badge
+            ),
+        );
+
+        if (in_array($gatewayId, array('rede_credit', 'maxipago_credit', 'maxipago_debit'), true)) {
+            $fields['payment_complete_status_fake'] = array(
+                'title' => esc_attr__('Complete Payment Status', 'woo-rede'),
+                'type' => 'select',
+                'class' => 'wc-enhanced-select',
+                'default' => 'processing',
+                'description' => esc_attr__('Select the default status for successfully paid orders.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Choose the status for the order after the payment is successfully completed.', 'woo-rede'),
+                'options' => array(
+                    'processing' => esc_attr__('Processing', 'woo-rede'),
+                    'completed'  => esc_attr__('Completed', 'woo-rede'),
+                    'on-hold'    => esc_attr__('On Hold', 'woo-rede'),
+                ),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Status after successful payment.', 'woo-rede')),
+                    $badge
+                ),
+            );
+        }
+
+        $fields['auto_refund_on_cancel_fake'] = array(
+            'title' => esc_attr__('Automatic Refund on Cancellation', 'woo-rede'),
+            'type' => 'checkbox',
+            'label' => __('Enable automatic refund when the order is cancelled.', 'woo-rede'),
+            'default' => 'no',
+            'desc_tip' => esc_attr__('When enabled, cancelling an order will automatically trigger a refund through this gateway.', 'woo-rede'),
+            'description' => esc_attr__('If enabled, WooCommerce will automatically issue a refund via this gateway when an order is cancelled.', 'woo-rede'),
+            'custom_attributes' => array_merge(
+                array('data-title-description' => esc_attr__('Automatically refunds the customer when an order is cancelled.', 'woo-rede')),
+                $badge
+            ),
+        );
+
+        // Bloco de parcelamento (apenas crédito).
+        if (in_array($gatewayId, array('rede_credit', 'maxipago_credit'), true)) {
+            $fields['Installment_fake'] = array(
+                'title' => esc_attr__('Installment', 'woo-rede'),
+                'type' => 'title',
+            );
+
+            $fields['interest_or_discount_fake'] = array(
+                'title' => esc_attr__('Installment Settings', 'woo-rede'),
+                'type' => 'select',
+                'class' => 'wc-enhanced-select',
+                'default' => 'interest',
+                'options' => array(
+                    'interest' => __('Interest', 'woo-rede'),
+                    'discount' => __('Discount', 'woo-rede'),
+                ),
+                'description' => esc_attr__('Allows the user to select discount or interest on credit card installments.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Select the option interest or discount. Save to continue configuration.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Defines whether the installment will apply interest or offer a discount.', 'woo-rede')),
+                    $badge
+                ),
+            );
+
+            $fields['interest_show_percent_fake'] = array(
+                'title' => __('Display interest percentage', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => __('Display interest percentage. Default (enabled)', 'woo-rede'),
+                'default' => 'yes',
+                'description' => __('The percentage applied to each installment will be displayed to the customer during checkout.', 'woo-rede'),
+                'desc_tip' => true,
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => __('Displays the interest percentage at checkout.', 'woo-rede')),
+                    $badge
+                ),
+            );
+
+            $fields['installment_interest_fake'] = array(
+                'title' => __('Interest on installments', 'woo-rede'),
+                'type' => 'checkbox',
+                'default' => 'no',
+                'description' => esc_attr__('Allows payment with interest in installments.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Enable to allow interest to be charged on installment payments.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Applies an interest rate to each installment.', 'woo-rede')),
+                    $badge
+                ),
+            );
+
+            $fields['installment_discount_fake'] = array(
+                'title' => __('Discount on installments', 'woo-rede'),
+                'type' => 'checkbox',
+                'default' => 'no',
+                'desc_tip' => esc_attr__('Enable to give a discount when the customer chooses to pay in installments.', 'woo-rede'),
+                'description' => esc_attr__('Enables payment with discount on installments.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Applies a discount per installment when selected.', 'woo-rede')),
+                    $badge
+                ),
+            );
+
+            $fields['min_interest_fake'] = array(
+                'title' => __('Minimum installment for no interest', 'woo-rede'),
+                'type' => 'number',
+                'default' => '0',
+                'description' => esc_attr__('Sets the minimum accepted installment value.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Set the minimum value of each installment for the sale to be considered interest-free.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array(
+                        'min' => '0',
+                        'step' => '1',
+                        'data-title-description' => esc_attr__('Defines the lowest possible value for each installment.', 'woo-rede'),
+                    ),
+                    $badgeTop($gatewayId . '_installment_interest')
+                ),
+            );
+
+            // Gera 1..18 para permitir controle dinâmico pelo seletor de limite.
+            for ($c = 1; $c <= 18; ++$c) {
+                $fields[$c . 'x_fake'] = array(
+                    'title' => __('Installment interest', 'woo-rede') . ' ' . $c . 'x',
+                    'type' => 'number',
+                    'default' => '0',
+                    'description' => __('This option defines the interest on the installment as a percentage. Only accepts numbers.', 'woo-rede'),
+                    'custom_attributes' => array_merge(
+                        array(
+                            'min' => '0',
+                            'step' => '0.01',
+                            'data-title-description' => esc_attr__('Interest applied when customer selects to pay in ' . $c . 'x. Leave 0 for no interest.', 'woo-rede'),
+                        ),
+                        $badgeTop($gatewayId . '_installment_interest')
+                    ),
+                );
+
+                $fields[$c . 'x_discount_fake'] = array(
+                    'title' => __('Installment discount', 'woo-rede') . ' ' . $c . 'x',
+                    'type' => 'number',
+                    'default' => '0',
+                    'desc_tip' => false,
+                    'description' => __('This option defines the discount on the installment as a percentage. Only accepts numbers.', 'woo-rede'),
+                    'custom_attributes' => array_merge(
+                        array(
+                            'min' => '0',
+                            'step' => '0.01',
+                            'max' => '100',
+                            'data-title-description' => esc_attr__('Discount applied when customer selects to pay in ' . $c . 'x. Leave 0 for no discount.', 'woo-rede'),
+                        ),
+                        $badgeTop($gatewayId . '_installment_discount')
+                    ),
+                );
+            }
+
+            $limitOptions = array();
+            for ($i = 1; $i <= 21; ++$i) {
+                $limitOptions[(string) $i] = $i . 'x';
+            }
+
+            $fields['max_parcels_number_fake'] = array(
+                'title' => esc_attr__('Max installments', 'woo-rede'),
+                'type' => 'select',
+                'class' => 'wc-enhanced-select',
+                'default' => '12',
+                'description' => esc_attr__('Set the maximum number of installments allowed in credit transactions.', 'woo-rede'),
+                'desc_tip' => true,
+                'options' => $limitOptions,
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Maximum number of installments.', 'woo-rede')),
+                    $badge
+                ),
+            );
+        }
+
+        // Remove fakes cuja chave-base já existe no formulário do FREE (evita duplicar
+        // campos que o PRO sobrescreve).
+        if (! empty($existing)) {
+            foreach (array_keys($fields) as $fakeKey) {
+                if ('_fake' === substr($fakeKey, -5) && in_array(substr($fakeKey, 0, -5), $existing, true)) {
+                    unset($fields[$fakeKey]);
+                }
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Força os campos PRO de um gateway de cartão aos valores padrão quando a licença
+     * não está ativa. Executado ao salvar as configurações (WooCommerce Settings API).
+     * Garante que nenhum recurso PRO permaneça habilitado no banco, cobrindo tanto o
+     * HTML manipulado quanto os campos "fake" replicados no plano gratuito.
+     *
+     * @param array $settings Configurações do gateway prestes a serem salvas.
+     * @return array
+     */
+    final public static function lknRedeEnforceProFieldsOnSave(array $settings): array
+    {
+        if (self::isProLicenseValid()) {
+            return $settings;
+        }
+
+        // Remove as chaves "fake" (nunca devem persistir).
+        foreach (array_keys($settings) as $key) {
+            if ('_fake' === substr($key, -5)) {
+                unset($settings[$key]);
+            }
+        }
+
+        $defaults = array(
+            'convert_to_brl' => 'no',
+            'currency_quote' => '',
+            'custom_css_short_code' => '',
+            'custom_css_block_editor' => '',
+            'auto_refund_on_cancel' => 'no',
+            'auto_capture' => 'yes',
+            'card_type_restriction' => 'both',
+            'hide_card_type_selector' => 'no',
+            'interest_or_discount' => 'interest',
+            'interest_show_percent' => 'yes',
+            'installment_interest' => 'no',
+            'installment_discount' => 'no',
+            'min_interest' => '0',
+            'abecs_norms' => 'no',
+        );
+
+        foreach ($defaults as $key => $value) {
+            if (array_key_exists($key, $settings)) {
+                $settings[$key] = $value;
+            }
+        }
+
+        for ($c = 1; $c <= 24; ++$c) {
+            if (array_key_exists($c . 'x', $settings)) {
+                $settings[$c . 'x'] = '0';
+            }
+            if (array_key_exists($c . 'x_discount', $settings)) {
+                $settings[$c . 'x_discount'] = '0';
+            }
+        }
+
+        return $settings;
+    }
+
+    /**
      * Verifica se o gateway deve usar as mensagens padronizadas ABECS.
      *
      * Recurso exclusivo do plano PRO: sem licença PRO ativa, o resultado é sempre

@@ -250,8 +250,11 @@
                         const dataTitleDescription = fieldConfig.getAttribute('data-title-description');
                         descriptionTitle.innerHTML = dataTitleDescription ?? '';
                         
-                        // Verificar se o campo tem atributo lkn-is-pro="true"
-                        const isProField = fieldConfig.getAttribute('lkn-is-pro') === 'true';
+                        // Campos marcados como PRO: lkn-is-pro (travado) ou lkn-pro-badge
+                        // (selo PRO, porém editável — usado nos campos fake do plano free).
+                        const isProField = fieldConfig.getAttribute('lkn-is-pro') === 'true'
+                            || fieldConfig.getAttribute('lkn-pro-badge') === 'true';
+                        const isProLocked = fieldConfig.getAttribute('lkn-is-pro') === 'true';
                         if (isProField) {
                             // Criar o link PRO dinamicamente
                             const proLink = document.createElement('a');
@@ -268,20 +271,21 @@
                             
                             titleHeader.appendChild(proLink);
                             
-                            // Desabilitar o campo automaticamente
-                            if (!fieldConfig.hasAttribute('disabled')) {
-                                fieldConfig.disabled = true;
-                            }
-                            // fieldConfig.readOnly = true;
-                            
-                            // Se for um campo select, aplicar estilo cinza no select2
-                            if (fieldConfig.tagName.toLowerCase() === 'select') {
-                                const selectId = fieldConfig.id;
-                                const select2Container = document.querySelector(`#select2-${selectId}-container`);
-                                if (select2Container) {
-                                    select2Container.style.opacity = '0.6';
-                                    select2Container.style.filter = 'grayscale(0.5)';
-                                    select2Container.style.pointerEvents = 'none';
+                            // Só bloqueia de fato os campos exclusivos do PRO (lkn-is-pro).
+                            // Os campos com lkn-pro-badge permanecem editáveis (fakes).
+                            if (isProLocked) {
+                                if (!fieldConfig.hasAttribute('disabled')) {
+                                    fieldConfig.disabled = true;
+                                }
+                                // Se for um campo select, aplicar estilo cinza no select2
+                                if (fieldConfig.tagName.toLowerCase() === 'select') {
+                                    const selectId = fieldConfig.id;
+                                    const select2Container = document.querySelector(`#select2-${selectId}-container`);
+                                    if (select2Container) {
+                                        select2Container.style.opacity = '0.6';
+                                        select2Container.style.filter = 'grayscale(0.5)';
+                                        select2Container.style.pointerEvents = 'none';
+                                    }
                                 }
                             }
                         }
@@ -366,7 +370,8 @@
                                 return opt ? opt.textContent.trim() : value;
                             };
 
-                            const isProField = fieldConfig.getAttribute('lkn-is-pro') === 'true';
+                            const isProField = fieldConfig.getAttribute('lkn-pro-badge') === 'true'
+                                || fieldConfig.getAttribute('lkn-is-pro') === 'true';
 
                             if (isProField) {
                                 // PRO desabilitado: exibe os dois modelos para comparação.
@@ -462,12 +467,34 @@
             const supportLabel = lknWcRedeTranslations && lknWcRedeTranslations.sendConfigs ? lknWcRedeTranslations.sendConfigs : 'Suporte';
             sendConfigsInput.value = `${supportLabel}`.trim();
 
+            // Plano gratuito (licença PRO inválida): botão apenas decorativo (cinza, sem ação).
+            const redeProLicenseValid = (typeof lknPhpVariables !== 'undefined' && lknPhpVariables.isProLicenseValid);
+            if (!redeProLicenseValid) {
+                sendConfigsInput.type = 'button';
+                sendConfigsInput.disabled = true;
+                sendConfigsInput.style.width = 'fit-content';
+                sendConfigsInput.style.setProperty('padding', '10px 18px 10px 32px', 'important');
+                sendConfigsInput.style.background = 'url("https://cdn.simpleicons.org/whatsapp/999") no-repeat 8px center/18px, #f0f0f1';
+                sendConfigsInput.style.color = '#a7aaad';
+                sendConfigsInput.style.fill = '#a7aaad';
+                sendConfigsInput.style.border = '1px solid #dcdcde';
+                sendConfigsInput.style.borderRadius = '2px';
+                sendConfigsInput.style.fontWeight = 'bold';
+                sendConfigsInput.style.cursor = 'not-allowed';
+                sendConfigsInput.style.outline = 'none';
+                sendConfigsInput.onmouseover = null;
+                sendConfigsInput.onmouseout = null;
+                sendConfigsInput.onclick = null;
+            } else {
+
             // Adiciona o ícone do WhatsApp antes do texto
             sendConfigsInput.style.width = 'fit-content';
-            sendConfigsInput.style.paddingTop = '10px';
-            sendConfigsInput.style.paddingBottom = '10px';
-            sendConfigsInput.style.paddingLeft = '32px';
-            sendConfigsInput.style.paddingRight = '18px';
+            // padding-left generoso (ícone em 8px, 18px de largura) — com !important
+            // para vencer o `.input-text { padding: .5em .8em !important }` do WooCommerce.
+            sendConfigsInput.style.setProperty('padding-top', '10px', 'important');
+            sendConfigsInput.style.setProperty('padding-bottom', '10px', 'important');
+            sendConfigsInput.style.setProperty('padding-left', '32px', 'important');
+            sendConfigsInput.style.setProperty('padding-right', '18px', 'important');
             sendConfigsInput.style.background = 'url("https://cdn.simpleicons.org/whatsapp/white") no-repeat 8px center/18px, #25d366';
             sendConfigsInput.style.color = '#fff';
             sendConfigsInput.style.fill = '#fff';
@@ -552,6 +579,7 @@
                 message += ' Aguardo retorno, obrigado!';
                 window.open(`https://api.whatsapp.com/send/?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`,'_blank');
             };
+            }
         }
         // === LÓGICA DO WHATSAPP - FIM ===
 

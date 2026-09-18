@@ -1,6 +1,10 @@
 # 5.4.11 - 10/09/2026
 * Ajuste: Logs dos gateways adequados às normas ABECS.
 * Ajuste: Textos do analytics ajustados para tradução.
+* Novo: recursos PRO replicados como campos de demonstração (selo PRO) no plano gratuito, com aviso e sem gravar nas opções reais.
+* Ajuste: restrição de tipo de cartão passa a ser recurso PRO (sem licença, aceita crédito e débito).
+* Ajuste: exibição dinâmica de juros/desconto e limite de parcelas (campos reais e de demonstração).
+* Ajuste: botões de suporte ao WhatsApp e de validação de licença exibidos também no plano gratuito (decorativos).
 
 # 5.4.10 - 26/08/2026
 * Ajuste: Cancelamento ou timeout no desafio 3D Secure agora recusa a transação (onFailure sempre "decline").
