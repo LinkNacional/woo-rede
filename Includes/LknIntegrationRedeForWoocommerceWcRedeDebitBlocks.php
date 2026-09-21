@@ -23,12 +23,22 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebitBlocks extends AbstractPa
 
     public function get_payment_method_script_handles()
     {
-        // Registra o CSS do template moderno apenas quando o estilo efetivo é "modern"
-        // (recurso PRO — sem licença ativa get3dsTemplateStyle() força "basic").
-        if (LknIntegrationRedeForWoocommerceHelper::get3dsTemplateStyle($this->name) === 'modern') {
+        // Registra o CSS do template moderno/compacto apenas quando o estilo efetivo
+        // é "modern"/"compact" (recurso PRO — sem licença ativa get3dsTemplateStyle()
+        // força "basic").
+        $lkn_template_style = LknIntegrationRedeForWoocommerceHelper::get3dsTemplateStyle($this->name);
+        if ('modern' === $lkn_template_style) {
             wp_enqueue_style(
                 'rede-modern-template-style',
                 plugin_dir_url(__FILE__) . '../Public/css/rede/LknIntegrationRedeForWoocommerceModernTemplate.css',
+                array(),
+                '1.0.0',
+                'all'
+            );
+        } elseif ('compact' === $lkn_template_style) {
+            wp_enqueue_style(
+                'rede-compact-template-style',
+                plugin_dir_url(__FILE__) . '../Public/css/rede/LknIntegrationRedeForWoocommerceCompactTemplate.css',
                 array(),
                 '1.0.0',
                 'all'

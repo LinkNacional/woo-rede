@@ -396,6 +396,7 @@
 
                                 previewContainer.appendChild(buildItem(lknWcRedeLayoutSettings.basic, optionLabel('basic')));
                                 previewContainer.appendChild(buildItem(lknWcRedeLayoutSettings.modern, optionLabel('modern')));
+                                previewContainer.appendChild(buildItem(lknWcRedeLayoutSettings.compact, optionLabel('compact')));
                             } else {
                                 // PRO ativo: preview único que segue a opção escolhida.
                                 const previewLabel = document.createElement('p');
@@ -409,12 +410,21 @@
                                 // Função para atualizar a imagem
                                 function updatePreviewImage() {
                                     const selectedValue = fieldConfig.value;
-                                    if (selectedValue === 'basic' && lknWcRedeLayoutSettings.basic) {
-                                        previewImage.src = lknWcRedeLayoutSettings.basic;
-                                        previewImage.alt = 'Basic Template Preview';
-                                    } else if (selectedValue === 'modern' && lknWcRedeLayoutSettings.modern) {
-                                        previewImage.src = lknWcRedeLayoutSettings.modern;
-                                        previewImage.alt = 'Modern Template Preview';
+                                    const previewSources = {
+                                        basic: lknWcRedeLayoutSettings.basic,
+                                        modern: lknWcRedeLayoutSettings.modern,
+                                        compact: lknWcRedeLayoutSettings.compact
+                                    };
+                                    const src = previewSources[selectedValue];
+                                    if (src) {
+                                        previewImage.src = src;
+                                        previewImage.alt = selectedValue + ' Template Preview';
+                                        previewImage.style.display = 'block';
+                                    } else {
+                                        // Sem imagem para este template (ex.: compacto ainda
+                                        // sem screenshot): evita exibir a imagem anterior.
+                                        previewImage.removeAttribute('src');
+                                        previewImage.style.display = 'none';
                                     }
                                 }
 

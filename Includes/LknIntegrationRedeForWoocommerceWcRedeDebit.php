@@ -1122,7 +1122,14 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'default' => 'basic',
                 'options' => array(
                     'basic' => esc_attr__('Basic Template', 'woo-rede'),
-                    'modern' => esc_attr__('Modern Template (PRO)', 'woo-rede'),
+                    // O sufixo "(PRO)" só faz sentido sem licença ativa; com PRO
+                    // ativo o recurso está liberado e o rótulo fica redundante.
+                    'modern' => $isProValid
+                        ? esc_attr__('Modern Template', 'woo-rede')
+                        : esc_attr__('Modern Template (PRO)', 'woo-rede'),
+                    'compact' => $isProValid
+                        ? esc_attr__('Compact Template', 'woo-rede')
+                        : esc_attr__('Compact Template (PRO)', 'woo-rede'),
                 ),
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__('Choose between basic and modern 3DS authentication templates. Modern template provides enhanced visual design and better user experience during payment authentication.', 'woo-rede')
@@ -1383,10 +1390,30 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             wp_enqueue_style('rede-debit-style', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceCardShortcode.css', array(), '1.0.0', 'all');
         }
 
-        // Enfileira CSS do template moderno apenas se o estilo efetivo for "modern"
-        // (recurso PRO — sem licença ativa get3dsTemplateStyle() força "basic")
-        if (LknIntegrationRedeForWoocommerceHelper::get3dsTemplateStyle($this->id) === 'modern') {
+        // Enfileira CSS do template moderno/compacto apenas se o estilo efetivo for
+        // "modern"/"compact" (recurso PRO — sem licença ativa get3dsTemplateStyle()
+        // força "basic").
+        $lkn_template_style = LknIntegrationRedeForWoocommerceHelper::get3dsTemplateStyle($this->id);
+        if ('modern' === $lkn_template_style) {
             wp_enqueue_style('lknwoo-modern-template', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceModernTemplate.css', array(), '1.0.0', 'all');
+        } elseif ('compact' === $lkn_template_style) {
+            wp_enqueue_style('lknwoo-compact-template', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceCompactTemplate.css', array(), '1.0.0', 'all');
+            // JS do compacto clássico compilado pelo webpack (npm run build).
+            $compact_js_rel  = 'Public/js/debitCard/rede/wooRedeDebitCompactCompiled.js';
+            $compact_js_path = plugin_dir_path(LknIntegrationRedeForWoocommerceWcRede::FILE) . '../' . $compact_js_rel;
+            $compact_js_ver  = '1.0.0' . '.' . (file_exists($compact_js_path) ? filemtime($compact_js_path) : '0');
+            wp_enqueue_script('wooRedeDebit-compact-js', $plugin_url . $compact_js_rel, array('jquery'), $compact_js_ver, true);
+            wp_localize_script('wooRedeDebit-compact-js', 'redeDebitCompact', array(
+                'ajaxurl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('redeCardNonce'),
+                'assets' => array(
+                    'visa' => $plugin_url . 'Includes/assets/cardTemplate/visa-icon.svg',
+                    'mastercard' => $plugin_url . 'Includes/assets/cardTemplate/mastercard-icon.svg',
+                    'elo' => $plugin_url . 'Includes/assets/cardTemplate/elo-icon.svg',
+                    'calendar' => $plugin_url . 'Includes/assets/cardTemplate/calendar.svg',
+                    'key' => $plugin_url . 'Includes/assets/cardTemplate/key.svg',
+                ),
+            ));
         }
 
         
@@ -2016,8 +2043,15 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             }
         }
 
+        // Seleciona o template do checkout clássico conforme o estilo efetivo.
+        // 'compact' é recurso PRO (get3dsTemplateStyle() força 'basic' sem licença).
+        $lkn_template_style = LknIntegrationRedeForWoocommerceHelper::get3dsTemplateStyle($this->id);
+        $lkn_debit_template = 'compact' === $lkn_template_style
+            ? 'debitCard/redePaymentDebitCompactForm.php'
+            : 'debitCard/redePaymentDebitForm.php';
+
         $wc_get_template(
-            'debitCard/redePaymentDebitForm.php',
+            $lkn_debit_template,
             array(
                 'installments' => $this->getInstallments($order_total),
                 'installments_number' => $installments_number,

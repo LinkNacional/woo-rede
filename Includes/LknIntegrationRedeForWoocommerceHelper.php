@@ -1451,13 +1451,13 @@ class LknIntegrationRedeForWoocommerceHelper
     /**
      * Retorna o estilo de template 3DS efetivo do gateway.
      *
-     * O template "modern" é um recurso exclusivo do plano PRO. Sem licença PRO ativa o
-     * resultado é sempre 'basic', ignorando o valor salvo na opção (ex.: valor antigo
-     * persistido ou HTML do painel manipulado pelo lojista). Com licença ativa vale o
-     * valor da opção ('basic' ou 'modern').
+     * O template "modern"/"compact" é um recurso exclusivo do plano PRO. Sem licença
+     * PRO ativa o resultado é sempre 'basic', ignorando o valor salvo na opção (ex.:
+     * valor antigo persistido ou HTML do painel manipulado pelo lojista). Com licença
+     * ativa vale o valor da opção ('basic', 'modern' ou 'compact').
      *
      * @param string $gateway_id ID do gateway (ex.: rede_debit).
-     * @return string 'basic' ou 'modern'.
+     * @return string 'basic', 'modern' ou 'compact'.
      */
     final public static function get3dsTemplateStyle($gateway_id = ''): string
     {
@@ -1471,7 +1471,7 @@ class LknIntegrationRedeForWoocommerceHelper
         $settings = get_option("woocommerce_{$gateway_id}_settings", array());
         $style = (is_array($settings) && isset($settings['3ds_template_style'])) ? $settings['3ds_template_style'] : 'basic';
 
-        return 'modern' === $style ? 'modern' : 'basic';
+        return in_array($style, array('modern', 'compact'), true) ? $style : 'basic';
     }
 
     /**

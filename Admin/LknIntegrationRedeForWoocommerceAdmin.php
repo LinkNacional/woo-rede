@@ -137,7 +137,11 @@ final class LknIntegrationRedeForWoocommerceAdmin
 
         if ('wc-settings' === $page && 'checkout' === $tab && in_array($section, $gateways, true)) {
             wp_enqueue_script('lknIntegrationRedeForWoocommerceAdminClearLogsButton', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-clear-logs-button.js', array('jquery'), $this->version, false);
-            wp_enqueue_script('lknIntegrationRedeForWoocommerceSettingsLayoutScript', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-settings-layout.js', array('jquery'), $this->version, false);
+            // Cache-bust por filemtime: garante que alterações no JS do layout (ex.: preview
+            // do template compacto) carreguem sem depender de bump da versão do plugin.
+            $layout_js_path = plugin_dir_path(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-settings-layout.js';
+            $layout_js_ver  = $this->version . '.' . (file_exists($layout_js_path) ? filemtime($layout_js_path) : '0');
+            wp_enqueue_script('lknIntegrationRedeForWoocommerceSettingsLayoutScript', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-settings-layout.js', array('jquery'), $layout_js_ver, false);
             wp_enqueue_script('lknIntegrationRedeForWoocommerceCard', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-card.js', array('jquery'), $this->version, false);
             wc_get_template(
                 'adminCard/adminSettingsCard.php',
@@ -164,6 +168,10 @@ final class LknIntegrationRedeForWoocommerceAdmin
             wp_localize_script('lknIntegrationRedeForWoocommerceSettingsLayoutScript', 'lknWcRedeLayoutSettings', array(
                 'basic' => plugin_dir_url(__FILE__) . 'images/basicTemplate.png',
                 'modern' => plugin_dir_url(__FILE__) . 'images/modernTemplate.png',
+                // A imagem do compacto é opcional: se o arquivo existir, é exibido.
+                'compact' => file_exists(plugin_dir_path(__FILE__) . 'images/compactTemplate.png')
+                    ? plugin_dir_url(__FILE__) . 'images/compactTemplate.png'
+                    : '',
             ));
 
             $gateway_settings = get_option('woocommerce_' . $section . '_settings', array());
