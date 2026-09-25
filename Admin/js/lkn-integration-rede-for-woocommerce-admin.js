@@ -148,8 +148,8 @@
       if (typeof lknPhpVariables !== 'undefined' && !lknPhpVariables.isProLicenseValid && wcForm && !document.getElementById('lknRedeFakeProNotice')) {
         const notice = document.createElement('div')
         notice.id = 'lknRedeFakeProNotice'
-        notice.className = 'notice notice-info inline'
-        notice.setAttribute('style', 'margin: 10px 0; padding: 8px 12px; border-left-color: #2271b1;')
+        notice.className = 'notice notice-error inline'
+        notice.setAttribute('style', 'margin: 10px 0; padding: 8px 12px; border-left-color: #d63638;')
 
         const p = document.createElement('p')
         p.setAttribute('style', 'margin: 4px 0;')
@@ -158,11 +158,18 @@
           : 'The features marked with the PRO badge are a preview in the free plan. You can adjust them freely to explore them, but they only take effect with an active PRO license.'
         notice.appendChild(p)
 
-        const header = wcForm.querySelector('h2') || wcForm.firstElementChild
-        if (header && header.parentNode) {
-          header.parentNode.insertBefore(notice, header.nextSibling)
+        // Coloca logo ACIMA do botão "Salvar alterações" (fim do formulário), para
+        // o lojista ver o aviso antes de salvar.
+        const submit = wcForm.querySelector('p.submit') || wcForm.querySelector('.woocommerce-save-button')
+        if (submit && submit.parentNode) {
+          submit.parentNode.insertBefore(notice, submit)
         } else {
-          wcForm.insertBefore(notice, wcForm.firstChild)
+          const header = wcForm.querySelector('h2') || wcForm.firstElementChild
+          if (header && header.parentNode) {
+            header.parentNode.insertBefore(notice, header.nextSibling)
+          } else {
+            wcForm.insertBefore(notice, wcForm.firstChild)
+          }
         }
       }
     }

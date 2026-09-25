@@ -101,38 +101,45 @@ window.jQuery(function ($) {
       // maybe delete old card data
       $form.data('card', null)
 
-      // init animated card
-      $form.card({
-        container: '#rede-debit-card-animation',
+      // init animated card (apenas quando a lib jquery.card está carregada —
+      // ou seja, quando a opção "Show animated card" está habilitada).
+      if (typeof $form.card === 'function') {
+        $form.card({
+          container: '#rede-debit-card-animation',
 
-        /**
-             * Selectors
-             */
-        formSelectors: inputSelectors,
+          // A máscara/validação dos campos é responsabilidade do rede-card-fields.js
+          // (padronizado: MM/AA, só dígitos, inputmode). Aqui só a animação do cartão.
+          formatting: false,
 
-        /**
-             * Placeholders
-             */
-        placeholders: {
-          number: '•••• •••• •••• ••••',
-          name: 'NOME',
-          expiry: 'MM/ANO',
-          cvc: 'CVC'
-        },
+          /**
+               * Selectors
+               */
+          formSelectors: inputSelectors,
 
-        /**
-             * Translation Brazilian Portuguese
-             */
-        messages: {
-          validDate: 'VALIDADE',
-          monthYear: ''
-        },
+          /**
+               * Placeholders
+               */
+          placeholders: {
+            number: '•••• •••• •••• ••••',
+            name: 'NOME',
+            expiry: 'MM/ANO',
+            cvc: 'CVC'
+          },
 
-        /**
-             * Debug
-             */
-        debug: !!window.wooRedeDebit.debug
-      })
+          /**
+               * Translation Brazilian Portuguese
+               */
+          messages: {
+            validDate: 'VALIDADE',
+            monthYear: ''
+          },
+
+          /**
+               * Debug
+               */
+          debug: !!window.wooRedeDebit.debug
+        })
+      }
 
       // Workaround to maintain the card data rendered after checkout updates
       Object.values(inputSelectors).reverse().forEach(function (selector) {
@@ -142,11 +149,7 @@ window.jQuery(function ($) {
       $(inputSelectors.numberInput)[0]?.dispatchEvent(new CustomEvent('focus'))
       $(inputSelectors.numberInput)[0]?.dispatchEvent(new CustomEvent('blur'))
     }
-    const paymentBoxP = document.querySelector('.payment_box.payment_method_rede_debit p');
-    if (paymentBoxP) {
-      paymentBoxP.style.display = 'none';
-    }
-    
+
     // Adicionar listener no select de parcelas
     addInstallmentListener();
   }

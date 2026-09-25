@@ -29,13 +29,19 @@ const minInstallmentsRede = settingsRedeDebit.minInstallmentsRede ? settingsRede
 const templateStyle = settingsRedeDebit['3dsTemplateStyle'] || 'basic';
 const gatewayDescription = settingsRedeDebit.gatewayDescription || '';
 const cardTemplateAssets = window.redeDebitAjax?.cardTemplateAssets || {};
+// Opções do gateway: cartão animado (grátis) e bandeiras (PRO). Default ligadas.
+const showCardAnimation = (settingsRedeDebit.showCardAnimation || 'yes') !== 'no';
+const showCardBrandIcons = (settingsRedeDebit.showCardBrandIcons || 'yes') !== 'no';
 
 // Flag de proteção contra duplo envio do checkout (evita duplicidade de transações)
 let redeCheckoutSubmitted = false;
 const REDE_CHECKOUT_SESSION_KEY = 'rede_checkout_processing';
 
-// Observer global para adicionar ícones das bandeiras (fora do componente React)
-if (templateStyle === 'modern') {
+// Observer global para adicionar as bandeiras ao lado do TÍTULO do método (fora do
+// componente React). Vale para TODOS os layouts (Basic/Modern/Compact). A opção
+// "Show card brand icons" controla essa faixa. O compacto mostra as bandeiras no
+// CAMPO de número de forma independente (ver renderCompactTemplate).
+{
   const addCardBrandIcons = () => {
     const radioInput = document.querySelector('input[value="rede_debit"][type="radio"]');
     if (!radioInput) return;
@@ -46,10 +52,17 @@ if (templateStyle === 'modern') {
     const labelGroup = label.querySelector('.wc-block-components-radio-control__label-group');
     if (!labelGroup) return;
 
-    // Adiciona classe para estilos do template moderno ao container do payment content
-    const paymentContent = document.querySelector('#radio-control-wc-payment-method-options-rede_debit__content');
-    if (paymentContent) {
-      paymentContent.classList.add('rede-modern-template-active');
+    // Classe de estilos do template moderno — só no layout moderno.
+    if (templateStyle === 'modern') {
+      const paymentContent = document.querySelector('#radio-control-wc-payment-method-options-rede_debit__content');
+      if (paymentContent) {
+        paymentContent.classList.add('rede-modern-template-active');
+      }
+    }
+
+    // Bandeiras ao lado do título desativadas pela opção "Show card brand icons".
+    if (!showCardBrandIcons) {
+      return;
     }
 
     // Verifica se já foram adicionados os ícones
@@ -250,33 +263,33 @@ const ContentRedeDebit = props => {
     }
   }, [lockCardTypeSelector, templateStyle]);
 
-  // Placeholders no layout compacto: o TextInput do WooCommerce Blocks não aceita
-  // a prop `placeholder`, então aplicamos direto no input (idempotente, com
-  // retentativas após a hidratação do React).
+  // Placeholders personalizáveis (seção "Fields" do admin): o TextInput do Blocks
+  // não aceita a prop placeholder, então aplicamos direto no input. Vale para
+  // todos os layouts (o React renderiza os campos em todos).
   window.wp.element.useEffect(() => {
-    if (templateStyle !== 'compact') return;
-    const placeholders = {
-      rede_debit_holder_name: 'Nome impresso no cartão',
-      rede_debit_number: '0000 0000 0000 0000',
-      rede_debit_expiry: 'MM/AA',
-      rede_debit_cvc: 'CVC'
-    };
+    const ph = settingsRedeDebit.fieldPlaceholders || {}
+    const map = {
+      rede_debit_holder_name: ph.holder_name,
+      rede_debit_number: ph.card_number,
+      rede_debit_expiry: ph.expiry,
+      rede_debit_cvc: ph.cvc
+    }
     const applyPlaceholders = () => {
-      Object.keys(placeholders).forEach((id) => {
-        const el = document.getElementById(id);
-        if (el && el.getAttribute('placeholder') !== placeholders[id]) {
-          el.setAttribute('placeholder', placeholders[id]);
+      Object.keys(map).forEach((id) => {
+        const el = document.getElementById(id)
+        if (el && map[id]) {
+          el.setAttribute('placeholder', map[id])
         }
-      });
-    };
-    applyPlaceholders();
-    const t1 = setTimeout(applyPlaceholders, 400);
-    const t2 = setTimeout(applyPlaceholders, 1200);
+      })
+    }
+    applyPlaceholders()
+    const t1 = setTimeout(applyPlaceholders, 400)
+    const t2 = setTimeout(applyPlaceholders, 1200)
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
-  }, [templateStyle]);
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
+  }, []);
 
   // Função para buscar dados atualizados do backend e gerar as opções de installments (com debounce)
   let installmentTimeout = null;
@@ -591,7 +604,7 @@ const ContentRedeDebit = props => {
   }, [debitObject]); // Reexecuta quando debitObject muda
 
   const formatDebitCardNumber = value => {
-    if (value?.length > 19) return debitObject.rede_debit_number;
+    if (value?.length > 24) return debitObject.rede_debit_number;
     // Remove caracteres não numéricos
     const cleanedValue = value?.replace(/\D/g, '');
     // Adiciona espaços a cada quatro dígitos
@@ -705,34 +718,35 @@ const ContentRedeDebit = props => {
     });
   };
 
+  // Formatação padronizada (espelhada em Public/js/rede-card-fields.js).
+  const lknOnlyDigits = value => String(value == null ? '' : value).replace(/\D/g, '');
+  const lknFormatCardExpiry = value => {
+    const digits = lknOnlyDigits(value);
+    let month = digits.slice(0, 2);
+    let year = digits.slice(2);
+    if (month.length === 1 && month >= '2' && month <= '9') {
+      month = '0' + month;
+    } else if (month.length === 2 && parseInt(month, 10) > 12) {
+      month = '12';
+    }
+    if (year.length > 2) year = year.slice(-2);
+    return year.length ? month + '/' + year : month;
+  };
+
   const updateDebitObject = (key, value) => {
-    let isValidDate = false;
     switch (key) {
       case 'rede_debit_expiry':
-        if (value.length > 7) return;
-
-        // Verifica se o valor é uma data válida (MM/YY)
-        isValidDate = /^\d{2}\/\d{2}$/.test(value);
-        if (!isValidDate) {
-          // Remove caracteres não numéricos
-          const cleanedValue = value?.replace(/\D/g, '');
-          let formattedValue = cleanedValue?.replace(/^(.{2})/, '$1 / ')?.trim();
-
-          // Se o tamanho da string for 5, remove o espaço e a barra adicionados anteriormente
-          if (formattedValue.length === 4) {
-            formattedValue = formattedValue.replace(/\s\//, '');
-          }
-
-          // Atualiza o estado
-          setDebitObject(prevState => ({
-            ...prevState,
-            [key]: formattedValue
-          }));
-        }
+        setDebitObject(prevState => ({
+          ...prevState,
+          [key]: lknFormatCardExpiry(value)
+        }));
         return;
       case 'rede_debit_cvc':
-        if (!/^\d+$/.test(value) && value !== '' || value.length > 4) return;
-        break;
+        setDebitObject(prevState => ({
+          ...prevState,
+          [key]: lknOnlyDigits(value).slice(0, 4)
+        }));
+        return;
       default:
         break;
     }
@@ -741,8 +755,9 @@ const ContentRedeDebit = props => {
       [key]: value
     }));
 
-    // Detecta bandeira do cartão quando o número é alterado (moderno e compacto)
-    if (key === 'rede_debit_number' && (templateStyle === 'modern' || templateStyle === 'compact')) {
+    // Detecta bandeira do cartão quando o número é alterado (TODOS os layouts).
+    // Aplica às bandeiras da faixa do título e às do CAMPO do compacto.
+    if (key === 'rede_debit_number') {
       detectCardBrand(value);
     }
   };
@@ -890,7 +905,7 @@ const ContentRedeDebit = props => {
     <React.Fragment>
       <div className="modern-template-container">
         {/* Card preview */}
-        <Cards
+        {showCardAnimation && (<Cards
           number={debitObject.rede_debit_number}
           name={debitObject.rede_debit_holder_name}
           expiry={debitObject.rede_debit_expiry.replace(/\s+/g, '')}
@@ -903,7 +918,7 @@ const ContentRedeDebit = props => {
           }}
           locale={{ valid: 'VÁLIDO ATÉ' }}
           focused={focus}
-        />
+        />)}
 
         {/* Nome do portador - 100% */}
         <div className="modern-field-row-full">
@@ -1026,7 +1041,7 @@ const ContentRedeDebit = props => {
   // Template básico (original)
   const renderBasicTemplate = () => (
     <React.Fragment>
-      <Cards
+      {showCardAnimation && (<Cards
         number={debitObject.rede_debit_number}
         name={debitObject.rede_debit_holder_name}
         expiry={debitObject.rede_debit_expiry.replace(/\s+/g, '')}
@@ -1039,7 +1054,7 @@ const ContentRedeDebit = props => {
         }}
         locale={{ valid: 'VÁLIDO ATÉ' }}
         focused={focus}
-      />
+      />)}
       <wcComponents.TextInput
         id="rede_debit_holder_name"
         label={translationsRedeDebit.nameOnCard}
@@ -1111,9 +1126,13 @@ const ContentRedeDebit = props => {
         </div>
       )}
       
+      {/* Botão de finalizar custom — recurso PRO (mesma regra dos layouts
+          moderno/compacto). Sem PRO, usa o botão nativo do WooCommerce. */}
+      {settingsRedeDebit.isProValid && renderSubmitButton('rede-basic-submit-button')}
+
       {/* Descrição do gateway */}
       {gatewayDescription && (
-        <div className="basic-gateway-description" style={{textAlign: 'center', marginTop: '15px'}}>
+        <div className="basic-gateway-description">
           {gatewayDescription}
         </div>
       )}
@@ -1126,7 +1145,7 @@ const ContentRedeDebit = props => {
     <React.Fragment>
       <div className="rede-compact-container">
         {/* Preview do cartão */}
-        <Cards
+        {showCardAnimation && (<Cards
           number={debitObject.rede_debit_number}
           name={debitObject.rede_debit_holder_name}
           expiry={debitObject.rede_debit_expiry.replace(/\s+/g, '')}
@@ -1139,7 +1158,7 @@ const ContentRedeDebit = props => {
           }}
           locale={{ valid: 'VÁLIDO ATÉ' }}
           focused={focus}
-        />
+        />)}
 
         {/* Linha 1: Nome do portador + Tipo do cartão */}
         <div className={'rede-compact-row rede-compact-row--top' + (showCardTypeSelector ? '' : ' rede-compact-row--name-only')}>

@@ -76,12 +76,48 @@
   flex: 1 1 100%;
 }
 
+/* Linha 1 (Nome + Tipo) e Linha 2 (Número + Validade + Código) usam a MESMA grade
+ * de colunas. Assim o NOME e o NÚMERO do cartão ficam com exatamente a mesma
+ * largura (antes o nome esticava para ~58% e o número para ~59%, gerando a
+ * diferença de largura entre as linhas). O tipo do cartão ocupa as colunas 2-3 da
+ * linha 1. O gap vem do `.rede-compact-row` (12px; 8/6px nos breakpoints). */
+.rede-compact-classic .rede-compact-row--top,
+.rede-compact-classic .rede-compact-row--card {
+  display: grid;
+  grid-template-columns: 3fr 1.05fr 1fr;
+  align-items: end;
+}
+
+.rede-compact-classic .rede-compact-row--top > .rede-compact-field--name {
+  grid-column: 1 / 2;
+}
+
+.rede-compact-classic .rede-compact-row--top > .rede-compact-field--type {
+  grid-column: 2 / 4;
+}
+
+.rede-compact-classic .rede-compact-row--name-only > .rede-compact-field--name {
+  grid-column: 1 / -1;
+}
+
+.rede-compact-classic .rede-compact-row--card > .rede-compact-field--number {
+  grid-column: 1 / 2;
+}
+
+.rede-compact-classic .rede-compact-row--card > .rede-compact-field--exp {
+  grid-column: 2 / 3;
+}
+
+.rede-compact-classic .rede-compact-row--card > .rede-compact-field--cvc {
+  grid-column: 3 / 4;
+}
+
 .rede-compact-classic .rede-compact-field label {
   display: block;
   font-weight: 600;
   color: #495057;
   margin-bottom: 6px;
-  font-size: 12px;
+  font-size: 12.6px;
   text-transform: uppercase;
   letter-spacing: 0.4px;
   white-space: nowrap;
@@ -103,6 +139,7 @@
 
 .rede-compact-classic .rede-compact-input-wrap input,
 .rede-compact-classic .rede-compact-input-wrap select {
+  height: 50px !important;
   width: 100% !important;
   min-width: 0 !important;
   max-width: 100% !important;
@@ -111,10 +148,8 @@
   border: 2px solid #e9ecef !important;
   padding: .5em .8em !important;
   border-radius: 8px !important;
-  font-size: 1rem !important;
-  line-height: 1.4 !important;
-  height: auto !important;
-  min-height: 0 !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
   box-shadow: none !important;
   background-color: #fff !important;
   color: #495057;
@@ -124,6 +159,14 @@
 .rede-compact-classic .rede-compact-input-wrap input::placeholder {
   color: #adb5bd;
   opacity: 1;
+}
+
+/* Placeholder dos inputs do compacto dos BLOCOS em cinza (o tema costuma deixá-lo
+   escuro). Escopado ao container do método; só os inputs (o select não tem
+   placeholder). */
+#radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container input::placeholder {
+  color: #adb5bd !important;
+  opacity: 1 !important;
 }
 
 .rede-compact-classic .rede-compact-input-wrap input:focus,
@@ -186,12 +229,12 @@
   }
 
   .rede-compact-classic .rede-compact-field label {
-    font-size: 11px;
+    font-size: 12.6px;
   }
 
   .rede-compact-classic .rede-compact-input-wrap input,
   .rede-compact-classic .rede-compact-input-wrap select {
-    font-size: 0.9rem !important;
+    font-size: 14px !important;
     padding: .45em .5em !important;
   }
 
@@ -278,18 +321,64 @@
   flex: 1 1 100%;
 }
 
+/* Mesma grade de colunas para Nome (Linha 1) e Número (Linha 2), garantindo
+ * larguras idênticas. Tipo do cartão ocupa as colunas 2-3 da Linha 1. */
+#radio-control-wc-payment-method-options-rede_debit__content .rede-compact-row--top,
+#radio-control-wc-payment-method-options-rede_debit__content .rede-compact-row--card {
+  display: grid;
+  grid-template-columns: 3fr 1.05fr 1fr;
+  align-items: end;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .rede-compact-row--top > .rede-compact-field--name {
+  grid-column: 1 / 2;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .rede-compact-row--top > .rede-compact-field--type {
+  grid-column: 2 / 4;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .rede-compact-row--name-only > .rede-compact-field--name {
+  grid-column: 1 / -1;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .rede-compact-row--card > .rede-compact-field--number {
+  grid-column: 1 / 2;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .rede-compact-row--card > .rede-compact-field--exp {
+  grid-column: 2 / 3;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .rede-compact-row--card > .rede-compact-field--cvc {
+  grid-column: 3 / 4;
+}
+
 /* Aparência base dos campos */
 #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container .wc-block-components-text-input input,
 #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container select {
   border: 1px solid #ccc !important;
-  border-radius: 4px !important;
+  border-radius: 8px !important;
   width: 100% !important;
   min-width: 0 !important;
   box-sizing: border-box !important;
   height: 50px !important;
   background-color: #fff !important;
-  font-size: 16px !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
   padding: 0 12px !important;
+}
+
+/* Seta própria do plugin APENAS nos selects (o tema usa appearance:none e o
+   reset de background apagaria a seta nativa). Nos inputs NÃO se aplica. */
+#radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container select {
+  padding-right: 40px !important;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
 }
 
 /* Labels ACIMA do input */
@@ -305,7 +394,7 @@
   top: 0 !important;
   left: 0 !important;
   transform: none !important;
-  font-size: 12px !important;
+  font-size: 12.6px !important;
   font-weight: 600 !important;
   line-height: 1.2 !important;
   color: #495057 !important;
@@ -318,7 +407,7 @@
 
 #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-field--installments label {
   display: block;
-  font-size: 12px !important;
+  font-size: 12.6px !important;
   font-weight: 600 !important;
   color: #495057 !important;
   margin-bottom: 6px !important;
@@ -327,7 +416,7 @@
 /* Labels dos selects crus (tipo do cartão / parcelas) — ficam acima do campo */
 #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-field > label {
   display: block;
-  font-size: 12px !important;
+  font-size: 12.6px !important;
   font-weight: 600 !important;
   color: #495057 !important;
   margin-bottom: 6px !important;
@@ -387,19 +476,25 @@
 /* Botão finalizar (mesma cor do template moderno) */
 #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-submit-button {
   width: 100%;
+  height: 50px;
+  box-sizing: border-box;
+  /* Mesmo espaçamento (18px) acima do botão de finalizar em todos os templates. */
+  margin-top: 18px;
   background-color: #306FC5 !important;
   color: #fff !important;
-  border: none !important;
-  border-radius: 4px;
-  padding: 14px 20px;
-  font-size: 15px;
+  border: 1px solid #2557a3 !important;
+  border-radius: 8px;
+  padding: 0 20px;
+  font-size: 14px;
   font-weight: 600;
+  text-transform: uppercase !important;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease-in-out;
 }
 
 #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-submit-button:hover {
-  background-color: #172B85 !important;
+  background-color: #2557a3 !important;
+  color: #fff !important;
 }
 
 #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-submit-button.blocked,
@@ -410,11 +505,48 @@
   opacity: 0.6;
 }
 
+/* Botão finalizar do compacto CLÁSSICO (shortcode) — mesma cara do compacto de
+ * Blocos/moderno. O lápis/label já vem do PHP. */
+.rede-compact-classic .payment-submit-section {
+  /* O espaçamento de 18px fica no próprio botão; o wrapper não adiciona margem. */
+  margin-top: 0;
+}
+
+.rede-compact-classic .rede-compact-submit-button {
+  width: 100%;
+  height: 50px;
+  box-sizing: border-box;
+  /* Mesmo espaçamento (18px) acima do botão de finalizar em todos os templates. */
+  margin-top: 18px;
+  background-color: #306FC5 !important;
+  color: #fff !important;
+  border: 1px solid #2557a3 !important;
+  border-radius: 8px;
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase !important;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.rede-compact-classic .rede-compact-submit-button:hover {
+  background-color: #2557a3 !important;
+  color: #fff !important;
+}
+
+.rede-compact-classic .rede-compact-submit-button:disabled {
+  background-color: #cccccc !important;
+  color: #666666 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
 #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-description {
   text-align: center;
-  color: #6b7280;
-  font-size: 13px;
-  font-style: italic;
+  margin-top: 12px;
+  color: #8e9ba8;
+  font-size: 11.2px;
 }
 
 @media (max-width: 640px) {
@@ -424,9 +556,14 @@
 
   #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container .wc-block-components-text-input input,
   #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container select {
-    font-size: 15px !important;
+    font-size: 14px !important;
     padding-left: 8px !important;
     padding-right: 8px !important;
+  }
+
+  /* Mantém espaço para a seta nos selects (sobrepõe o padding-right:8px acima). */
+  #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container select {
+    padding-right: 32px !important;
   }
 
   #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container .rede-compact-field--number input {

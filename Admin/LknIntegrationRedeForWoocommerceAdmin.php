@@ -142,6 +142,29 @@ final class LknIntegrationRedeForWoocommerceAdmin
             $layout_js_path = plugin_dir_path(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-settings-layout.js';
             $layout_js_ver  = $this->version . '.' . (file_exists($layout_js_path) ? filemtime($layout_js_path) : '0');
             wp_enqueue_script('lknIntegrationRedeForWoocommerceSettingsLayoutScript', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-settings-layout.js', array('jquery'), $layout_js_ver, false);
+            // Lightbox nativo do WordPress (Thickbox) para ampliar as imagens do layout.
+            wp_enqueue_script('thickbox');
+            wp_enqueue_style('thickbox');
+            $rede_tb_css = plugin_dir_path(__FILE__) . 'css/lkn-rede-thickbox.css';
+            wp_enqueue_style('lkn-rede-thickbox', plugin_dir_url(__FILE__) . 'css/lkn-rede-thickbox.css', array('thickbox'), $this->version . '.' . (file_exists($rede_tb_css) ? filemtime($rede_tb_css) : '0'));
+            $rede_tb_js = plugin_dir_path(__FILE__) . 'js/lkn-rede-thickbox.js';
+            wp_enqueue_script('lkn-rede-thickbox', plugin_dir_url(__FILE__) . 'js/lkn-rede-thickbox.js', array('thickbox'), $this->version . '.' . (file_exists($rede_tb_js) ? filemtime($rede_tb_js) : '0'), true);
+            // Editor visual da seção "Fields" (preview + lápis de label/placeholder).
+            $fields_preview_js_path = plugin_dir_path(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-fields-preview.js';
+            $fields_preview_js_ver  = $this->version . '.' . (file_exists($fields_preview_js_path) ? filemtime($fields_preview_js_path) : '0');
+            wp_enqueue_script('lknRedeFieldsPreview', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-fields-preview.js', array(), $fields_preview_js_ver, true);
+
+            $fields_preview_css_path = plugin_dir_path(__FILE__) . 'css/lkn-integration-rede-for-woocommerce-fields-preview.css';
+            $fields_preview_css_ver  = $this->version . '.' . (file_exists($fields_preview_css_path) ? filemtime($fields_preview_css_path) : '0');
+            wp_enqueue_style('lknRedeFieldsPreviewStyle', plugin_dir_url(__FILE__) . 'css/lkn-integration-rede-for-woocommerce-fields-preview.css', array(), $fields_preview_css_ver);
+
+            // CSS reais do checkout (para o preview ficar fiel ao front).
+            $rede_public_css = plugin_dir_url(__FILE__) . '../Public/css/';
+            wp_enqueue_style('lknRedeFieldsPreviewCard', $rede_public_css . 'card.css', array(), $this->version);
+            wp_enqueue_style('lknRedeFieldsPreviewSelect', $rede_public_css . 'lknIntegrationRedeForWoocommerceSelectStyle.css', array(), $this->version);
+            wp_enqueue_style('lknRedeFieldsPreviewShortcode', $rede_public_css . 'rede/LknIntegrationRedeForWoocommerceCardShortcode.css', array(), $this->version);
+            wp_enqueue_style('lknRedeFieldsPreviewModern', $rede_public_css . 'rede/LknIntegrationRedeForWoocommerceModernTemplate.css', array(), $this->version);
+            wp_enqueue_style('lknRedeFieldsPreviewCompact', $rede_public_css . 'rede/LknIntegrationRedeForWoocommerceCompactTemplate.css', array(), $this->version);
             wp_enqueue_script('lknIntegrationRedeForWoocommerceCard', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-card.js', array('jquery'), $this->version, false);
             wc_get_template(
                 'adminCard/adminSettingsCard.php',
@@ -166,12 +189,20 @@ final class LknIntegrationRedeForWoocommerceAdmin
                 'alertText' => __('Deseja realmente deletar todos logs dos pedidos?', 'woo-rede')
             ));
             wp_localize_script('lknIntegrationRedeForWoocommerceSettingsLayoutScript', 'lknWcRedeLayoutSettings', array(
-                'basic' => plugin_dir_url(__FILE__) . 'images/basicTemplate.png',
-                'modern' => plugin_dir_url(__FILE__) . 'images/modernTemplate.png',
-                // A imagem do compacto é opcional: se o arquivo existir, é exibido.
-                'compact' => file_exists(plugin_dir_path(__FILE__) . 'images/compactTemplate.png')
-                    ? plugin_dir_url(__FILE__) . 'images/compactTemplate.png'
-                    : '',
+                // Previews do layout por tipo de checkout: no checkout em Blocos
+                // (Gutenberg) e no Shortcode/Clássico as telas do cartão são
+                // diferentes, então cada um recebe o seu conjunto de imagens.
+                // O template "basic" (padrão) usa a imagem *-default-version.
+                'blocks' => array(
+                    'basic'   => plugin_dir_url(__FILE__) . 'images/gutenberg-default-version.png',
+                    'modern'  => plugin_dir_url(__FILE__) . 'images/gutenberg-modern-version.png',
+                    'compact' => plugin_dir_url(__FILE__) . 'images/gutenberg-compact-version.png',
+                ),
+                'classic' => array(
+                    'basic'   => plugin_dir_url(__FILE__) . 'images/shortcode-default-version.png',
+                    'modern'  => plugin_dir_url(__FILE__) . 'images/shortcode-modern-version.png',
+                    'compact' => plugin_dir_url(__FILE__) . 'images/shortcode-compact-version.png',
+                ),
             ));
 
             $gateway_settings = get_option('woocommerce_' . $section . '_settings', array());

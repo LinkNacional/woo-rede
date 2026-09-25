@@ -748,7 +748,7 @@
 .jp-card-logo.jp-card-dinersclub::after {
     content: 'International';
     text-transform: uppercase;
-    font-size: 0.6em
+    font-size: 8.4px
 }
 
 .jp-card.jp-card-dinersclub .jp-card-front .jp-card-logo {

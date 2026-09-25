@@ -1010,3 +1010,20 @@ msgstr ""
 
 msgid "Return URL to automatically update the status of orders paid via debit on the Maxipago."
 msgstr ""
+msgid "Fields"
+msgstr ""
+
+msgid "Layout to customize"
+msgstr ""
+
+msgid "Choose which layout the fields below refer to."
+msgstr ""
+
+msgid "Only the selected layout shows its fields below."
+msgstr ""
+
+msgid "Label — %1$s (%2$s)"
+msgstr ""
+
+msgid "Placeholder — %1$s (%2$s)"
+msgstr ""

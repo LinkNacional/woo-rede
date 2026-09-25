@@ -24,6 +24,9 @@ final class LknIntegrationRedeForWoocommerceWcRedeCreditBlocks extends AbstractP
     public function get_payment_method_script_handles()
     {
         wp_enqueue_style('select-style', plugin_dir_url(INTEGRATION_REDE_FOR_WOOCOMMERCE_FILE) . '/Public/css/lknIntegrationRedeForWoocommerceSelectStyle.css', array(), '1.0.0', 'all');
+        // Padronização dos campos de cartão (número/validade/CVC) no checkout em Blocos.
+        wp_enqueue_script('rede-card-fields', plugin_dir_url(INTEGRATION_REDE_FOR_WOOCOMMERCE_FILE) . '/Public/js/rede-card-fields.js', array(), '1.0.0', true);
+        wp_enqueue_script('rede-card-fields-blocks', plugin_dir_url(INTEGRATION_REDE_FOR_WOOCOMMERCE_FILE) . '/Public/js/rede-card-fields-blocks.js', array('rede-card-fields'), '1.0.0', true);
         wp_register_script(
             'rede_credit-blocks-integration',
             plugin_dir_url(__FILE__) . '../Public/js/creditCard/rede/lknIntegrationRedeForWoocommerceCheckoutCompiled.js',

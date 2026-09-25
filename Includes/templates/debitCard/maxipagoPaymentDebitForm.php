@@ -63,7 +63,7 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_maxipago_debi
                     placeholder="<?php echo esc_attr('123.456.789-12'); ?>"
                     maxlength="22"
                     autocomplete="off"
-                    style="font-size: 1.5em; padding: 8px 45px;" />
+                    style="font-size: 21px; padding: 8px 45px;" />
             </div>
         <?php } ?>
 
@@ -104,10 +104,10 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_maxipago_debi
                 name="maxipago_debit_holder_name"
                 class="input-text"
                 type="text"
-                placeholder="<?php esc_attr_e('Name', 'woo-rede'); ?>"
+                placeholder="<?php echo esc_attr('John Doe'); ?>"
                 maxlength="30"
                 autocomplete="off"
-                style="font-size: 1.5em; padding: 8px 45px;" />
+                style="font-size: 21px; padding: 8px 45px;" />
         </div>
 
         <div class="form-row form-row">
@@ -160,7 +160,7 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_maxipago_debi
                 maxlength="22"
                 autocomplete="off"
                 placeholder="&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;"
-                style="font-size: 1.5em; padding: 8px 45px;" />
+                style="font-size: 21px; padding: 8px 45px;" />
             <input
                 name="maxipago_debit_nonce"
                 type="hidden"
@@ -200,7 +200,7 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_maxipago_debi
                 type="tel"
                 autocomplete="off"
                 placeholder="<?php esc_attr_e('MM / YEAR', 'woo-rede'); ?>"
-                style="font-size: 1.5em; padding: 8px 30px 8px 35px;" />
+                style="font-size: 21px; padding: 8px 30px 8px 35px;" />
         </div>
 
         <div class="form-row form-row">
@@ -235,7 +235,7 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_maxipago_debi
                 type="tel"
                 autocomplete="off"
                 placeholder="<?php esc_attr_e('CVC', 'woo-rede'); ?>"
-                style="font-size: 1.5em; padding: 8px 30px 8px 35px;" />
+                style="font-size: 21px; padding: 8px 30px 8px 35px;" />
         </div>
         <div class="clear"></div>
     </div>

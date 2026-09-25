@@ -128,6 +128,14 @@ A: Yes — tested up to WordPress 6.8.
 ### 5.4.11 - 2026-09-10
 * Adjustment: Gateway logs updated to comply with ABECS standards.
 * Tweak: Analytics texts adjusted for translation.
+* Added: PRO features replicated as demonstration fields (PRO badge) on the free plan, with notice and without saving to the real options.
+* Adjustment: card type restriction is now a PRO feature (without a license, accepts credit and debit).
+* Adjustment: dynamic display of interest/discount and installment limit (real and demonstration fields).
+* Adjustment: WhatsApp support and license validation buttons also shown on the free plan (decorative).
+* Added: compact debit layout (shortcode and Blocks) and compact template option (basic/modern/compact).
+* Added: "Fields" visual editor with checkout preview per type (Blocks/Shortcode) and per-layout label/placeholder editing (PRO).
+* Added: layout images per checkout type, with gallery enlargement (WordPress lightbox).
+* Adjustment: standardized fields and finish-order button; gray input placeholders.
 
 ### 5.4.10 - 2026-08-26
 * Fix: 3D Secure challenge cancellation/timeout now declines the transaction (onFailure always "decline").
@@ -298,6 +306,8 @@ A: Yes — tested up to WordPress 6.8.
 ### 5.4.11 - 2026-09-10
 * Adjustment: Gateway logs updated to comply with ABECS standards.
 * Tweak: Analytics texts adjusted for translation.
+* Added: compact debit layout (shortcode and Blocks) and compact template option.
+* Added: "Fields" visual editor with checkout preview and per-layout label/placeholder editing (PRO).
 
 ### 5.4.10 - 2026-08-26
 * Fix: 3DS challenge cancel/timeout now declines the transaction.

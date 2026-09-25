@@ -159,12 +159,25 @@ abstract class LknIntegrationRedeForWoocommerceWcRedeAbstract extends WC_Payment
 
     final public function payment_fields(): void
     {
-        if ($this->get_description()) {
-            $description = $this->get_description();
-            echo wp_kses_post(wpautop($description));
+        // A descrição é renderizada no próprio template do checkout pelos
+        // gateways de cartão; por isso não é ecoada aqui de novo (evita o texto
+        // duplicado no topo do payment_box). Gateways que NÃO a renderizam no
+        // template sobrescrevem shouldEchoDescription() para manter o echo.
+        if ($this->shouldEchoDescription() && $this->get_description()) {
+            echo wp_kses_post(wpautop($this->get_description()));
         }
 
         $this->getCheckoutForm($this->get_cart_subtotal_without_taxes());
+    }
+
+    /**
+     * Define se a descrição do gateway é ecoada no topo do payment_box.
+     * Default true (comportamento histórico). Gateways que já exibem a
+     * descrição no template do checkout retornam false.
+     */
+    protected function shouldEchoDescription(): bool
+    {
+        return true;
     }
 
     abstract protected function getCheckoutForm($order_total = 0);

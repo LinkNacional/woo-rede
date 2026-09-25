@@ -198,6 +198,10 @@
         }
 
         document.querySelectorAll('.form-table > tbody > tr').forEach(tr => {
+            // As linhas de campos ocultos da seção "Fields" não passam pelo transform.
+            if (tr.classList.contains('lkn-fields-hidden-row')) {
+                return;
+            }
             const td = tr.querySelector('td');
             const th = tr.querySelector('th');
             if (td && th) {
@@ -352,16 +356,37 @@
                         if (fieldId === 'woocommerce_rede_debit_3ds_template_style' && typeof lknWcRedeLayoutSettings !== 'undefined') {
                             const previewContainer = document.createElement('div');
                             previewContainer.style.marginTop = '10px';
+                            // O body do campo é flex (align-items:start), então o
+                            // container encolhe ao conteúdo; width:100% faz a imagem
+                            // (width:100%) ocupar a largura total, como no Cielo.
+                            previewContainer.style.width = '100%';
 
-                            const buildImage = (src, alt) => {
+                            const buildImage = (src, alt, maxW) => {
                                 const img = document.createElement('img');
                                 img.src = src || '';
                                 img.alt = alt || '';
-                                img.style.maxWidth = '200px';
+                                // PRO (imagem única): mesma largura do preview de edição.
+                                // Free (3 miniaturas): pequena, por comparação.
+                                img.style.maxWidth = maxW || '200px';
                                 img.style.width = '100%';
                                 img.style.border = '1px solid #ddd';
                                 img.style.borderRadius = '4px';
+                                img.style.cursor = 'zoom-in';
                                 return img;
+                            };
+
+                            // Envolve a imagem numa âncora .thickbox para abrir no lightbox
+                            // (galeria de visualização) nativo do WordPress, em tamanho maior.
+                            const buildThickbox = (src, alt, maxW) => {
+                                const link = document.createElement('a');
+                                link.className = 'thickbox';
+                                link.rel = 'lkn-rede-layout-gallery';
+                                link.href = src || '';
+                                link.title = alt || '';
+                                link.style.display = 'block';
+                                link.style.cursor = 'zoom-in';
+                                link.appendChild(buildImage(src, alt, maxW));
+                                return link;
                             };
 
                             // Rótulo localizado lido do próprio <select> (ex.: "Modelo Básico").
@@ -370,11 +395,29 @@
                                 return opt ? opt.textContent.trim() : value;
                             };
 
+                            // Imagens de preview por tipo de checkout (Block x Shortcode/Clássico).
+                            const redeGatewayId = (typeof lknWcRedeTranslationsInput !== 'undefined' && lknWcRedeTranslationsInput.gateway_id)
+                                ? lknWcRedeTranslationsInput.gateway_id
+                                : 'rede_debit';
+                            const modeSelect = document.getElementById('woocommerce_' + redeGatewayId + '_checkout_type')
+                                || document.querySelector('select[id$="_checkout_type"]');
+                            const getMode = () => {
+                                const v = modeSelect ? String(modeSelect.value || '') : '';
+                                return v === 'classic' ? 'classic' : 'blocks';
+                            };
+                            const getSources = () => lknWcRedeLayoutSettings[getMode()]
+                                || lknWcRedeLayoutSettings.blocks
+                                || lknWcRedeLayoutSettings.classic
+                                || {};
+
+                            // Renderiza/atualiza o preview (redefinido em cada ramo abaixo).
+                            let renderPreview = () => {};
+
                             const isProField = fieldConfig.getAttribute('lkn-pro-badge') === 'true'
                                 || fieldConfig.getAttribute('lkn-is-pro') === 'true';
 
                             if (isProField) {
-                                // PRO desabilitado: exibe os dois modelos para comparação.
+                                // PRO desabilitado: exibe os modelos para comparação.
                                 previewContainer.style.display = 'flex';
                                 previewContainer.style.flexWrap = 'wrap';
                                 previewContainer.style.gap = '16px';
@@ -383,7 +426,7 @@
                                     const item = document.createElement('div');
                                     item.style.textAlign = 'center';
                                     if (src) {
-                                        item.appendChild(buildImage(src, caption));
+                                        item.appendChild(buildThickbox(src, caption));
                                         const cap = document.createElement('p');
                                         cap.textContent = caption;
                                         cap.style.margin = '6px 0 0';
@@ -394,9 +437,13 @@
                                     return item;
                                 };
 
-                                previewContainer.appendChild(buildItem(lknWcRedeLayoutSettings.basic, optionLabel('basic')));
-                                previewContainer.appendChild(buildItem(lknWcRedeLayoutSettings.modern, optionLabel('modern')));
-                                previewContainer.appendChild(buildItem(lknWcRedeLayoutSettings.compact, optionLabel('compact')));
+                                renderPreview = () => {
+                                    const sources = getSources();
+                                    previewContainer.innerHTML = '';
+                                    previewContainer.appendChild(buildItem(sources.basic, optionLabel('basic')));
+                                    previewContainer.appendChild(buildItem(sources.modern, optionLabel('modern')));
+                                    previewContainer.appendChild(buildItem(sources.compact, optionLabel('compact')));
+                                };
                             } else {
                                 // PRO ativo: preview único que segue a opção escolhida.
                                 const previewLabel = document.createElement('p');
@@ -404,32 +451,38 @@
                                 previewLabel.style.margin = '5px 0';
                                 previewLabel.style.fontWeight = 'bold';
 
-                                const previewImage = buildImage('', '');
+                                // Envolve a imagem numa âncora .thickbox (lightbox do WP).
+                                const previewLink = document.createElement('a');
+                                previewLink.className = 'thickbox';
+                                previewLink.rel = 'lkn-rede-layout-gallery';
+                                previewLink.style.display = 'block';
+                                previewLink.style.cursor = 'zoom-in';
+                                const previewImage = buildImage('', '', '100%');
                                 previewImage.style.display = 'block';
+                                previewLink.appendChild(previewImage);
 
                                 // Função para atualizar a imagem
                                 function updatePreviewImage() {
                                     const selectedValue = fieldConfig.value;
-                                    const previewSources = {
-                                        basic: lknWcRedeLayoutSettings.basic,
-                                        modern: lknWcRedeLayoutSettings.modern,
-                                        compact: lknWcRedeLayoutSettings.compact
-                                    };
-                                    const src = previewSources[selectedValue];
+                                    const sources = getSources();
+                                    const src = sources[selectedValue];
                                     if (src) {
                                         previewImage.src = src;
                                         previewImage.alt = selectedValue + ' Template Preview';
                                         previewImage.style.display = 'block';
+                                        previewLink.href = src;
+                                        previewLink.title = selectedValue + ' Template Preview';
+                                        previewLink.style.display = 'block';
                                     } else {
-                                        // Sem imagem para este template (ex.: compacto ainda
-                                        // sem screenshot): evita exibir a imagem anterior.
+                                        // Sem imagem para este template: evita exibir a
+                                        // imagem anterior.
                                         previewImage.removeAttribute('src');
                                         previewImage.style.display = 'none';
+                                        previewLink.removeAttribute('href');
+                                        previewLink.style.display = 'none';
                                     }
                                 }
-
-                                // Configurar imagem inicial
-                                updatePreviewImage();
+                                renderPreview = updatePreviewImage;
 
                                 // Adicionar evento de mudança usando Select2 event
                                 $(fieldConfig).on('select2:select', function() {
@@ -442,8 +495,19 @@
                                 });
 
                                 previewContainer.appendChild(previewLabel);
-                                previewContainer.appendChild(previewImage);
+                                previewContainer.appendChild(previewLink);
                             }
+
+                            // Reage à troca do tipo de checkout (Block x Shortcode/Clássico).
+                            if (modeSelect) {
+                                modeSelect.addEventListener('change', renderPreview);
+                                if (window.jQuery) {
+                                    window.jQuery(modeSelect).on('change select2:select', renderPreview);
+                                }
+                            }
+
+                            // Render inicial.
+                            renderPreview();
 
                             divBody.appendChild(previewContainer);
                         }

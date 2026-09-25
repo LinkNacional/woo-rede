@@ -7,6 +7,20 @@ const labelRedeCredit = window.wp.htmlEntities.decodeEntities(settingsRedeCredit
 const nonceRedeCredit = settingsRedeCredit.nonceRedeCredit;
 const translationsRedeCredit = settingsRedeCredit.translations;
 const minInstallmentsRede = settingsRedeCredit.minInstallmentsRede.replace(',', '.');
+// Formatação padronizada dos campos de cartão (espelhada em Public/js/rede-card-fields.js).
+const lknOnlyDigits = value => String(value == null ? '' : value).replace(/\D/g, '');
+const lknFormatCardExpiry = value => {
+  const digits = lknOnlyDigits(value);
+  let month = digits.slice(0, 2);
+  let year = digits.slice(2);
+  if (month.length === 1 && month >= '2' && month <= '9') {
+    month = '0' + month;
+  } else if (month.length === 2 && parseInt(month, 10) > 12) {
+    month = '12';
+  }
+  if (year.length > 2) year = year.slice(-2);
+  return year.length ? month + '/' + year : month;
+};
 const ContentRedeCredit = props => {
   const totalAmountFloat = settingsRedeCredit.cartTotal;
   const [selectedValue, setSelectedValue] = window.wp.element.useState('1');
@@ -58,33 +72,19 @@ const ContentRedeCredit = props => {
 
   // useCallback para estabilizar a função updateCreditObject
   const updateCreditObject = window.wp.element.useCallback((key, value) => {
-    let isValidDate = false;
     switch (key) {
       case 'rede_credit_expiry':
-        if (value.length > 7) return;
-
-        // Verifica se o valor é uma data válida (MM/YY)
-        isValidDate = /^\d{2}\/\d{2}$/.test(value);
-        if (!isValidDate) {
-          // Remove caracteres não numéricos
-          const cleanedValue = value?.replace(/\D/g, '');
-          let formattedValue = cleanedValue?.replace(/^(.{2})/, '$1 / ')?.trim();
-
-          // Se o tamanho da string for 5, remove o espaço e a barra adicionados anteriormente
-          if (formattedValue.length === 4) {
-            formattedValue = formattedValue.replace(/\s\//, '');
-          }
-
-          // Atualiza o estado
-          setCreditObject(prevState => ({
-            ...prevState,
-            [key]: formattedValue
-          }));
-        }
+        setCreditObject(prevState => ({
+          ...prevState,
+          [key]: lknFormatCardExpiry(value)
+        }));
         return;
       case 'rede_credit_cvc':
-        if (!/^\d+$/.test(value) && value !== '' || value.length > 4) return;
-        break;
+        setCreditObject(prevState => ({
+          ...prevState,
+          [key]: lknOnlyDigits(value).slice(0, 4)
+        }));
+        return;
       default:
         break;
     }
@@ -235,7 +235,7 @@ const ContentRedeCredit = props => {
 
   // formatCreditCardNumber como useCallback
   const formatCreditCardNumber = window.wp.element.useCallback((value) => {
-    if (value?.length > 19) return creditObject.rede_credit_number;
+    if (value?.length > 24) return creditObject.rede_credit_number;
     const cleanedValue = value?.replace(/\D/g, '');
     return cleanedValue?.replace(/(.{4})/g, '$1 ')?.trim();
   }, [creditObject.rede_credit_number]);
@@ -310,6 +310,7 @@ const ContentRedeCredit = props => {
         id="rede_credit_number"
         label={translationsRedeCredit.cardNumber}
         value={formatCreditCardNumber(creditObject.rede_credit_number)}
+        inputMode="numeric"
         onChange={value => updateCreditObject('rede_credit_number', formatCreditCardNumber(value))}
         onFocus={() => setFocus('number')}
       />
@@ -317,6 +318,7 @@ const ContentRedeCredit = props => {
         id="rede_credit_expiry"
         label={translationsRedeCredit.cardExpiringDate}
         value={creditObject.rede_credit_expiry}
+        inputMode="numeric"
         onChange={value => updateCreditObject('rede_credit_expiry', value)}
         onFocus={() => setFocus('expiry')}
       />
@@ -324,6 +326,7 @@ const ContentRedeCredit = props => {
         id="rede_credit_cvc"
         label={translationsRedeCredit.securityCode}
         value={creditObject.rede_credit_cvc}
+        inputMode="numeric"
         onChange={value => updateCreditObject('rede_credit_cvc', value)}
         onFocus={() => setFocus('cvc')}
       />

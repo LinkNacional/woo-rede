@@ -79,7 +79,7 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_credit_s
                     name="rede_credit_holder_name"
                     class="input-text"
                     type="text"
-                    placeholder="<?php esc_attr_e('Name', 'woo-rede'); ?>"
+                    placeholder="<?php echo esc_attr('John Doe'); ?>"
                     maxlength="30"
                     autocomplete="off"
                     style="font-size: 1.5em; padding: 8px 45px;" />
@@ -175,7 +175,7 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_credit_s
                     class="input-text wc-credit-card-form-card-expiry"
                     type="tel"
                     autocomplete="off"
-                    placeholder="<?php esc_attr_e('MM / YEAR', 'woo-rede'); ?>"
+                    placeholder="<?php esc_attr_e('MM/AA', 'woo-rede'); ?>"
                     style="font-size: 1.5em; padding: 8px 30px 8px 35px;" />
             </div>
 

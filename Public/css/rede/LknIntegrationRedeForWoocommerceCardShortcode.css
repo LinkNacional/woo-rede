@@ -7,6 +7,7 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+    margin-top: 12px;
     margin-bottom: 20px;
     gap: 10px;
 }
@@ -14,10 +15,76 @@
 .payment-method-description p {
     text-align: center;
     margin: 0 !important;
+    font-size: 11.2px;
+    color: #8e9ba8;
+}
+
+/* Descrição no rodapé do gateway Rede débito (shortcode): 0.8rem, cinza.
+   Escopado ao formulário de débito para não afetar o de crédito. */
+#rede-debit-payment-form .payment-method-description {
+    margin-top: 12px;
+    margin-bottom: 0;
+}
+
+/* Placeholder dos inputs do formulário de débito sempre em CINZA — muitos temas
+   deixam o placeholder escuro (quase preto). Vale para todos os templates do
+   shortcode (o id do fieldset é o mesmo em basic/modern/compact) e só nos
+   inputs (o select não tem placeholder). */
+#rede-debit-payment-form input::placeholder {
+    color: #adb5bd !important;
+    opacity: 1 !important;
+}
+
+#rede-debit-payment-form .payment-method-description p {
+    font-size: 11.2px;
+    color: #8e9ba8;
+}
+
+/* Layout Basic (shortcode): 8px entre os campos, exceto o primeiro
+   (nome impresso no cartão). Escopado ao Basic — não afeta moderno/compacto. */
+#rede-debit-payment-form:not(.rede-modern-classic):not(.rede-compact-classic) .wc-payment-rede-form-fields > .form-row + .form-row {
+    margin-top: 8px;
 }
 
 #logo-rede {
     height: 20px;
+}
+
+/* Faixa de bandeiras no TOPO do formulário — SÓ no SHORTCODE clássico (standard/
+   compacto). O checkout em Blocos também carrega este CSS, mas a faixa do título
+   lá é criada por JS (.rede-card-brands dentro do label-group) e deve manter o
+   layout próprio; por isso escopamos ao formulário do shortcode
+   (#rede-debit-payment-form / .rede-payment-form), fora dos Blocos. O layout
+   moderno do shortcode tem regras próprias em .rede-modern-classic. */
+.rede-payment-form:not(.rede-modern-classic) .rede-card-brands-container {
+    text-align: center;
+    margin: 0 0 16px 0;
+}
+
+.rede-payment-form:not(.rede-modern-classic) .rede-card-brands {
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(233, 236, 239, 0.6);
+}
+
+.rede-payment-form:not(.rede-modern-classic) .rede-card-brands img,
+.rede-payment-form:not(.rede-modern-classic) .rede-card-brands .rede-card-brand-icon {
+    width: 40px;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Bandeira "apagada": quando uma é detectada, as demais ficam cinzas. */
+.rede-payment-form:not(.rede-modern-classic) .rede-card-brands img.is-dim {
+    filter: grayscale(100%) !important;
+    opacity: 0.35 !important;
 }
 
 .labels-with-icons {
@@ -35,14 +102,68 @@
     line-height: normal !important;
 }
 
-.input-text,
-.input-select {
+/* Campos do formulário do Rede (escopado: sem isso o height/line-height vazaria
+   para os .input-text de billing/shipping do WooCommerce). */
+.rede-payment-form .input-text,
+.rede-payment-form .input-select {
+    height: 50px !important;
+    box-sizing: border-box !important;
     padding: .5em .8em !important;
-    font-size: 1rem !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+    /* Força fundo branco sobre o background do tema. */
+    background-color: #fff !important;
+}
+
+/* Label do shortcode clássico (padrão e moderno) — 0.9rem. */
+.rede-payment-form label {
+    font-size: 12.6px;
+}
+
+/* Borda levemente arredondada (8px, igual ao modelo moderno) apenas nos campos
+   do formulário do Rede. O border/radius são forçados (!important) para vencer
+   o CSS do tema (ex.: Woodmart ".wd select"), que aplica o próprio radius/borda. */
+.rede-payment-form .input-text,
+.rede-payment-form .input-select {
+    border-radius: 8px !important;
+}
+
+.rede-payment-form .input-select {
+    border: 1px solid #d1d5db !important;
 }
 
 @media (max-width: 450px) {
     .rede-payment-form {
         padding: 10px !important;
     }
+}
+/* Botão de finalizar custom no layout padrão do shortcode — recurso PRO.
+   Mesmo estilo azul dos layouts moderno/compacto. */
+.rede-payment-form .rede-basic-submit-button {
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    margin-top: 18px;
+    background-color: #306FC5 !important;
+    color: #fff !important;
+    border: 1px solid #2557a3 !important;
+    border-radius: 8px;
+    padding: 0 20px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.rede-payment-form .rede-basic-submit-button:hover {
+    background-color: #2557a3 !important;
+    color: #fff !important;
+}
+
+.rede-payment-form .rede-basic-submit-button:disabled {
+    background-color: #cccccc !important;
+    color: #666666 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
 }

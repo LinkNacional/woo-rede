@@ -18,14 +18,47 @@ if (! defined('ABSPATH')) {
     exit();
 }
 $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_settings');
+
+// Labels/placeholders personalizáveis (seção "Fields" do admin, recurso PRO).
+$lkn_fields_gtw = 'rede_debit';
+$lkn_lbl = function ($field) use ($lkn_fields_gtw) {
+    return \Lknwoo\IntegrationRedeForWoocommerce\Includes\LknIntegrationRedeForWoocommerceHelper::getFieldLabel($lkn_fields_gtw, 'compact', $field, 'classic');
+};
+$lkn_ph = function ($field, $default) use ($lkn_fields_gtw) {
+    $custom = \Lknwoo\IntegrationRedeForWoocommerce\Includes\LknIntegrationRedeForWoocommerceHelper::getFieldOverride($lkn_fields_gtw, 'compact', $field, 'placeholder', $default, 'classic');
+    return '' !== $custom ? $custom : $default;
+};
+
+// Opções do gateway: cartão animado e bandeiras (default ligados).
+$lkn_show_card_animation = isset($show_card_animation) ? $show_card_animation : 'yes';
+
+// Bandeiras no topo do formulário (opção "Show card brand icons") — recurso
+// separado, ativável em qualquer layout (igual ao Cielo). NÃO confundir com as
+// bandeiras do CAMPO de número (essas aparecem sempre).
+$lkn_show_card_brand_icons = isset($show_card_brand_icons) ? $show_card_brand_icons : 'yes';
+$lkn_brand_asset = plugin_dir_url(__FILE__) . '../../assets/cardTemplate/';
+$lkn_top_brands = array(
+    'visa'       => array('label' => __('Visa', 'woo-rede'), 'file' => 'visa-icon.svg'),
+    'mastercard' => array('label' => __('Mastercard', 'woo-rede'), 'file' => 'mastercard-icon.svg'),
+    'amex'       => array('label' => __('American Express', 'woo-rede'), 'file' => 'amex-icon.svg'),
+    'elo'        => array('label' => __('Elo', 'woo-rede'), 'file' => 'elo-icon.svg'),
+    'other_card' => array('label' => __('Other Card', 'woo-rede'), 'file' => 'other-card.svg'),
+);
 ?>
 <fieldset id="rede-debit-payment-form" class="rede-payment-form rede-compact-classic">
-    <div class="payment-method-description">
-        <p><?php echo esc_html($integration_rede_for_woocommerce_option['description'] ?? __('Pay for your purchase with a debit card through', 'woo-rede')); ?></p>
-    </div>
-
     <div class="rede-debit-fields-wrapper rede-compact-wrapper">
+        <?php if ('yes' === $lkn_show_card_brand_icons) : ?>
+        <div class="rede-card-brands-container" id="rede-debit-card-brands">
+            <div class="rede-card-brands">
+                <?php foreach ($lkn_top_brands as $lkn_brand_key => $lkn_brand) : ?>
+                    <img src="<?php echo esc_url($lkn_brand_asset . $lkn_brand['file']); ?>" alt="<?php echo esc_attr($lkn_brand['label'] . ' logo'); ?>" title="<?php echo esc_attr($lkn_brand['label']); ?>" data-brand="<?php echo esc_attr($lkn_brand_key); ?>" class="rede-card-brand-icon" />
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+        <?php if ('yes' === $lkn_show_card_animation) : ?>
         <div id="rede-debit-card-animation" class="card-wrapper card-animation"></div>
+        <?php endif; ?>
         <div class="wc-payment-rede-form-fields rede-compact-fields">
 
             <?php
@@ -62,7 +95,7 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
             <div class="rede-compact-row rede-compact-row--top<?php echo $lkn_hide_card_type_selector ? ' rede-compact-row--name-only' : ''; ?>">
                 <!-- Nome do titular -->
                 <div class="rede-compact-field rede-compact-field--name">
-                    <label for="rede-debit-card-holder-name"><?php esc_html_e('Name on Card', 'woo-rede'); ?><span class="required">*</span></label>
+                    <label for="rede-debit-card-holder-name"><?php echo esc_html($lkn_lbl('holder_name')); ?><span class="required">*</span></label>
                     <div class="rede-compact-input-wrap">
                         <input id="rede-debit-card-holder-name"
                             name="rede_debit_holder_name"
@@ -70,14 +103,14 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
                             type="text"
                             autocomplete="off"
                             maxlength="30"
-                            placeholder="Nome impresso no cartão"
+                            placeholder="<?php echo esc_attr($lkn_ph('holder_name', 'John Doe')); ?>"
                             required />
                     </div>
                 </div>
 
                 <!-- Tipo do cartão -->
                 <div class="rede-compact-field rede-compact-field--type" id="rede-debit-card-type-wrapper"<?php echo $lkn_hide_card_type_selector ? ' style="display: none;"' : ''; ?>>
-                    <label for="rede-debit-card-type"><?php esc_html_e('Card Type', 'woo-rede'); ?><span class="required">*</span></label>
+                    <label for="rede-debit-card-type"><?php echo esc_html($lkn_lbl('card_type')); ?><span class="required">*</span></label>
                     <div class="rede-compact-input-wrap">
                         <select
                             id="rede-debit-card-type"
@@ -97,7 +130,7 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
             <div class="rede-compact-row rede-compact-row--card">
                 <!-- Número do cartão (com bandeiras) -->
                 <div class="rede-compact-field rede-compact-field--number">
-                    <label for="rede-debit-card-number"><?php esc_html_e('Card Number', 'woo-rede'); ?><span class="required">*</span></label>
+                    <label for="rede-debit-card-number"><?php echo esc_html($lkn_lbl('card_number')); ?><span class="required">*</span></label>
                     <div class="rede-compact-input-wrap">
                         <input
                             id="rede-debit-card-number"
@@ -107,8 +140,9 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
                             maxlength="22"
                             autocomplete="off"
                             inputmode="numeric"
-                            placeholder="0000 0000 0000 0000"
+                            placeholder="<?php echo esc_attr($lkn_ph('card_number', '0000 0000 0000 0000')); ?>"
                             required />
+                        <?php /* Bandeiras do CAMPO de número: SEMPRE exibidas (independente da opção "Show card brand icons", que controla apenas as bandeiras ao lado do título). */ ?>
                         <div class="rede-compact-card-brands" aria-hidden="true"></div>
                     </div>
                     <input
@@ -120,7 +154,7 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
 
                 <!-- Data de validade (o ícone é injetado via JS) -->
                 <div class="rede-compact-field rede-compact-field--exp" data-icon="calendar">
-                    <label for="rede-debit-card-expiry"><?php esc_html_e('Card Expiring Date', 'woo-rede'); ?><span class="required">*</span></label>
+                    <label for="rede-debit-card-expiry"><?php echo esc_html($lkn_lbl('expiry')); ?><span class="required">*</span></label>
                     <div class="rede-compact-input-wrap">
                         <input id="rede-debit-card-expiry"
                             name="rede_debit_expiry"
@@ -128,14 +162,14 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
                             type="tel"
                             autocomplete="off"
                             inputmode="numeric"
-                            placeholder="MM/AA"
+                            placeholder="<?php echo esc_attr($lkn_ph('expiry', 'MM/AA')); ?>"
                             required />
                     </div>
                 </div>
 
                 <!-- Código de segurança (o ícone é injetado via JS) -->
                 <div class="rede-compact-field rede-compact-field--cvc" data-icon="key">
-                    <label for="rede-debit-card-cvc"><?php esc_html_e('Security Code', 'woo-rede'); ?><span class="required">*</span></label>
+                    <label for="rede-debit-card-cvc"><?php echo esc_html($lkn_lbl('cvc')); ?><span class="required">*</span></label>
                     <div class="rede-compact-input-wrap">
                         <input id="rede-debit-card-cvc"
                             name="rede_debit_cvc"
@@ -144,7 +178,7 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
                             autocomplete="off"
                             inputmode="numeric"
                             maxlength="4"
-                            placeholder="CVC"
+                            placeholder="<?php echo esc_attr($lkn_ph('cvc', 'CVC')); ?>"
                             required />
                     </div>
                 </div>
@@ -153,7 +187,7 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
             <?php if (($card_type_restriction === 'credit_only' || $card_type_restriction === 'both') && is_array($installments) && count($installments) > 1) : ?>
             <div class="rede-compact-row rede-compact-row--installments" id="rede-debit-installments-wrapper" <?php echo ($card_type_restriction === 'both' && $card_type === 'debit') ? 'style="display: none;"' : ''; ?>>
                 <div class="rede-compact-field rede-compact-field--installments">
-                    <label for="rede-debit-card-installments"><?php esc_html_e('Installments', 'woo-rede'); ?><span class="required">*</span></label>
+                    <label for="rede-debit-card-installments"><?php echo esc_html($lkn_lbl('installments')); ?><span class="required">*</span></label>
                     <div class="rede-compact-input-wrap">
                         <select
                             id="rede-debit-card-installments"
@@ -176,6 +210,12 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
                 </div>
             </div>
             <?php endif; ?>
+
+            <div class="payment-submit-section">
+                <button type="button" id="rede-debit-submit-btn" class="rede-compact-submit-button">
+                    <?php echo esc_html($lkn_lbl('button')); ?>
+                </button>
+            </div>
 
             <div class="clear"></div>
         </div>
@@ -201,4 +241,9 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_debit_se
         });
     </script>
     <?php endif; ?>
+
+    <!-- Descrição do gateway no rodapé, abaixo do botão de finalizar. -->
+    <div class="payment-method-description">
+        <p><?php echo esc_html($integration_rede_for_woocommerce_option['description'] ?? __('Pay for your purchase with a debit card through', 'woo-rede')); ?></p>
+    </div>
 </fieldset>
