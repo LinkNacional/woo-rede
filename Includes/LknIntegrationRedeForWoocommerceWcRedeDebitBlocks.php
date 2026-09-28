@@ -105,6 +105,11 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebitBlocks extends AbstractPa
         }
 
         apply_filters('integration_rede_for_woocommerce_set_custom_css', get_option('woocommerce_rede_debit_settings')['custom_css_block_editor'] ?? false);
+
+        // Recurso PRO: permite ao plugin PRO remover o campo do titular no
+        // checkout em Blocos (espelha lkn_wc_cielo_remove_cardholder_name_3ds).
+        do_action('integration_rede_for_woocommerce_remove_cardholder_name_3ds', $this->gateway);
+
         return array('rede_debit-blocks-integration');
     }
 
@@ -129,6 +134,8 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebitBlocks extends AbstractPa
             'cartTotal' => $cart_total,
             'cardTypeRestriction' => LknIntegrationRedeForWoocommerceHelper::getCardTypeRestriction($this->gateway->id),
             'hideCardTypeSelector' => LknIntegrationRedeForWoocommerceHelper::isHideCardTypeSelectorEnabled($this->name) ? 'yes' : 'no',
+            // Recurso PRO: ocultar o campo do titular no checkout em Blocos.
+            'hideCardholderName' => $this->gateway->isCardholderNameDisabled() ? 'yes' : 'no',
             'maxParcels' => $this->gateway->get_option('max_parcels_number', '12'),
             'minParcelsValue' => $this->gateway->get_option('min_parcels_value', '5'),
             '3dsTemplateStyle' => LknIntegrationRedeForWoocommerceHelper::get3dsTemplateStyle($this->name),

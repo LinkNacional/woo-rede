@@ -305,6 +305,21 @@ abstract class LknIntegrationRedeForWoocommerceWcRedeAbstract extends WC_Payment
         }
     }
 
+    /**
+     * Indica se o campo do titular deve ser ocultado no checkout e o nome
+     * obtido do pedido (billing first/last name) em vez de digitado.
+     *
+     * Recurso PRO: só é considerado habilitado com licença PRO ativa e a opção
+     * "show_cardholder_name" = yes no gateway.
+     *
+     * @return bool
+     */
+    public function isCardholderNameDisabled(): bool
+    {
+        return LknIntegrationRedeForWoocommerceHelper::isProLicenseValid()
+            && 'yes' === $this->get_option('show_cardholder_name', 'no');
+    }
+
     protected function validate_card_number($cardNumber)
     {
         $cardNumber_checksum = '';
@@ -321,16 +336,20 @@ abstract class LknIntegrationRedeForWoocommerceWcRedeAbstract extends WC_Payment
 
     protected function validate_card_fields($posted)
     {
-        if (! isset($posted[$this->id . '_holder_name']) || '' === $posted[$this->id . '_holder_name']) {
-            return false;
-        }
+        // Recurso PRO: quando o campo do titular está desabilitado, o nome é
+        // obtido do pedido no process_payment e não deve ser exigido aqui.
+        if (! $this->isCardholderNameDisabled()) {
+            if (! isset($posted[$this->id . '_holder_name']) || '' === $posted[$this->id . '_holder_name']) {
+                return false;
+            }
 
-        if (preg_replace(
-            '/[^a-zA-Z\s]/',
-            '',
-            $posted[$this->id . '_holder_name']
-        ) != $posted[$this->id . '_holder_name']) {
-            return false;
+            if (preg_replace(
+                '/[^a-zA-Z\s]/',
+                '',
+                $posted[$this->id . '_holder_name']
+            ) != $posted[$this->id . '_holder_name']) {
+                return false;
+            }
         }
 
         if (! isset($posted[$this->id . '_expiry']) || '' === $posted[$this->id . '_expiry']) {

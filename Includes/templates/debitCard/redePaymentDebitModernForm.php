@@ -39,6 +39,8 @@ $lkn_ph = function ($field, $default) use ($lkn_fields_gtw) {
 // Opções do gateway: cartão animado e bandeiras (default ligados).
 $lkn_show_card_animation = isset($show_card_animation) ? $show_card_animation : 'yes';
 $lkn_show_card_brand_icons = isset($show_card_brand_icons) ? $show_card_brand_icons : 'yes';
+// Recurso PRO: oculta o campo do titular; o nome é obtido do pedido.
+$lkn_show_cardholder = isset($show_cardholder_name) ? $show_cardholder_name : 'no';
 
 $lkn_asset = plugin_dir_url(__FILE__) . '../../assets/cardTemplate/';
 $lkn_brands = array(
@@ -73,6 +75,10 @@ $lkn_brands = array(
             <?php endif; ?>
 
             <!-- Nome do titular (100%) -->
+            <?php if ('yes' === $lkn_show_cardholder) : ?>
+            <!-- Recurso PRO: campo do titular oculto; o nome é obtido do pedido. -->
+            <input type="hidden" id="rede-debit-card-holder-name" name="rede_debit_holder_name" value="" />
+            <?php else : ?>
             <div class="modern-field">
                 <label class="field-label" for="rede-debit-card-holder-name">
                     <?php echo esc_html($lkn_lbl('holder_name')); ?><span class="required">*</span>
@@ -87,6 +93,7 @@ $lkn_brands = array(
                         placeholder="<?php echo esc_attr($lkn_ph('holder_name', 'John Doe')); ?>" />
                 </div>
             </div>
+            <?php endif; ?>
 
             <!-- Número do cartão + tipo do cartão (½ cada) -->
             <div class="field-group">
@@ -242,6 +249,28 @@ $lkn_brands = array(
 
             toggleInstallments();
             $('#rede-debit-card-type').on('change', toggleInstallments);
+        });
+    </script>
+    <?php endif; ?>
+
+    <?php if ('yes' === $lkn_show_cardholder) : ?>
+    <script type="text/javascript">
+        // Recurso PRO: com o campo do titular oculto, espelha o nome de
+        // faturamento (ou entrega) no campo virtual para a animação do cartão.
+        jQuery(function ($) {
+            function lknSyncHolderName() {
+                var $first = $('#billing_first_name').length ? $('#billing_first_name') : $('#shipping_first_name');
+                var $last = $('#billing_last_name').length ? $('#billing_last_name') : $('#shipping_last_name');
+                var name = (($first.val() || '') + ' ' + ($last.val() || '')).trim();
+                var $hidden = $('#rede-debit-card-holder-name');
+                if ($hidden.length && $hidden.val() !== name) {
+                    $hidden.val(name).trigger('input').trigger('change');
+                }
+            }
+            $(document.body).on('input change blur', '#billing_first_name, #billing_last_name, #shipping_first_name, #shipping_last_name', lknSyncHolderName);
+            $(document.body).on('updated_checkout', lknSyncHolderName);
+            lknSyncHolderName();
+            setTimeout(lknSyncHolderName, 300);
         });
     </script>
     <?php endif; ?>

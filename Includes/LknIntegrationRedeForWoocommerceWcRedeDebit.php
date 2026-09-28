@@ -115,7 +115,9 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             return false;
         }
 
-        if (empty($_POST['rede_debit_holder_name'])) {
+        // Recurso PRO: com o campo do titular desabilitado não exige o nome aqui
+        // (o nome é obtido do pedido em process_payment).
+        if (! $this->isCardholderNameDisabled() && empty($_POST['rede_debit_holder_name'])) {
             wc_add_notice(esc_attr__('Cardholder name is a required field', 'woo-rede'), 'error');
 
             return false;
@@ -1417,6 +1419,10 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
      * Move os campos da seção "Fields" (select "Checkout" + Layout real
      * 3ds_template_style) para logo após o título Fields e remove o select
      * "Template" (fields_preview_template), que era redundante.
+     *
+     * Também move, para LOGO ABAIXO do preview, as configurações que afetam o
+     * formulário (tipo de cartão, ocultar seletor de tipo e campo do titular).
+     * São os MESMOS campos/opções de sempre (mudam de lugar, não de lógica).
      */
     private function move_layout_field_to_fields_section(): void
     {
@@ -1433,18 +1439,34 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 $section_fields[] = $candidate;
             }
         }
-        if (empty($section_fields)) {
+
+        // Configurações que afetam o formulário: exibidas ABAIXO do preview.
+        $below_preview_fields = array();
+        foreach (array('card_type_restriction', 'hide_card_type_selector', 'show_cardholder_name', 'show_cardholder_name_fake') as $candidate) {
+            if (isset($fields[$candidate])) {
+                $below_preview_fields[] = $candidate;
+            }
+        }
+
+        if (empty($section_fields) && empty($below_preview_fields)) {
             return;
         }
 
         $reordered = array();
         foreach ($fields as $key => $value) {
-            if ('fields_preview_template' === $key || in_array($key, $section_fields, true)) {
-                continue; // remove o Template; os campos da seção são reinseridos após o título
+            if ('fields_preview_template' === $key
+                || in_array($key, $section_fields, true)
+                || in_array($key, $below_preview_fields, true)) {
+                continue; // remove o Template; os campos são reinseridos nas posições-alvo
             }
             $reordered[$key] = $value;
             if ('fields_section' === $key) {
                 foreach ($section_fields as $sf) {
+                    $reordered[$sf] = $fields[$sf];
+                }
+            }
+            if ('fields_preview' === $key) {
+                foreach ($below_preview_fields as $sf) {
                     $reordered[$sf] = $fields[$sf];
                 }
             }
@@ -1807,6 +1829,16 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             'card_holder' => isset($_POST['rede_debit_holder_name']) ? sanitize_text_field(wp_unslash($_POST['rede_debit_holder_name'])) : '',
             'card_type' => $card_type,
             'installments' => $installments,
+        );
+
+        // Recurso PRO: quando o campo do titular está desabilitado, o nome é
+        // obtido do pedido (filtro registrado pelo plugin PRO), garantindo o
+        // titular correto mesmo sem o campo no checkout.
+        $cardData['card_holder'] = apply_filters(
+            'integration_rede_for_woocommerce_get_cardholder_name',
+            $cardData['card_holder'],
+            $this,
+            $order
         );
 
         try {
@@ -2376,6 +2408,8 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'show_card_animation' => $this->get_option('show_card_animation', 'yes'),
                 'show_card_brand_icons' => $this->get_option('show_card_brand_icons', 'yes'),
                 'hide_rede_logo' => $this->get_option('hide_rede_logo', 'no'),
+                // Recurso PRO: ocultar o campo do titular no checkout clássico.
+                'show_cardholder_name' => $this->isCardholderNameDisabled() ? 'yes' : 'no',
             ),
             'woocommerce/rede/',
             LknIntegrationRedeForWoocommerceWcRede::getTemplatesPath()

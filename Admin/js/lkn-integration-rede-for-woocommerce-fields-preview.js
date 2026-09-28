@@ -199,6 +199,143 @@
       syncDescription()
     }
 
+    // ---- Configurações que afetam o formulário (tipo de cartão + campo do titular) ----
+    // Refletem no preview (todos os layouts) sem alterar a lógica do checkout: são as
+    // mesmas opções reais (card_type_restriction / hide_card_type_selector / show_cardholder_name).
+    var restrictionField = document.getElementById('woocommerce_' + gateway + '_card_type_restriction') ||
+      document.getElementById('woocommerce_' + gateway + '_card_type_mode')
+    var hideSelectorField = document.getElementById('woocommerce_' + gateway + '_hide_card_type_selector')
+    var hideHolderField = document.getElementById('woocommerce_' + gateway + '_show_cardholder_name') ||
+      document.getElementById('woocommerce_' + gateway + '_show_cardholder_name_fake')
+
+    // Bloco (wrapper) que contém campo + label, cobrindo todos os templates.
+    var BLOCK_SELECTOR = '.form-row, .modern-field, .rede-compact-field, .compact-field, ' +
+      '.wc-block-components-text-input, .modern-select-wrapper, ' +
+      '.lknIntegrationRedeForWoocommerceSelectBlocks, .lkn-credit-debit-card-field'
+
+    // Lê o valor de um checkbox (ou dos rádios "-control" em que ele é convertido).
+    function fieldIsYes (el) {
+      if (! el) return false
+      var radios = document.querySelectorAll('input[name="' + el.id + '-control"]')
+      if (radios.length) {
+        for (var i = 0; i < radios.length; i++) {
+          if (radios[i].checked) return radios[i].value === '1'
+        }
+        return false
+      }
+      var cb = document.getElementById(el.id)
+      return !!(cb && cb.checked)
+    }
+
+    // Localiza o select de tipo de cartão dentro de um preview (pelas opções).
+    function findCardTypeSelect (preview) {
+      var selects = preview.querySelectorAll('select')
+      for (var i = 0; i < selects.length; i++) {
+        for (var j = 0; j < selects[i].options.length; j++) {
+          if (/^(credit|debit)$/i.test(selects[i].options[j].value)) return selects[i]
+        }
+      }
+      return null
+    }
+
+    // Localiza o select de parcelas dentro de um preview (opções "1x".."Nx").
+    function findInstallmentsSelect (preview) {
+      var selects = preview.querySelectorAll('select')
+      for (var i = 0; i < selects.length; i++) {
+        for (var j = 0; j < selects[i].options.length; j++) {
+          if (/^\d+\s*x$/i.test((selects[i].options[j].textContent || '').trim())) return selects[i]
+        }
+      }
+      return null
+    }
+
+    // Restringe as opções do select de tipo conforme a restrição (guarda o original).
+    function setCardTypeOptions (select, creditOnly, debitOnly) {
+      if (! select.getAttribute('data-lkn-original-options')) {
+        var original = []
+        for (var i = 0; i < select.options.length; i++) {
+          original.push({ value: select.options[i].value, text: select.options[i].textContent, selected: select.options[i].selected })
+        }
+        select.setAttribute('data-lkn-original-options', JSON.stringify(original))
+      }
+      var all = JSON.parse(select.getAttribute('data-lkn-original-options'))
+      var keep = all.filter(function (o) {
+        if (creditOnly) return /^credit$/i.test(o.value)
+        if (debitOnly) return /^debit$/i.test(o.value)
+        return true
+      })
+      while (select.firstChild) select.removeChild(select.firstChild)
+      keep.forEach(function (o) {
+        var opt = document.createElement('option')
+        opt.value = o.value
+        opt.textContent = o.text
+        // Com um único tipo, seleciona a opção restante; em "both", preserva a
+        // seleção original (o template já vem com o crédito selecionado).
+        opt.selected = (keep.length === 1) ? true : !!o.selected
+        select.appendChild(opt)
+      })
+    }
+
+    function toggleBlock (el, show) {
+      if (! el) return
+      var block = el.closest(BLOCK_SELECTOR)
+      if (block) block.style.display = show ? '' : 'none'
+    }
+
+    function applyFormConfig () {
+      var restriction = restrictionField ? String(restrictionField.value || '') : ''
+      var creditOnly = restriction === 'credit_only' || restriction === 'only_credit'
+      var debitOnly = restriction === 'debit_only' || restriction === 'only_debit'
+      var single = creditOnly || debitOnly
+      var hideSelector = fieldIsYes(hideSelectorField)
+      var hideHolder = fieldIsYes(hideHolderField)
+
+      editor.querySelectorAll('.lkn-fields-preview').forEach(function (preview) {
+        // Campo do titular (id varia por template: "lkn-preview-holder" no
+        // moderno/compacto e "lkn-preview-holder_name" no padrão/basic).
+        toggleBlock(preview.querySelector('[id^="lkn-preview-holder"]'), ! hideHolder)
+
+        // Tipo de cartão: opções + exibir/ocultar o seletor.
+        var ct = findCardTypeSelect(preview)
+        if (ct) {
+          setCardTypeOptions(ct, creditOnly, debitOnly)
+          toggleBlock(ct, ! (hideSelector && single))
+        }
+
+        // Parcelas: oculta quando restrito a débito.
+        toggleBlock(findInstallmentsSelect(preview), ! debitOnly)
+
+        // Layout compacto: a Linha 1 (Nome | Tipo) é um grid de 3 colunas. Sem o
+        // nome, a coluna 1 ficaria vazia e o Tipo não esticaria; e quando o seletor
+        // de tipo está oculto, o Nome deve ocupar a linha toda (como no checkout).
+        var topRow = preview.querySelector('.rede-compact-row--top')
+        if (topRow) {
+          var nameCell = topRow.querySelector('.rede-compact-field--name')
+          var typeCell = topRow.querySelector('.rede-compact-field--type')
+          if (nameCell) nameCell.style.display = hideHolder ? 'none' : ''
+          if (typeCell) typeCell.style.gridColumn = hideHolder ? '1 / -1' : ''
+          topRow.classList.toggle('rede-compact-row--name-only', hideSelector && single && ! hideHolder)
+          // Sem nome e sem seletor de tipo, a Linha 1 fica vazia: recolhe a linha.
+          topRow.style.display = (hideHolder && hideSelector && single) ? 'none' : ''
+        }
+      })
+    }
+
+    ;[restrictionField, hideSelectorField, hideHolderField].forEach(function (el) {
+      if (! el) return
+      el.addEventListener('change', applyFormConfig)
+      if (window.jQuery) window.jQuery(el).on('change select2:select', applyFormConfig)
+    })
+    document.addEventListener('change', function (e) {
+      if (e.target && e.target.name && /-control$/.test(e.target.name)) applyFormConfig()
+    })
+    applyFormConfig()
+    // Reaplica após o transform do painel (roda em window.load) — garante o estado final.
+    window.addEventListener('load', function () {
+      setTimeout(applyFormConfig, 100)
+      setTimeout(applyFormConfig, 500)
+    })
+
     editor.addEventListener('click', function (event) {
       var btn = event.target.closest('.lkn-edit-btn')
       if (! btn || ! editor.contains(btn)) return

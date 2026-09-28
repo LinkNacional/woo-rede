@@ -30,6 +30,8 @@ $lkn_hide_rede_logo = isset($hide_rede_logo) ? $hide_rede_logo : 'no';
 // separado, ativável em qualquer layout (igual ao Cielo). Faixa estática com
 // todas as bandeiras. NÃO confundir com as bandeiras do CAMPO do compacto.
 $lkn_show_card_brand_icons = isset($show_card_brand_icons) ? $show_card_brand_icons : 'yes';
+// Recurso PRO: oculta o campo do titular; o nome é obtido do pedido.
+$lkn_show_cardholder = isset($show_cardholder_name) ? $show_cardholder_name : 'no';
 $lkn_brand_asset = plugin_dir_url(__FILE__) . '../../assets/cardTemplate/';
 $lkn_top_brands = array(
     'visa'       => array('label' => __('Visa', 'woo-rede'), 'file' => 'visa-icon.svg'),
@@ -55,6 +57,10 @@ $lkn_top_brands = array(
         <div id="rede-debit-card-animation" class="card-wrapper card-animation"></div>
         <?php endif; ?>
         <div class="wc-payment-rede-form-fields">
+            <?php if ('yes' === $lkn_show_cardholder) : ?>
+            <!-- Recurso PRO: campo do titular oculto; o nome é obtido do pedido. -->
+            <input type="hidden" id="rede-debit-card-holder-name" name="rede_debit_holder_name" value="" />
+            <?php else : ?>
             <div class="form-row form-row">
                 <label class="labels-with-icons" for="rede-debit-card-holder-name">
                     <?php echo esc_html($lkn_lbl('holder_name')); ?><span class="required">*</span>
@@ -66,6 +72,7 @@ $lkn_top_brands = array(
                     maxlength="30" autocomplete="off"
                     style="font-size: 21px; padding: 8px 45px;" />
             </div>
+            <?php endif; ?>
 
             <div class="form-row form-row">
                 <label class="labels-with-icons" for="rede-debit-card-number">
@@ -244,4 +251,26 @@ $lkn_top_brands = array(
         </svg>
         <?php endif; ?>
     </div>
+
+    <?php if ('yes' === $lkn_show_cardholder) : ?>
+    <script type="text/javascript">
+        // Recurso PRO: com o campo do titular oculto, espelha o nome de
+        // faturamento (ou entrega) no campo virtual para a animação do cartão.
+        jQuery(function ($) {
+            function lknSyncHolderName() {
+                var $first = $('#billing_first_name').length ? $('#billing_first_name') : $('#shipping_first_name');
+                var $last = $('#billing_last_name').length ? $('#billing_last_name') : $('#shipping_last_name');
+                var name = (($first.val() || '') + ' ' + ($last.val() || '')).trim();
+                var $hidden = $('#rede-debit-card-holder-name');
+                if ($hidden.length && $hidden.val() !== name) {
+                    $hidden.val(name).trigger('input').trigger('change');
+                }
+            }
+            $(document.body).on('input change blur', '#billing_first_name, #billing_last_name, #shipping_first_name, #shipping_last_name', lknSyncHolderName);
+            $(document.body).on('updated_checkout', lknSyncHolderName);
+            lknSyncHolderName();
+            setTimeout(lknSyncHolderName, 300);
+        });
+    </script>
+    <?php endif; ?>
 </fieldset>

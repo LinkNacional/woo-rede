@@ -8,6 +8,8 @@ const nonceRedeDebit = settingsRedeDebit.nonceRedeDebit;
 const translationsRedeDebit = settingsRedeDebit.translations;
 const cardTypeRestriction = settingsRedeDebit.cardTypeRestriction || 'debit_only';
 const hideCardTypeSelector = settingsRedeDebit.hideCardTypeSelector || 'no';
+// Recurso PRO: ocultar o campo do titular e usar o nome do pedido (billing).
+const hideCardholderName = settingsRedeDebit.hideCardholderName === 'yes';
 // Mostra o seletor sempre que a restrição permite ambos os tipos; com um único tipo, só mostra se a opção de escondê-lo não estiver habilitada.
 const showCardTypeSelector = cardTypeRestriction === 'both' ? true : hideCardTypeSelector !== 'yes';
 // Com um único tipo, o seletor aparece porém "travado" (cinza/aparentando disabled).
@@ -764,7 +766,10 @@ const ContentRedeDebit = props => {
   window.wp.element.useEffect(() => {
     const unsubscribe = onPaymentSetup(async () => {
       // Verifica se todos os campos obrigatórios estão preenchidos
-      const requiredFields = ['rede_debit_number', 'rede_debit_expiry', 'rede_debit_cvc', 'rede_debit_holder_name'];
+      const requiredFields = ['rede_debit_number', 'rede_debit_expiry', 'rede_debit_cvc'];
+      if (!hideCardholderName) {
+        requiredFields.push('rede_debit_holder_name');
+      }
       if (cardTypeRestriction === 'both') {
         requiredFields.push('card_type');
       }
@@ -921,6 +926,7 @@ const ContentRedeDebit = props => {
         />)}
 
         {/* Nome do portador - 100% */}
+        {!hideCardholderName && (
         <div className="modern-field-row-full">
           <wcComponents.TextInput
             id="rede_debit_holder_name"
@@ -931,6 +937,7 @@ const ContentRedeDebit = props => {
             onFocus={() => setFocus('name')}
           />
         </div>
+        )}
 
         {/* Número do cartão e tipo do cartão - 50% cada */}
         <div className="modern-field-row-half">
@@ -1055,6 +1062,7 @@ const ContentRedeDebit = props => {
         locale={{ valid: 'VÁLIDO ATÉ' }}
         focused={focus}
       />)}
+      {!hideCardholderName && (
       <wcComponents.TextInput
         id="rede_debit_holder_name"
         label={translationsRedeDebit.nameOnCard}
@@ -1063,6 +1071,7 @@ const ContentRedeDebit = props => {
         onChange={value => updateDebitObject('rede_debit_holder_name', value)}
         onFocus={() => setFocus('name')}
       />
+      )}
       <wcComponents.TextInput
         id="rede_debit_number"
         label={translationsRedeDebit.cardNumber}
@@ -1161,8 +1170,9 @@ const ContentRedeDebit = props => {
         />)}
 
         {/* Linha 1: Nome do portador + Tipo do cartão */}
-        <div className={'rede-compact-row rede-compact-row--top' + (showCardTypeSelector ? '' : ' rede-compact-row--name-only')}>
-          <div className="rede-compact-field rede-compact-field--name">
+        <div className={'rede-compact-row rede-compact-row--top' + (showCardTypeSelector ? '' : ' rede-compact-row--name-only')} style={(hideCardholderName && !showCardTypeSelector) ? { display: 'none' } : undefined}>
+          <div className="rede-compact-field rede-compact-field--name" style={hideCardholderName ? { display: 'none' } : undefined}>
+            {!hideCardholderName && (
             <wcComponents.TextInput
               id="rede_debit_holder_name"
               label={translationsRedeDebit.nameOnCard}
@@ -1171,9 +1181,10 @@ const ContentRedeDebit = props => {
               onChange={value => updateDebitObject('rede_debit_holder_name', value)}
               onFocus={() => setFocus('name')}
             />
+            )}
           </div>
           {showCardTypeSelector && (
-            <div className="rede-compact-field rede-compact-field--type">
+            <div className="rede-compact-field rede-compact-field--type" style={hideCardholderName ? { gridColumn: '1 / -1' } : undefined}>
               <label htmlFor="card_type_selector">{translationsRedeDebit.cardType}</label>
               <select
                 id="card_type_selector"

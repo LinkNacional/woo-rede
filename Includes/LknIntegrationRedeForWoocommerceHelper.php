@@ -1360,6 +1360,22 @@ class LknIntegrationRedeForWoocommerceHelper
             ),
         );
 
+        // Recurso PRO (Rede Débito): ocultar o campo do titular e usar o nome do pedido.
+        if ('rede_debit' === $gatewayId) {
+            $fields['show_cardholder_name_fake'] = array(
+                'title' => esc_attr__('Cardholder Name Field', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => __('Disable the cardholder name field', 'woo-rede'),
+                'default' => 'no',
+                'description' => esc_attr__('Hide the cardholder name field and use the billing name from the order instead.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Enable this option to use the billing name instead of collecting the cardholder name separately.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Disables the cardholder name input and uses the billing name instead.', 'woo-rede')),
+                    $badge
+                ),
+            );
+        }
+
         // Bloco de parcelamento (apenas crédito).
         if (in_array($gatewayId, array('rede_credit', 'maxipago_credit'), true)) {
             $fields['Installment_fake'] = array(
@@ -1541,6 +1557,7 @@ class LknIntegrationRedeForWoocommerceHelper
             'installment_interest' => 'no',
             'installment_discount' => 'no',
             'min_interest' => '0',
+            'show_cardholder_name' => 'no',
             'abecs_norms' => 'no',
         );
 
@@ -1678,7 +1695,8 @@ class LknIntegrationRedeForWoocommerceHelper
             'abecs_norms' => 'no',
             'hide_card_type_selector' => 'no',
             'show_card_brand_icons' => 'yes',
-            'hide_rede_logo' => 'no'
+            'hide_rede_logo' => 'no',
+            'show_cardholder_name' => 'no'
         );
 
         // Reset campos de parcelas específicas
@@ -1731,7 +1749,8 @@ class LknIntegrationRedeForWoocommerceHelper
             'abecs_norms' => 'no',
             'hide_card_type_selector' => 'no',
             'show_card_brand_icons' => 'yes',
-            'hide_rede_logo' => 'no'
+            'hide_rede_logo' => 'no',
+            'show_cardholder_name' => 'no'
         );
 
         // Reset campos de parcelas específicas

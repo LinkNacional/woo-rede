@@ -36,6 +36,8 @@ $lkn_show_card_animation = isset($show_card_animation) ? $show_card_animation : 
 // separado, ativável em qualquer layout (igual ao Cielo). NÃO confundir com as
 // bandeiras do CAMPO de número (essas aparecem sempre).
 $lkn_show_card_brand_icons = isset($show_card_brand_icons) ? $show_card_brand_icons : 'yes';
+// Recurso PRO: oculta o campo do titular; o nome é obtido do pedido.
+$lkn_show_cardholder = isset($show_cardholder_name) ? $show_cardholder_name : 'no';
 $lkn_brand_asset = plugin_dir_url(__FILE__) . '../../assets/cardTemplate/';
 $lkn_top_brands = array(
     'visa'       => array('label' => __('Visa', 'woo-rede'), 'file' => 'visa-icon.svg'),
@@ -92,8 +94,12 @@ $lkn_top_brands = array(
             }
             ?>
 
-            <div class="rede-compact-row rede-compact-row--top<?php echo $lkn_hide_card_type_selector ? ' rede-compact-row--name-only' : ''; ?>">
+            <div class="rede-compact-row rede-compact-row--top<?php echo $lkn_hide_card_type_selector ? ' rede-compact-row--name-only' : ''; ?>"<?php echo ('yes' === $lkn_show_cardholder && $lkn_hide_card_type_selector) ? ' style="display: none;"' : ''; ?>>
                 <!-- Nome do titular -->
+                <?php if ('yes' === $lkn_show_cardholder) : ?>
+                <!-- Recurso PRO: campo do titular oculto; o nome é obtido do pedido. -->
+                <input type="hidden" id="rede-debit-card-holder-name" name="rede_debit_holder_name" value="" />
+                <?php else : ?>
                 <div class="rede-compact-field rede-compact-field--name">
                     <label for="rede-debit-card-holder-name"><?php echo esc_html($lkn_lbl('holder_name')); ?><span class="required">*</span></label>
                     <div class="rede-compact-input-wrap">
@@ -107,9 +113,20 @@ $lkn_top_brands = array(
                             required />
                     </div>
                 </div>
+                <?php endif; ?>
 
                 <!-- Tipo do cartão -->
-                <div class="rede-compact-field rede-compact-field--type" id="rede-debit-card-type-wrapper"<?php echo $lkn_hide_card_type_selector ? ' style="display: none;"' : ''; ?>>
+                <?php
+                // Recurso PRO: sem o campo do titular, o tipo do cartão ocupa a
+                // linha toda (evita a coluna vazia da grade Nome | Tipo).
+                $lkn_type_cell_style = '';
+                if ($lkn_hide_card_type_selector) {
+                    $lkn_type_cell_style = 'display: none;';
+                } elseif ('yes' === $lkn_show_cardholder) {
+                    $lkn_type_cell_style = 'grid-column: 1 / -1;';
+                }
+                ?>
+                <div class="rede-compact-field rede-compact-field--type" id="rede-debit-card-type-wrapper"<?php echo '' !== $lkn_type_cell_style ? ' style="' . esc_attr($lkn_type_cell_style) . '"' : ''; ?>>
                     <label for="rede-debit-card-type"><?php echo esc_html($lkn_lbl('card_type')); ?><span class="required">*</span></label>
                     <div class="rede-compact-input-wrap">
                         <select
@@ -246,4 +263,26 @@ $lkn_top_brands = array(
     <div class="payment-method-description">
         <p><?php echo esc_html($integration_rede_for_woocommerce_option['description'] ?? __('Pay for your purchase with a debit card through', 'woo-rede')); ?></p>
     </div>
+
+    <?php if ('yes' === $lkn_show_cardholder) : ?>
+    <script type="text/javascript">
+        // Recurso PRO: com o campo do titular oculto, espelha o nome de
+        // faturamento (ou entrega) no campo virtual para a animação do cartão.
+        jQuery(function ($) {
+            function lknSyncHolderName() {
+                var $first = $('#billing_first_name').length ? $('#billing_first_name') : $('#shipping_first_name');
+                var $last = $('#billing_last_name').length ? $('#billing_last_name') : $('#shipping_last_name');
+                var name = (($first.val() || '') + ' ' + ($last.val() || '')).trim();
+                var $hidden = $('#rede-debit-card-holder-name');
+                if ($hidden.length && $hidden.val() !== name) {
+                    $hidden.val(name).trigger('input').trigger('change');
+                }
+            }
+            $(document.body).on('input change blur', '#billing_first_name, #billing_last_name, #shipping_first_name, #shipping_last_name', lknSyncHolderName);
+            $(document.body).on('updated_checkout', lknSyncHolderName);
+            lknSyncHolderName();
+            setTimeout(lknSyncHolderName, 300);
+        });
+    </script>
+    <?php endif; ?>
 </fieldset>
