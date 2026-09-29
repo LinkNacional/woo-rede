@@ -161,13 +161,13 @@ $lkn_render = function ($mode, $tpl) use (
     if ($blocks) {
         if ('modern' === $tpl) {
             echo '<div class="modern-template-container">';
-            echo '<div class="modern-field-row-full">' . $block_field('holder_name', 'lkn-preview-holder') . '</div>';
-            echo '<div class="modern-field-row-half"><div class="modern-field-with-icon">' . $block_field('card_number', 'lkn-preview-number') . $img('lock.svg', 'modern-field-icon') . '</div>';
-            echo '<div class="modern-select-wrapper">' . $lkn_select($lkn_card_type_opts, 'modern-select') . '</div></div>';
-            echo '<div class="modern-field-row-half"><div class="modern-field-with-icon">' . $block_field('expiry', 'lkn-preview-expiry') . $img('calendar.svg', 'modern-field-icon') . '</div>';
-            echo '<div class="modern-field-with-icon">' . $block_field('cvc', 'lkn-preview-cvc') . $img('key.svg', 'modern-field-icon') . '</div></div>';
-            echo '<div class="modern-field-row-full"><div class="modern-select-wrapper">' . $ins_label . $lkn_select($lkn_installments_opts, 'modern-select') . '</div></div>';
-            echo '<div class="modern-field-row-full">' . $lkn_btn($mode, $tpl, 'modern-submit-button') . '</div>';
+            echo '<div class="modern-field-row-full">' . $block_field('holder_name', 'lkn-preview-holder') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo '<div class="modern-field-row-half"><div class="modern-field-with-icon">' . $block_field('card_number', 'lkn-preview-number') . $img('lock.svg', 'modern-field-icon') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo '<div class="modern-select-wrapper">' . $lkn_select($lkn_card_type_opts, 'modern-select') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo '<div class="modern-field-row-half"><div class="modern-field-with-icon">' . $block_field('expiry', 'lkn-preview-expiry') . $img('calendar.svg', 'modern-field-icon') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo '<div class="modern-field-with-icon">' . $block_field('cvc', 'lkn-preview-cvc') . $img('key.svg', 'modern-field-icon') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo '<div class="modern-field-row-full"><div class="modern-select-wrapper">' . $ins_label . $lkn_select($lkn_installments_opts, 'modern-select') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo '<div class="modern-field-row-full">' . $lkn_btn($mode, $tpl, 'modern-submit-button') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo '<div class="modern-gateway-description lkn-preview-description">' . esc_html($lkn_description) . '</div>';
             echo '</div>';
             return;
@@ -176,16 +176,16 @@ $lkn_render = function ($mode, $tpl) use (
         if ('compact' === $tpl) {
             echo '<div id="radio-control-wc-payment-method-options-rede_debit__content"><div class="rede-compact-container">';
             echo '<div class="rede-compact-row rede-compact-row--top">';
-            echo '<div class="rede-compact-field rede-compact-field--name">' . $block_field('holder_name', 'lkn-preview-holder') . '</div>';
-            echo '<div class="rede-compact-field rede-compact-field--type">' . $ct_label . '<select class="rede-compact-select" disabled aria-disabled="true" tabindex="-1" style="background-color:#f0f0f1 !important;color:#767676 !important;pointer-events:none;cursor:not-allowed;">' . $lkn_card_type_opts . '</select></div>';
+            echo '<div class="rede-compact-field rede-compact-field--name">' . $block_field('holder_name', 'lkn-preview-holder') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo '<div class="rede-compact-field rede-compact-field--type">' . $ct_label . '<select class="rede-compact-select" disabled aria-disabled="true" tabindex="-1" style="background-color:#f0f0f1 !important;color:#767676 !important;pointer-events:none;cursor:not-allowed;">' . $lkn_card_type_opts . '</select></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo '</div>';
             echo '<div class="rede-compact-row rede-compact-row--card">';
-            echo '<div class="rede-compact-field rede-compact-field--number"><div class="rede-compact-field-with-icon">' . $block_field('card_number', 'lkn-preview-number') . '</div></div>';
-            echo '<div class="rede-compact-field rede-compact-field--exp"><div class="rede-compact-field-with-icon">' . $block_field('expiry', 'lkn-preview-expiry') . $img('calendar.svg', 'rede-compact-field-icon') . '</div></div>';
-            echo '<div class="rede-compact-field rede-compact-field--cvc"><div class="rede-compact-field-with-icon">' . $block_field('cvc', 'lkn-preview-cvc') . $img('key.svg', 'rede-compact-field-icon') . '</div></div>';
+            echo '<div class="rede-compact-field rede-compact-field--number"><div class="rede-compact-field-with-icon">' . $block_field('card_number', 'lkn-preview-number') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo '<div class="rede-compact-field rede-compact-field--exp"><div class="rede-compact-field-with-icon">' . $block_field('expiry', 'lkn-preview-expiry') . $img('calendar.svg', 'rede-compact-field-icon') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo '<div class="rede-compact-field rede-compact-field--cvc"><div class="rede-compact-field-with-icon">' . $block_field('cvc', 'lkn-preview-cvc') . $img('key.svg', 'rede-compact-field-icon') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo '</div>';
-            echo '<div class="rede-compact-row rede-compact-row--installments"><div class="rede-compact-field rede-compact-field--installments">' . $ins_label . '<select class="rede-compact-select" disabled aria-disabled="true" tabindex="-1" style="background-color:#f0f0f1 !important;color:#767676 !important;pointer-events:none;cursor:not-allowed;">' . $lkn_installments_opts . '</select></div></div>';
-            echo '<div class="rede-compact-row rede-compact-row--submit">' . $lkn_btn($mode, $tpl, 'rede-compact-submit-button') . '</div>';
+            echo '<div class="rede-compact-row rede-compact-row--installments"><div class="rede-compact-field rede-compact-field--installments">' . $ins_label . '<select class="rede-compact-select" disabled aria-disabled="true" tabindex="-1" style="background-color:#f0f0f1 !important;color:#767676 !important;pointer-events:none;cursor:not-allowed;">' . $lkn_installments_opts . '</select></div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo '<div class="rede-compact-row rede-compact-row--submit">' . $lkn_btn($mode, $tpl, 'rede-compact-submit-button') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo '<div class="rede-compact-description lkn-preview-description">' . esc_html($lkn_description) . '</div>';
             echo '</div></div>';
             return;
@@ -196,8 +196,8 @@ $lkn_render = function ($mode, $tpl) use (
         foreach ($lkn_text_fields as $field) {
             echo $block_field($field, 'lkn-preview-' . $field); // phpcs:ignore
         }
-        echo '<div class="lknIntegrationRedeForWoocommerceSelectBlocks lknIntegrationRedeForWoocommerceSelect3dsInstallments">' . $lkn_edit_label($mode, $tpl, 'card_type', '', 'lkn-preview-type') . $lkn_select($lkn_card_type_opts, 'lknIntegrationRedeForWoocommerceSelect') . '</div>';
-        echo '<div class="lknIntegrationRedeForWoocommerceSelectBlocks">' . $ins_label . $lkn_select($lkn_installments_opts, 'lknIntegrationRedeForWoocommerceSelect') . '</div>';
+        echo '<div class="lknIntegrationRedeForWoocommerceSelectBlocks lknIntegrationRedeForWoocommerceSelect3dsInstallments">' . $lkn_edit_label($mode, $tpl, 'card_type', '', 'lkn-preview-type') . $lkn_select($lkn_card_type_opts, 'lknIntegrationRedeForWoocommerceSelect') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '<div class="lknIntegrationRedeForWoocommerceSelectBlocks">' . $ins_label . $lkn_select($lkn_installments_opts, 'lknIntegrationRedeForWoocommerceSelect') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo $order_button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo '<div class="basic-gateway-description lkn-preview-description" style="text-align:center;">' . esc_html($lkn_description) . '</div>';
         echo '</div>';
@@ -209,16 +209,16 @@ $lkn_render = function ($mode, $tpl) use (
         echo '<fieldset class="rede-payment-form rede-compact-classic">';
         echo '<div class="rede-debit-fields-wrapper rede-compact-wrapper"><div class="wc-payment-rede-form-fields rede-compact-fields">';
         echo '<div class="rede-compact-row rede-compact-row--top">';
-        echo '<div class="rede-compact-field rede-compact-field--name">' . $lkn_edit_label($mode, $tpl, 'holder_name', '', 'lkn-preview-holder') . $classic_field('holder_name', 'lkn-preview-holder', '', 'rede-compact-input-wrap') . '</div>';
-        echo '<div class="rede-compact-field rede-compact-field--type" id="rede-debit-card-type-wrapper">' . $lkn_edit_label($mode, $tpl, 'card_type', '', 'lkn-preview-type') . '<div class="rede-compact-input-wrap">' . $lkn_select($lkn_card_type_opts, 'input-select lknIntegrationRedeForWoocommerceSelect rede-compact-select') . '</div></div>';
+        echo '<div class="rede-compact-field rede-compact-field--name">' . $lkn_edit_label($mode, $tpl, 'holder_name', '', 'lkn-preview-holder') . $classic_field('holder_name', 'lkn-preview-holder', '', 'rede-compact-input-wrap') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '<div class="rede-compact-field rede-compact-field--type" id="rede-debit-card-type-wrapper">' . $lkn_edit_label($mode, $tpl, 'card_type', '', 'lkn-preview-type') . '<div class="rede-compact-input-wrap">' . $lkn_select($lkn_card_type_opts, 'input-select lknIntegrationRedeForWoocommerceSelect rede-compact-select') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo '</div>';
         echo '<div class="rede-compact-row rede-compact-row--card">';
-        echo '<div class="rede-compact-field rede-compact-field--number">' . $lkn_edit_label($mode, $tpl, 'card_number', '', 'lkn-preview-number') . $classic_field('card_number', 'lkn-preview-number', '', 'rede-compact-input-wrap') . '</div>';
-        echo '<div class="rede-compact-field rede-compact-field--exp">' . $lkn_edit_label($mode, $tpl, 'expiry', '', 'lkn-preview-expiry') . $classic_field('expiry', 'lkn-preview-expiry', '', 'rede-compact-input-wrap') . '</div>';
-        echo '<div class="rede-compact-field rede-compact-field--cvc">' . $lkn_edit_label($mode, $tpl, 'cvc', '', 'lkn-preview-cvc') . $classic_field('cvc', 'lkn-preview-cvc', '', 'rede-compact-input-wrap') . '</div>';
+        echo '<div class="rede-compact-field rede-compact-field--number">' . $lkn_edit_label($mode, $tpl, 'card_number', '', 'lkn-preview-number') . $classic_field('card_number', 'lkn-preview-number', '', 'rede-compact-input-wrap') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '<div class="rede-compact-field rede-compact-field--exp">' . $lkn_edit_label($mode, $tpl, 'expiry', '', 'lkn-preview-expiry') . $classic_field('expiry', 'lkn-preview-expiry', '', 'rede-compact-input-wrap') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '<div class="rede-compact-field rede-compact-field--cvc">' . $lkn_edit_label($mode, $tpl, 'cvc', '', 'lkn-preview-cvc') . $classic_field('cvc', 'lkn-preview-cvc', '', 'rede-compact-input-wrap') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo '</div>';
-        echo '<div class="rede-compact-row rede-compact-row--installments" id="rede-debit-installments-wrapper"><div class="rede-compact-field rede-compact-field--installments">' . $ins_label . '<div class="rede-compact-input-wrap">' . $lkn_select($lkn_installments_opts, 'input-select lknIntegrationRedeForWoocommerceSelect rede-compact-select') . '</div></div></div>';
-        echo '<div class="payment-submit-section">' . $lkn_btn($mode, $tpl, 'rede-compact-submit-button') . '</div>';
+        echo '<div class="rede-compact-row rede-compact-row--installments" id="rede-debit-installments-wrapper"><div class="rede-compact-field rede-compact-field--installments">' . $ins_label . '<div class="rede-compact-input-wrap">' . $lkn_select($lkn_installments_opts, 'input-select lknIntegrationRedeForWoocommerceSelect rede-compact-select') . '</div></div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '<div class="payment-submit-section">' . $lkn_btn($mode, $tpl, 'rede-compact-submit-button') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo '<div class="payment-method-description"><p class="lkn-preview-note lkn-preview-description">' . esc_html($lkn_description) . '</p></div>';
         echo '<div class="clear"></div></div></div></fieldset>';
         return;
@@ -230,17 +230,17 @@ $lkn_render = function ($mode, $tpl) use (
         echo '<fieldset class="rede-payment-form rede-modern-classic">';
         echo '<div class="rede-modern-wrapper">';
         echo '<div class="rede-modern-form-fields">';
-        echo '<div class="modern-field">' . $lkn_edit_label($mode, $tpl, 'holder_name', 'field-label', 'lkn-preview-holder') . '<div class="field-wrapper">' . $modern_field('holder_name', 'lkn-preview-holder') . '</div></div>';
+        echo '<div class="modern-field">' . $lkn_edit_label($mode, $tpl, 'holder_name', 'field-label', 'lkn-preview-holder') . '<div class="field-wrapper">' . $modern_field('holder_name', 'lkn-preview-holder') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo '<div class="field-group">';
-        echo '<div class="modern-field field-half">' . $lkn_edit_label($mode, $tpl, 'card_number', 'field-label', 'lkn-preview-number') . '<div class="field-wrapper">' . $modern_field('card_number', 'lkn-preview-number') . '<div class="field-icon">' . $img('lock.svg', '') . '</div></div></div>';
-        echo '<div class="modern-field field-half">' . $lkn_edit_label($mode, $tpl, 'card_type', 'field-label', 'lkn-preview-type') . '<div class="field-wrapper">' . $lkn_select($lkn_card_type_opts, 'field-select') . '</div></div>';
+        echo '<div class="modern-field field-half">' . $lkn_edit_label($mode, $tpl, 'card_number', 'field-label', 'lkn-preview-number') . '<div class="field-wrapper">' . $modern_field('card_number', 'lkn-preview-number') . '<div class="field-icon">' . $img('lock.svg', '') . '</div></div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '<div class="modern-field field-half">' . $lkn_edit_label($mode, $tpl, 'card_type', 'field-label', 'lkn-preview-type') . '<div class="field-wrapper">' . $lkn_select($lkn_card_type_opts, 'field-select') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo '</div>';
         echo '<div class="field-group">';
-        echo '<div class="modern-field field-half">' . $lkn_edit_label($mode, $tpl, 'expiry', 'field-label', 'lkn-preview-expiry') . '<div class="field-wrapper">' . $modern_field('expiry', 'lkn-preview-expiry') . '<div class="field-icon">' . $img('calendar.svg', '') . '</div></div></div>';
-        echo '<div class="modern-field field-half">' . $lkn_edit_label($mode, $tpl, 'cvc', 'field-label', 'lkn-preview-cvc') . '<div class="field-wrapper">' . $modern_field('cvc', 'lkn-preview-cvc') . '<div class="field-icon">' . $img('key.svg', '') . '</div></div></div>';
+        echo '<div class="modern-field field-half">' . $lkn_edit_label($mode, $tpl, 'expiry', 'field-label', 'lkn-preview-expiry') . '<div class="field-wrapper">' . $modern_field('expiry', 'lkn-preview-expiry') . '<div class="field-icon">' . $img('calendar.svg', '') . '</div></div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '<div class="modern-field field-half">' . $lkn_edit_label($mode, $tpl, 'cvc', 'field-label', 'lkn-preview-cvc') . '<div class="field-wrapper">' . $modern_field('cvc', 'lkn-preview-cvc') . '<div class="field-icon">' . $img('key.svg', '') . '</div></div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo '</div>';
-        echo '<div class="modern-field" id="rede-debit-installments-wrapper">' . $lkn_edit_label($mode, $tpl, 'installments', 'field-label', 'lkn-preview-installments') . '<div class="field-wrapper">' . $lkn_select($lkn_installments_opts, 'field-select') . '</div></div>';
-        echo '<div class="payment-submit-section">' . $lkn_btn($mode, $tpl, 'modern-submit-button') . '</div>';
+        echo '<div class="modern-field" id="rede-debit-installments-wrapper">' . $lkn_edit_label($mode, $tpl, 'installments', 'field-label', 'lkn-preview-installments') . '<div class="field-wrapper">' . $lkn_select($lkn_installments_opts, 'field-select') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '<div class="payment-submit-section">' . $lkn_btn($mode, $tpl, 'modern-submit-button') . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo '<div class="modern-gateway-description lkn-preview-description">' . esc_html($lkn_description) . '</div>';
         echo '</div></div></fieldset>';
         return;
@@ -252,8 +252,8 @@ $lkn_render = function ($mode, $tpl) use (
     foreach ($lkn_text_fields as $field) {
         echo '<div class="form-row form-row lkn-preview-textfield">' . $lkn_edit_label($mode, $tpl, $field, '', 'lkn-preview-' . $field) . $classic_field($field, 'lkn-preview-' . $field, '') . '</div>'; // phpcs:ignore
     }
-    echo '<div class="form-row form-row" id="rede-debit-card-type-wrapper">' . $ct_label . '<div class="lkn-input-wrap">' . $lkn_select($lkn_card_type_opts, 'input-select lknIntegrationRedeForWoocommerceSelect') . '</div></div>';
-    echo '<div class="form-row form-row" id="rede-debit-installments-wrapper">' . $ins_label . '<div class="lkn-input-wrap">' . $lkn_select($lkn_installments_opts, 'input-select lknIntegrationRedeForWoocommerceSelect') . '</div></div>';
+    echo '<div class="form-row form-row" id="rede-debit-card-type-wrapper">' . $ct_label . '<div class="lkn-input-wrap">' . $lkn_select($lkn_card_type_opts, 'input-select lknIntegrationRedeForWoocommerceSelect') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    echo '<div class="form-row form-row" id="rede-debit-installments-wrapper">' . $ins_label . '<div class="lkn-input-wrap">' . $lkn_select($lkn_installments_opts, 'input-select lknIntegrationRedeForWoocommerceSelect') . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     echo $order_button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     echo '<div class="payment-method-description"><p class="lkn-preview-note lkn-preview-description">' . esc_html($lkn_description) . '</p></div>';
     echo '<div class="clear"></div></div></div></fieldset>';
