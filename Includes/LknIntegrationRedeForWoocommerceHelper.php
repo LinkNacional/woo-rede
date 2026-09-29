@@ -1196,8 +1196,9 @@ class LknIntegrationRedeForWoocommerceHelper
      * @param array  $existing  Chaves já presentes no formulário do FREE (para não duplicar campos).
      * @return array Campos fake no formato de form_fields do WooCommerce.
      */
-    final public static function lknRedeGetFakeProFields(string $gatewayId, array $proFields = array(), array $existing = array()): array
+    final public static function lknRedeGetFakeProFields(string $gatewayId, ?array $proFields = null, array $existing = array()): array
     {
+        $proFields = $proFields ?? array();
         $badge = array('lkn-pro-badge' => 'true');
         $badgeTop = function (string $target) use ($badge): array {
             return array_merge(array('merge-top' => 'woocommerce_' . $target . '_fake'), $badge);
