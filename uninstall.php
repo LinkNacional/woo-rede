@@ -34,3 +34,10 @@ delete_option('woocommerce_rede_credit_settings');
 delete_option('woocommerce_rede_debit_settings');
 delete_option('woocommerce_maxipago_credit_settings');
 delete_option('woocommerce_maxipago_debit_settings');
+
+// Metadados das notificações de atualização do plugin PRO (aviso, tela e e-mail).
+// Removê-los na desinstalação permite reinstalar e testar o fluxo do zero, sem
+// herdar as flags de "tela já exibida", "aviso dispensado" ou "e-mail já enviado".
+delete_option('lkn_rede_pro_update_screen_shown');
+delete_option('lkn_rede_pro_update_notice_dismissed');
+delete_option('lkn_rede_pro_update_email_sent');
