@@ -56,6 +56,30 @@
     color: #1d2327;
 }
 
+.lkn-pro-notice--success {
+    border-left-color: #2e7d32;
+}
+
+.lkn-pro-notice--success .lkn-pro-notice__badge {
+    background: #2e7d32;
+    color: #fff;
+}
+
+.lkn-pro-notice--error {
+    border-left-color: #d63638;
+}
+
+.lkn-pro-notice--error .lkn-pro-notice__badge {
+    background: #d63638;
+    color: #fff;
+}
+
+.lkn-pro-success-card,
+.lkn-pro-error-card {
+    transition: opacity 0.3s ease;
+    position: relative;
+}
+
 /* Botão com barrinha de progresso (padrão woo-better). */
 .lkn-pro-update-button {
     position: relative !important;

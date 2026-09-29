@@ -54,6 +54,12 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
     /** Ação do nonce de dispensa. */
     private const NONCE_DISMISS = 'lkn_rede_dismiss_pro_update_nonce';
 
+    /** Transient de sucesso: exibe o card "atualizado" após o reload. */
+    private const SUCCESS_TRANSIENT = 'lkn_rede_pro_update_success';
+
+    /** Transient de erro: exibe o card de erro após o reload. */
+    private const ERROR_TRANSIENT = 'lkn_rede_pro_update_error';
+
     /** Cache da versão instalada do PRO (evita reler o arquivo várias vezes). */
     private $cached_pro_version = null;
 
@@ -310,14 +316,19 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
         }
 
         if (is_wp_error($result)) {
-            wp_send_json_error(array('message' => $result->get_error_message()));
+            $message = $result->get_error_message();
+            set_transient(self::ERROR_TRANSIENT, $message, 5 * MINUTE_IN_SECONDS);
+            wp_send_json_error(array('message' => $message));
         }
 
         if (true !== $result) {
-            wp_send_json_error(array('message' => __('Nenhuma atualização disponível no momento. Atualize pela tela de Plugins.', 'woo-rede')));
+            $message = __('Nenhuma atualização disponível no momento. Atualize pela tela de Plugins.', 'woo-rede');
+            set_transient(self::ERROR_TRANSIENT, $message, 5 * MINUTE_IN_SECONDS);
+            wp_send_json_error(array('message' => $message));
         }
 
         delete_site_transient('update_plugins');
+        set_transient(self::SUCCESS_TRANSIENT, 'updated', 5 * MINUTE_IN_SECONDS);
 
         wp_send_json_success(array('message' => __('Atualizado com sucesso. Recarregando…', 'woo-rede')));
     }
@@ -350,7 +361,10 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
         $page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';
         $on_screen = (self::SCREEN_SLUG === $page);
 
-        if (! $on_screen && ! $this->notice_would_show()) {
+        $success = get_transient(self::SUCCESS_TRANSIENT);
+        $error   = get_transient(self::ERROR_TRANSIENT);
+
+        if (! $on_screen && ! $this->notice_would_show() && false === $success && false === $error) {
             return;
         }
 
@@ -369,7 +383,19 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
             true
         );
 
-        wp_localize_script('lkn-rede-pro-update', 'LknProUpdate', $this->script_data());
+        // Consome os transients: o card de sucesso/erro aparece uma única vez.
+        $show_on_load  = '';
+        $error_message = '';
+        if (false !== $error) {
+            $show_on_load  = 'error';
+            $error_message = (string) $error;
+            delete_transient(self::ERROR_TRANSIENT);
+        } elseif (false !== $success) {
+            $show_on_load = 'success';
+            delete_transient(self::SUCCESS_TRANSIENT);
+        }
+
+        wp_localize_script('lkn-rede-pro-update', 'LknProUpdate', $this->script_data($show_on_load, $error_message));
     }
 
     /**
@@ -377,8 +403,10 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
      *
      * @return array
      */
-    private function script_data(): array
+    private function script_data(string $show_on_load = '', string $error_message = ''): array
     {
+        $plugin_name = __('Integration Rede Itaú para WooCommerce', 'woo-rede');
+
         return array(
             'ajaxurl' => admin_url('admin-ajax.php'),
             'action' => self::AJAX_UPDATE,
@@ -386,6 +414,20 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
             'plugin' => self::PRO_BASENAME,
             'redirectUrl' => admin_url('plugins.php'),
             'successText' => __('Atualizado!', 'woo-rede'),
+            'iconUrl' => INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR_URL . 'Includes/assets/WordpressAssets/icon-256x256.gif',
+            'showOnLoad' => $show_on_load,
+            'errorMessage' => $error_message,
+            'success' => array(
+                'title' => $plugin_name,
+                'badge' => __('Sucesso', 'woo-rede'),
+                'close' => __('Fechar', 'woo-rede'),
+                'message' => __('O plugin PRO foi atualizado com sucesso.', 'woo-rede'),
+            ),
+            'error' => array(
+                'title' => $plugin_name,
+                'badge' => __('Erro', 'woo-rede'),
+                'close' => __('Fechar', 'woo-rede'),
+            ),
         );
     }
 
