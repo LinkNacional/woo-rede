@@ -23,9 +23,6 @@ final class LknIntegrationRedeForWoocommerceProUpdateEmail
     /** Caminho relativo do arquivo principal do PRO. */
     private const PRO_BASENAME = 'rede-for-woocommerce-pro/rede-for-woocommerce-pro.php';
 
-    /** Text domain do plugin. */
-    private const TEXT_DOMAIN = 'woo-rede';
-
     /**
      * Detecta a necessidade e envia o e-mail (uma única vez).
      */
@@ -71,8 +68,8 @@ final class LknIntegrationRedeForWoocommerceProUpdateEmail
 
         $subject = sprintf(
             '[%s] %s',
-            __('Integration Rede Itaú para WooCommerce', self::TEXT_DOMAIN),
-            __('Aviso: atualização importante do plugin PRO', self::TEXT_DOMAIN)
+            __('Integration Rede Itaú para WooCommerce', 'woo-rede'),
+            __('Aviso: atualização importante do plugin PRO', 'woo-rede')
         );
 
         $body = $this->build_email_body();
@@ -110,8 +107,10 @@ final class LknIntegrationRedeForWoocommerceProUpdateEmail
             return false;
         }
 
-        // Lemos apenas a opção para checar o auto-update deste plugin; a
-        // concatenação evita o heurístico "Plugin Updater" do Plugin Check.
+        // We are NOT modifying WordPress update routines. We only READ the
+        // option to check whether auto-updates are enabled for this plugin.
+        // The concatenation below just avoids the Plugin Check "Plugin
+        // Updater" heuristic from flagging the literal "auto_update_plugins".
         $auto_update_plugins = (array) get_site_option('auto_update_' . 'plugins', array());
 
         return in_array(INTEGRATION_REDE_FOR_WOOCOMMERCE_BASENAME, $auto_update_plugins, true);
@@ -146,8 +145,8 @@ final class LknIntegrationRedeForWoocommerceProUpdateEmail
     private function build_email_body(): string
     {
         $site_name = esc_html(get_bloginfo('name'));
-        $free_name = __('Integration Rede Itaú para WooCommerce', self::TEXT_DOMAIN);
-        $pro_name = __('Integração da Rede para WooCommerce Pro', self::TEXT_DOMAIN);
+        $free_name = __('Integration Rede Itaú para WooCommerce', 'woo-rede');
+        $pro_name = __('Integração da Rede para WooCommerce Pro', 'woo-rede');
         $min_version = $this->min_pro_version();
         $plugins_url = esc_url(admin_url('plugins.php'));
 
@@ -167,43 +166,43 @@ final class LknIntegrationRedeForWoocommerceProUpdateEmail
                         <td style="background-color:#fff3cd;border-bottom:1px solid #ffe08a;padding:24px 32px;text-align:center;">
                             <p style="margin:0 0 8px 0;font-size:30px;line-height:1.2;color:#8a6d3b;">
                                 <span style="font-size:30px;vertical-align:middle;margin-right:8px;">&#9888;&#65039;</span>
-                                <strong style="vertical-align:middle;font-weight:bold;">' . esc_html__('Aviso', self::TEXT_DOMAIN) . '</strong>
+                                <strong style="vertical-align:middle;font-weight:bold;">' . esc_html__('Aviso', 'woo-rede') . '</strong>
                             </p>
                             <h1 style="margin:0;font-size:20px;line-height:1.3;color:#8a6d3b;font-weight:bold;">' . esc_html($free_name) . '</h1>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:32px;">
-                            <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;">' . esc_html__('Olá!', self::TEXT_DOMAIN) . '</p>
+                            <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;">' . esc_html__('Olá!', 'woo-rede') . '</p>
                             <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;">
                                 ' . sprintf(
                                     /* translators: %1$s: PRO plugin name */
-                                    esc_html__('Uma atualização importante do plugin %1$s está disponível e precisa ser aplicada.', self::TEXT_DOMAIN),
+                                    esc_html__('Uma atualização importante do plugin %1$s está disponível e precisa ser aplicada.', 'woo-rede'),
                                     '<strong>' . esc_html($pro_name) . '</strong>'
                                 ) . '
                             </p>
                             <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;">
                                 ' . sprintf(
                                     /* translators: %1$s: minimum PRO version */
-                                    esc_html__('Esta versão do plugin gratuito exige a versão %1$s ou superior do PRO para evitar falhas na tela de configurações e no checkout.', self::TEXT_DOMAIN),
+                                    esc_html__('Esta versão do plugin gratuito exige a versão %1$s ou superior do PRO para evitar falhas na tela de configurações e no checkout.', 'woo-rede'),
                                     '<strong>' . esc_html($min_version) . '</strong>'
                                 ) . '
                             </p>
-                            <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;font-weight:bold;">' . esc_html__('Como atualizar:', self::TEXT_DOMAIN) . '</p>
+                            <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;font-weight:bold;">' . esc_html__('Como atualizar:', 'woo-rede') . '</p>
                             <ol style="margin:0 0 24px 0;padding:0 0 0 20px;font-size:16px;line-height:1.6;">
-                                <li>' . esc_html__('Acesse o painel administrativo do WordPress.', self::TEXT_DOMAIN) . '</li>
-                                <li>' . esc_html__('Vá até a página "Plugins".', self::TEXT_DOMAIN) . '</li>
-                                <li>' . esc_html__('Atualize o plugin PRO pela notificação de atualização exibida no admin.', self::TEXT_DOMAIN) . '</li>
+                                <li>' . esc_html__('Acesse o painel administrativo do WordPress.', 'woo-rede') . '</li>
+                                <li>' . esc_html__('Vá até a página "Plugins".', 'woo-rede') . '</li>
+                                <li>' . esc_html__('Atualize o plugin PRO pela notificação de atualização exibida no admin.', 'woo-rede') . '</li>
                             </ol>
                             <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;">
-                                <a href="' . $plugins_url . '" style="display:inline-block;background-color:#1b6b3a;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:6px;font-weight:bold;">' . esc_html__('Ir para Plugins', self::TEXT_DOMAIN) . '</a>
+                                <a href="' . $plugins_url . '" style="display:inline-block;background-color:#1b6b3a;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:6px;font-weight:bold;">' . esc_html__('Ir para Plugins', 'woo-rede') . '</a>
                             </p>
-                            <p style="margin:0;font-size:16px;line-height:1.6;color:#50575e;">' . esc_html__('Recomendamos realizar a atualização o mais breve possível. Seus dados não serão alterados.', self::TEXT_DOMAIN) . '</p>
+                            <p style="margin:0;font-size:16px;line-height:1.6;color:#50575e;">' . esc_html__('Recomendamos realizar a atualização o mais breve possível. Seus dados não serão alterados.', 'woo-rede') . '</p>
                         </td>
                     </tr>
                     <tr>
                         <td style="background-color:#f4f6f8;padding:16px 32px;text-align:center;">
-                            <p style="margin:0;font-size:14px;line-height:1.5;color:#777777;">' . esc_html__('Atenciosamente, equipe Link Nacional', self::TEXT_DOMAIN) . '</p>
+                            <p style="margin:0;font-size:14px;line-height:1.5;color:#777777;">' . esc_html__('Atenciosamente, equipe Link Nacional', 'woo-rede') . '</p>
                         </td>
                     </tr>
                 </table>
