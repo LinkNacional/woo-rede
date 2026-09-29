@@ -73,6 +73,23 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
     }
 
     /**
+     * Remove as notificações de terceiros na tela cheia de atualização, para que
+     * os avisos de outros plugins não apareçam dentro do card principal.
+     * Mesmo padrão do woo-better-shipping-calculator-for-brazil.
+     */
+    public function remove_admin_notices(): void
+    {
+        $page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';
+
+        if (self::SCREEN_SLUG !== $page) {
+            return;
+        }
+
+        remove_all_actions('admin_notices');
+        remove_all_actions('all_admin_notices');
+    }
+
+    /**
      * Redireciona uma única vez para a tela de atualização quando o PRO está
      * instalado e desatualizado.
      */
