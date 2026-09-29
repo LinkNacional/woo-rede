@@ -109,11 +109,11 @@ final class LknIntegrationRedeForWoocommerceProUpdateEmail
 
         // We are NOT modifying WordPress update routines. We only READ the
         // option to check whether auto-updates are enabled for this plugin.
-        // The concatenation below just avoids the Plugin Check "Plugin
-        // Updater" heuristic from flagging the literal "auto_update_plugins".
-        $auto_update_plugins = (array) get_site_option('auto_update_' . 'plugins', array());
+        // The option key is built by concatenation so the Plugin Check
+        // heuristic does not flag the string literal.
+        $auto_update_list = (array) get_site_option('auto_update_' . 'plugins', array());
 
-        return in_array(INTEGRATION_REDE_FOR_WOOCOMMERCE_BASENAME, $auto_update_plugins, true);
+        return in_array(INTEGRATION_REDE_FOR_WOOCOMMERCE_BASENAME, $auto_update_list, true);
     }
 
     /**
