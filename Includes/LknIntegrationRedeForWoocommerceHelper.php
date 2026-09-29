@@ -32,8 +32,9 @@ class LknIntegrationRedeForWoocommerceHelper
         $ownNames = array(
             __('Interest', 'woo-rede'),
             __('Discount', 'woo-rede'),
-            __('Interest', 'rede-for-woocommerce-pro'),
-            __('Discount', 'rede-for-woocommerce-pro'),
+            // Estes nomes podem ter sido criados pelo plugin PRO, que usa o próprio text domain.
+            __('Interest', 'rede-for-woocommerce-pro'), // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+            __('Discount', 'rede-for-woocommerce-pro'), // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
         );
 
         $feeName = strtolower(trim((string) $feeName));

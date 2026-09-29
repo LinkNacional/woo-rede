@@ -145,10 +145,10 @@ final class LknIntegrationRedeForWoocommerceAdmin
             // Lightbox nativo do WordPress (Thickbox) para ampliar as imagens do layout.
             wp_enqueue_script('thickbox');
             wp_enqueue_style('thickbox');
-            $rede_tb_css = plugin_dir_path(__FILE__) . 'css/lkn-rede-thickbox.css';
-            wp_enqueue_style('lkn-rede-thickbox', plugin_dir_url(__FILE__) . 'css/lkn-rede-thickbox.css', array('thickbox'), $this->version . '.' . (file_exists($rede_tb_css) ? filemtime($rede_tb_css) : '0'));
-            $rede_tb_js = plugin_dir_path(__FILE__) . 'js/lkn-rede-thickbox.js';
-            wp_enqueue_script('lkn-rede-thickbox', plugin_dir_url(__FILE__) . 'js/lkn-rede-thickbox.js', array('thickbox'), $this->version . '.' . (file_exists($rede_tb_js) ? filemtime($rede_tb_js) : '0'), true);
+            $rede_tb_css = plugin_dir_path(__FILE__) . 'css/lkn-rede-lightbox.css';
+            wp_enqueue_style('lkn-rede-lightbox', plugin_dir_url(__FILE__) . 'css/lkn-rede-lightbox.css', array('thickbox'), $this->version . '.' . (file_exists($rede_tb_css) ? filemtime($rede_tb_css) : '0'));
+            $rede_tb_js = plugin_dir_path(__FILE__) . 'js/lkn-rede-lightbox.js';
+            wp_enqueue_script('lkn-rede-lightbox', plugin_dir_url(__FILE__) . 'js/lkn-rede-lightbox.js', array('thickbox'), $this->version . '.' . (file_exists($rede_tb_js) ? filemtime($rede_tb_js) : '0'), true);
             // Editor visual da seção "Fields" (preview + lápis de label/placeholder).
             $fields_preview_js_path = plugin_dir_path(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-fields-preview.js';
             $fields_preview_js_ver  = $this->version . '.' . (file_exists($fields_preview_js_path) ? filemtime($fields_preview_js_path) : '0');

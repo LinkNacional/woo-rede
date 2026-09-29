@@ -1,7 +1,7 @@
 /**
  * Lightbox de imagens do layout (Thickbox do WordPress) — redesign com moldura.
  *
- * O JS (lkn-*-thickbox.js) aumenta a janela criando um "gutter" ao redor da
+ * O JS (lkn-*-lightbox.js) aumenta a janela criando um "gutter" ao redor da
  * imagem; o CSS usa esse espaço para colocar os controles FORA da imagem, numa
  * moldura clara (branco puxado por cinza).
  *
