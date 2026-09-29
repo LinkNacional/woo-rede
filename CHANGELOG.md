@@ -344,3 +344,4 @@
 * Inclusão de ícones de bandeiras de cartões de crédito;
 * A data de expiração agora aceita 2 ou 4 dígitos para o ano;
 * Sanitização dos campos de entrada.
+
