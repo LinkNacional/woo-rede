@@ -1,4 +1,4 @@
-# 5.4.11 - 10/09/2026
+# 5.5.0 - 29/09/2026
 * Ajuste: Logs dos gateways adequados às normas ABECS.
 * Ajuste: Textos do analytics ajustados para tradução.
 * Novo: recursos PRO replicados como campos de demonstração (selo PRO) no plano gratuito, com aviso e sem gravar nas opções reais.

@@ -5,7 +5,7 @@ Donate link: https://www.linknacional.com/wordpress/plugins/
 Tags: rede, PIX, cartao credito, itau, pagamento  
 Requires at least: 6.0
 Tested up to: 7.1  
-Stable tag: 5.4.11
+Stable tag: 5.5.0
 Requires PHP: 8.2
 License: GPLv3 or later  
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -125,7 +125,7 @@ A: Yes — tested up to WordPress 6.8.
 
 ## Changelog
 
-### 5.4.11 - 2026-09-10
+### 5.5.0 - 2026-09-29
 * Adjustment: Gateway logs updated to comply with ABECS standards.
 * Tweak: Analytics texts adjusted for translation.
 * Added: PRO features replicated as demonstration fields (PRO badge) on the free plan, with notice and without saving to the real options.
@@ -303,7 +303,7 @@ A: Yes — tested up to WordPress 6.8.
 
 ## Upgrade Notice
 
-### 5.4.11 - 2026-09-10
+### 5.5.0 - 2026-09-29
 * Adjustment: Gateway logs updated to comply with ABECS standards.
 * Tweak: Analytics texts adjusted for translation.
 * Added: compact debit layout (shortcode and Blocks) and compact template option.
