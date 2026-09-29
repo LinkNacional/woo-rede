@@ -83,7 +83,10 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
         }
 
         // Não interrompe requisições POST (evita perder um save em andamento).
-        if (isset($_SERVER['REQUEST_METHOD']) && 'POST' === strtoupper((string) wp_unslash($_SERVER['REQUEST_METHOD']))) {
+        $request_method = isset($_SERVER['REQUEST_METHOD'])
+            ? strtoupper(sanitize_text_field(wp_unslash($_SERVER['REQUEST_METHOD'])))
+            : 'GET';
+        if ('POST' === $request_method) {
             return;
         }
 
