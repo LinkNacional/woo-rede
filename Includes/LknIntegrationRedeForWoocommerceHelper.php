@@ -1464,7 +1464,11 @@ class LknIntegrationRedeForWoocommerceHelper
                         array(
                             'min' => '0',
                             'step' => '0.01',
-                            'data-title-description' => esc_attr__('Interest applied when customer selects to pay in ' . $c . 'x. Leave 0 for no interest.', 'woo-rede'),
+                            'data-title-description' => sprintf(
+                                /* translators: %d: installment count */
+                                esc_attr__('Interest applied when customer selects to pay in %dx. Leave 0 for no interest.', 'woo-rede'),
+                                $c
+                            ),
                         ),
                         $badgeTop($gatewayId . '_installment_interest')
                     ),
@@ -1481,7 +1485,11 @@ class LknIntegrationRedeForWoocommerceHelper
                             'min' => '0',
                             'step' => '0.01',
                             'max' => '100',
-                            'data-title-description' => esc_attr__('Discount applied when customer selects to pay in ' . $c . 'x. Leave 0 for no discount.', 'woo-rede'),
+                            'data-title-description' => sprintf(
+                                /* translators: %d: installment count */
+                                esc_attr__('Discount applied when customer selects to pay in %dx. Leave 0 for no discount.', 'woo-rede'),
+                                $c
+                            ),
                         ),
                         $badgeTop($gatewayId . '_installment_discount')
                     ),
