@@ -159,12 +159,25 @@ abstract class LknIntegrationRedeForWoocommerceWcRedeAbstract extends WC_Payment
 
     final public function payment_fields(): void
     {
-        if ($this->get_description()) {
-            $description = $this->get_description();
-            echo wp_kses_post(wpautop($description));
+        // A descrição é renderizada no próprio template do checkout pelos
+        // gateways de cartão; por isso não é ecoada aqui de novo (evita o texto
+        // duplicado no topo do payment_box). Gateways que NÃO a renderizam no
+        // template sobrescrevem shouldEchoDescription() para manter o echo.
+        if ($this->shouldEchoDescription() && $this->get_description()) {
+            echo wp_kses_post(wpautop($this->get_description()));
         }
 
         $this->getCheckoutForm($this->get_cart_subtotal_without_taxes());
+    }
+
+    /**
+     * Define se a descrição do gateway é ecoada no topo do payment_box.
+     * Default true (comportamento histórico). Gateways que já exibem a
+     * descrição no template do checkout retornam false.
+     */
+    protected function shouldEchoDescription(): bool
+    {
+        return true;
     }
 
     abstract protected function getCheckoutForm($order_total = 0);
@@ -245,7 +258,7 @@ abstract class LknIntegrationRedeForWoocommerceWcRedeAbstract extends WC_Payment
     final public function process_order_status($order, $transaction, $note = ''): void
     {
         /* translators: %s: return message from payment processor */
-        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::translate($transaction->getReturnCode(), $transaction->getReturnMessage()));
+        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $transaction->getReturnCode(), $transaction->getReturnMessage()));
 
         $order->add_order_note('[' . $this->id . '] ' . $status_note . ' ' . $note);
 
@@ -292,6 +305,21 @@ abstract class LknIntegrationRedeForWoocommerceWcRedeAbstract extends WC_Payment
         }
     }
 
+    /**
+     * Indica se o campo do titular deve ser ocultado no checkout e o nome
+     * obtido do pedido (billing first/last name) em vez de digitado.
+     *
+     * Recurso PRO: só é considerado habilitado com licença PRO ativa e a opção
+     * "show_cardholder_name" = yes no gateway.
+     *
+     * @return bool
+     */
+    public function isCardholderNameDisabled(): bool
+    {
+        return LknIntegrationRedeForWoocommerceHelper::isProLicenseValid()
+            && 'yes' === $this->get_option('show_cardholder_name', 'no');
+    }
+
     protected function validate_card_number($cardNumber)
     {
         $cardNumber_checksum = '';
@@ -308,16 +336,20 @@ abstract class LknIntegrationRedeForWoocommerceWcRedeAbstract extends WC_Payment
 
     protected function validate_card_fields($posted)
     {
-        if (! isset($posted[$this->id . '_holder_name']) || '' === $posted[$this->id . '_holder_name']) {
-            return false;
-        }
+        // Recurso PRO: quando o campo do titular está desabilitado, o nome é
+        // obtido do pedido no process_payment e não deve ser exigido aqui.
+        if (! $this->isCardholderNameDisabled()) {
+            if (! isset($posted[$this->id . '_holder_name']) || '' === $posted[$this->id . '_holder_name']) {
+                return false;
+            }
 
-        if (preg_replace(
-            '/[^a-zA-Z\s]/',
-            '',
-            $posted[$this->id . '_holder_name']
-        ) != $posted[$this->id . '_holder_name']) {
-            return false;
+            if (preg_replace(
+                '/[^a-zA-Z\s]/',
+                '',
+                $posted[$this->id . '_holder_name']
+            ) != $posted[$this->id . '_holder_name']) {
+                return false;
+            }
         }
 
         if (! isset($posted[$this->id . '_expiry']) || '' === $posted[$this->id . '_expiry']) {

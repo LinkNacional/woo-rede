@@ -946,12 +946,197 @@ class LknIntegrationRedeForWoocommerceHelper
     }
 
     /**
+     * Definição canônica dos campos de cartão personalizáveis (label/placeholder),
+     * incluindo a label do select de parcelas.
+     *
+     * @return array<string,array{label:string,placeholder:string}>
+     */
+    final public static function getCheckoutFieldDefinitions(): array
+    {
+        return array(
+            'holder_name' => array(
+                'label'       => __('Name on Card', 'woo-rede'),
+                'placeholder' => 'John Doe',
+            ),
+            'card_number' => array(
+                'label'       => __('Card Number', 'woo-rede'),
+                'placeholder' => '0000 0000 0000 0000',
+            ),
+            'expiry' => array(
+                'label'       => __('Card Expiring Date', 'woo-rede'),
+                'placeholder' => 'MM/AA',
+            ),
+            'cvc' => array(
+                'label'       => __('Security Code', 'woo-rede'),
+                'placeholder' => 'CVC',
+            ),
+            'card_type' => array(
+                'label'       => __('Card Type', 'woo-rede'),
+                'placeholder' => '',
+            ),
+            'installments' => array(
+                'label'       => __('Installments', 'woo-rede'),
+                'placeholder' => '',
+            ),
+            'button' => array(
+                'label'       => __('Place order', 'woo-rede'),
+                'placeholder' => '',
+            ),
+        );
+    }
+
+    /**
+     * Templates de layout disponíveis para personalização de campos.
+     *
+     * @return array<string,string>
+     */
+    final public static function getCheckoutFieldTemplates(): array
+    {
+        return array(
+            'standard' => __('Basic Template', 'woo-rede'),
+            'modern'   => __('Modern Template', 'woo-rede'),
+            'compact'  => __('Compact Template', 'woo-rede'),
+        );
+    }
+
+    /**
+     * Template de checkout ativo do gateway (standard/modern/compact). Recurso PRO:
+     * sem licença ativa é sempre 'standard'.
+     *
+     * @param string $gateway_id
+     * @return string
+     */
+    final public static function getActiveCheckoutTemplate($gateway_id = ''): string
+    {
+        $gateway_id = (string) $gateway_id;
+        if ('' === $gateway_id || ! self::isProLicenseValid()) {
+            return 'standard';
+        }
+        $settings = get_option("woocommerce_{$gateway_id}_settings", array());
+        $style = (is_array($settings) && isset($settings['3ds_template_style'])) ? $settings['3ds_template_style'] : 'basic';
+        if ('modern' === $style || 'compact' === $style) {
+            return $style;
+        }
+        return 'standard';
+    }
+
+    /**
+     * Modo de checkout detectado pela página de checkout padrão do WooCommerce.
+     *
+     * Usa has_blocks() no conteúdo da página "Checkout": se ela usa o editor de
+     * blocos (Gutenberg) o checkout é o de Blocos; caso contrário (shortcode
+     * [woocommerce_checkout]) é o clássico. Serve apenas como valor PADRÃO da
+     * opção "Checkout" da seção Fields — o lojista pode trocar manualmente.
+     *
+     * @return string 'blocks' | 'classic'
+     */
+    final public static function getDefaultCheckoutMode(): string
+    {
+        if (! function_exists('wc_get_page_id')) {
+            return 'classic';
+        }
+
+        $page_id = absint(wc_get_page_id('checkout'));
+        if ($page_id > 0 && function_exists('has_blocks') && has_blocks($page_id)) {
+            return 'blocks';
+        }
+
+        return 'classic';
+    }
+
+    /**
+     * Informa se um par modo/template aceita placeholder.
+     *
+     * - Clássico/shortcode: a label fica ACIMA do input em todos os templates,
+     *   então o placeholder existe em standard, modern e compact.
+     * - Blocos/Gutenberg: standard e modern usam a label flutuante (dentro do
+     *   input), então só o compact aceita placeholder.
+     *
+     * @param string $mode     blocks|classic
+     * @param string $template standard|modern|compact
+     * @return bool
+     */
+    final public static function checkoutModeHasPlaceholder($mode, $template): bool
+    {
+        if ('blocks' === $mode) {
+            return 'compact' === $template;
+        }
+        return in_array($template, array('standard', 'modern', 'compact'), true);
+    }
+
+    /**
+     * Rótulo personalizado de um campo, por template/modo. Vazio = usa o padrão.
+     *
+     * @param string $gateway_id
+     * @param string $template standard|modern|compact
+     * @param string $field holder_name|card_number|expiry|cvc|card_type
+     * @param string $mode blocks|classic
+     * @return string
+     */
+    final public static function getFieldLabel($gateway_id, $template, $field, $mode = 'classic'): string
+    {
+        $defs = self::getCheckoutFieldDefinitions();
+        $default = isset($defs[$field]['label']) ? $defs[$field]['label'] : '';
+        return self::getFieldOverride($gateway_id, $template, $field, 'label', $default, $mode);
+    }
+
+    /**
+     * Placeholder personalizado de um campo, por template/modo. Vazio = usa o padrão.
+     *
+     * @param string $gateway_id
+     * @param string $template standard|modern|compact
+     * @param string $field holder_name|card_number|expiry|cvc|card_type
+     * @param string $mode blocks|classic
+     * @return string
+     */
+    final public static function getFieldPlaceholder($gateway_id, $template, $field, $mode = 'classic'): string
+    {
+        $defs = self::getCheckoutFieldDefinitions();
+        $default = isset($defs[$field]['placeholder']) ? $defs[$field]['placeholder'] : '';
+        return self::getFieldOverride($gateway_id, $template, $field, 'placeholder', $default, $mode);
+    }
+
+    /**
+     * Lê o override salvo (label/placeholder) para um modo/template/campo, caindo no padrão.
+     * Recurso PRO: sem licença ativa sempre retorna o padrão.
+     */
+    final public static function getFieldOverride($gateway_id, $template, $field, $kind, $default = '', $mode = 'classic'): string
+    {
+        // O placeholder só existe nos templates em que a label fica ACIMA do input:
+        // no clássico (todos) e, nos blocos, apenas no compacto. Em blocos standard/
+        // modern a própria label age como placeholder (flutuante) — inclusive sem
+        // licença PRO (onde o layout ativo é 'standard').
+        if ('placeholder' === $kind && ! self::checkoutModeHasPlaceholder($mode, $template)) {
+            return '';
+        }
+        if (! self::isProLicenseValid()) {
+            return (string) $default;
+        }
+        $gateway_id = (string) $gateway_id;
+        $mode = ('blocks' === $mode) ? 'blocks' : 'classic';
+        if ('' === $gateway_id || ! in_array($template, array('standard', 'modern', 'compact'), true)) {
+            return (string) $default;
+        }
+        $settings = get_option("woocommerce_{$gateway_id}_settings", array());
+        $key = 'field_' . ('placeholder' === $kind ? 'placeholder' : 'label') . '_' . $mode . '_' . $template . '_' . $field;
+        if (is_array($settings) && isset($settings[$key]) && '' !== trim((string) $settings[$key])) {
+            return (string) $settings[$key];
+        }
+        return (string) $default;
+    }
+
+    /**
      * Verifica se a licença PRO está ativa e válida
      * 
      * @return bool
      */
     final public static function isProLicenseValid(): bool
     {
+        // Garante que is_plugin_active() exista mesmo em contextos de frontend.
+        if (! function_exists('is_plugin_active') && defined('ABSPATH')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
         // Verifica se o plugin PRO está ativo
         if (!is_plugin_active('rede-for-woocommerce-pro/rede-for-woocommerce-pro.php')) {
             return false;
@@ -976,6 +1161,525 @@ class LknIntegrationRedeForWoocommerceHelper
     }
 
     /**
+     * Retorna o modo efetivo de restrição de tipo de cartão de um gateway.
+     * Recurso PRO: sem licença ativa, o gateway não restringe o tipo — aceita
+     * crédito e débito (equivale a "both", independentemente do valor salvo).
+     *
+     * @param string $gatewayId ID do gateway (ex.: rede_debit).
+     * @return string 'both' | 'credit_only' | 'debit_only'
+     */
+    final public static function getCardTypeRestriction(string $gatewayId): string
+    {
+        if (! self::isProLicenseValid()) {
+            return 'both';
+        }
+
+        $settings = get_option('woocommerce_' . $gatewayId . '_settings', array());
+        if (is_array($settings) && ! empty($settings['card_type_restriction'])) {
+            return $settings['card_type_restriction'];
+        }
+
+        return 'debit_only';
+    }
+
+    /**
+     * Monta o bloco "fake" dos campos PRO de um gateway.
+     *
+     * Quando a licença PRO não está ativa, o plugin gratuito replica os campos
+     * exclusivos do PRO (mesmos títulos, tipos, opções e dependências de exibição),
+     * porém com chave própria (sufixo _fake) e marcados com o selo "PRO"
+     * (lkn-pro-badge). São inertes: o lojista pode interagir à vontade para explorar
+     * os recursos, mas nada é gravado nas opções reais do PRO.
+     *
+     * @param string $gatewayId ID do gateway (ex.: rede_credit, rede_debit, maxipago_credit, maxipago_debit).
+     * @param array  $proFields Campos retornados pelo PRO (para preservar os campos reais de licença).
+     * @param array  $existing  Chaves já presentes no formulário do FREE (para não duplicar campos).
+     * @return array Campos fake no formato de form_fields do WooCommerce.
+     */
+    final public static function lknRedeGetFakeProFields(string $gatewayId, array $proFields = array(), array $existing = array()): array
+    {
+        $badge = array('lkn-pro-badge' => 'true');
+        $badgeTop = function (string $target) use ($badge): array {
+            return array_merge(array('merge-top' => 'woocommerce_' . $target . '_fake'), $badge);
+        };
+
+        $fields = array();
+
+        $fields['PRO_fake'] = array(
+            'title' => esc_attr__('PRO', 'woo-rede'),
+            'type' => 'title',
+        );
+
+        // Preserva os campos reais de licença (quando o plugin PRO está presente) para
+        // permitir inserir/validar a chave; caso contrário, exibe um campo fake.
+        if (isset($proFields['license'])) {
+            $fields['license'] = $proFields['license'];
+            if (isset($proFields['validate_license'])) {
+                $fields['validate_license'] = $proFields['validate_license'];
+            } else {
+                // PRO presente, porém sem botão de validação ainda (licença vazia):
+                // exibe um botão inerte para o recurso ficar visível.
+                $fields['validate_license_fake'] = array(
+                    'title' => esc_attr__('Validate License', 'woo-rede'),
+                    'type' => 'button',
+                    'id' => 'validateLicenseFake',
+                    'class' => 'woocommerce-save-button components-button',
+                    'default' => __('Validate License', 'woo-rede'),
+                    'disabled' => true,
+                    'description' => __('Click the button to validate your license.', 'woo-rede'),
+                    'custom_attributes' => array_merge(
+                        array('data-title-description' => esc_attr__('Validates your license key to unlock all PRO features.', 'woo-rede')),
+                        $badge
+                    ),
+                );
+            }
+        } else {
+            $fields['license_fake'] = array(
+                'title' => esc_attr__('License', 'woo-rede'),
+                'type' => 'password',
+                'description' => esc_attr__('License for Rede for WooCommerce plugin extensions.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Enter your Link Nacional license key to activate PRO features.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Save to enable other options.', 'woo-rede')),
+                    $badge
+                ),
+            );
+
+            $fields['validate_license_fake'] = array(
+                'title' => esc_attr__('Validate License', 'woo-rede'),
+                'type' => 'button',
+                'id' => 'validateLicenseFake',
+                'class' => 'woocommerce-save-button components-button',
+                'default' => __('Validate License', 'woo-rede'),
+                'disabled' => true,
+                'description' => __('Click the button to validate your license.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Save to enable other options.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Validates your license key to unlock all PRO features.', 'woo-rede')),
+                    $badge
+                ),
+            );
+        }
+
+        // Conversor de moeda.
+        $fields['convert_to_brl_fake'] = array(
+            'title' => __('Currency Converter', 'woo-rede'),
+            'type' => 'checkbox',
+            'label' => __('Convert to BRL', 'woo-rede'),
+            'default' => 'no',
+            'description' => __('Automatically converts payment amounts to BRL.', 'woo-rede'),
+            'desc_tip' => __('If enabled, automatically converts the order amount to BRL when processing payment.', 'woo-rede'),
+            'custom_attributes' => array_merge(
+                array('data-title-description' => __('Automatically converts the order amount to BRL.', 'woo-rede')),
+                $badge
+            ),
+        );
+
+        $fields['currency_quote_fake'] = array(
+            'title' => __('Currency Quote', 'woo-rede'),
+            'type' => 'text',
+            'description' => sprintf(
+                '<a href="%s" target="_blank">%s</a>',
+                esc_url(plugins_url('integration-rede-for-woocommerce/Includes/files/linkCurrencies.json')),
+                __('View Currencies and Quotes', 'woo-rede')
+            ),
+            'desc_tip' => esc_attr__('These are the real-time exchange rates, indicating the value of each listed foreign currency in Brazilian Reais (BRL).', 'woo-rede'),
+            'custom_attributes' => array_merge(array('readonly' => 'readonly'), $badge),
+        );
+
+        // Extras (cartão de crédito tem auto-capture; maxipago_debit também expõe status).
+        if (in_array($gatewayId, array('rede_credit', 'maxipago_credit'), true)) {
+            $fields['auto_capture_fake'] = array(
+                'title' => __('Automatic Capture', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => __('Enable automatic capture', 'woo-rede'),
+                'default' => 'yes',
+                'description' => __('Automatically captures the payment once authorized.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Allows the transaction to be captured after authentication automatically.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => __('Automatically captures the payment once authorized by Rede.', 'woo-rede')),
+                    $badge
+                ),
+            );
+        }
+
+        $fields['custom_css_short_code_fake'] = array(
+            'title' => __('Custom CSS (Shortcode)', 'woo-rede'),
+            'type' => 'textarea',
+            'default' => '',
+            'description' => __('Define CSS rules for the shortcode.', 'woo-rede'),
+            'desc_tip' => __('Possibility to customize the shortcode CSS.', 'woo-rede'),
+            'custom_attributes' => array_merge(
+                array('data-title-description' => __('Customize the Shortcode CSS using selectors and rules.', 'woo-rede')),
+                $badge
+            ),
+        );
+
+        $fields['custom_css_block_editor_fake'] = array(
+            'title' => __('Custom CSS (Block Editor)', 'woo-rede'),
+            'type' => 'textarea',
+            'default' => '',
+            'description' => __('Define CSS rules for the block editor.', 'woo-rede'),
+            'desc_tip' => __('Possibility to customize the block editor CSS.', 'woo-rede'),
+            'custom_attributes' => array_merge(
+                array('data-title-description' => __('Customize the Block Editor CSS using selectors and rules.', 'woo-rede')),
+                $badge
+            ),
+        );
+
+        if (in_array($gatewayId, array('rede_credit', 'maxipago_credit', 'maxipago_debit'), true)) {
+            $fields['payment_complete_status_fake'] = array(
+                'title' => esc_attr__('Complete Payment Status', 'woo-rede'),
+                'type' => 'select',
+                'class' => 'wc-enhanced-select',
+                'default' => 'processing',
+                'description' => esc_attr__('Select the default status for successfully paid orders.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Choose the status for the order after the payment is successfully completed.', 'woo-rede'),
+                'options' => array(
+                    'processing' => esc_attr__('Processing', 'woo-rede'),
+                    'completed'  => esc_attr__('Completed', 'woo-rede'),
+                    'on-hold'    => esc_attr__('On Hold', 'woo-rede'),
+                ),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Status after successful payment.', 'woo-rede')),
+                    $badge
+                ),
+            );
+        }
+
+        $fields['auto_refund_on_cancel_fake'] = array(
+            'title' => esc_attr__('Automatic Refund on Cancellation', 'woo-rede'),
+            'type' => 'checkbox',
+            'label' => __('Enable automatic refund when the order is cancelled.', 'woo-rede'),
+            'default' => 'no',
+            'desc_tip' => esc_attr__('When enabled, cancelling an order will automatically trigger a refund through this gateway.', 'woo-rede'),
+            'description' => esc_attr__('If enabled, WooCommerce will automatically issue a refund via this gateway when an order is cancelled.', 'woo-rede'),
+            'custom_attributes' => array_merge(
+                array('data-title-description' => esc_attr__('Automatically refunds the customer when an order is cancelled.', 'woo-rede')),
+                $badge
+            ),
+        );
+
+        // Recurso PRO (Rede Débito): ocultar o campo do titular e usar o nome do pedido.
+        if ('rede_debit' === $gatewayId) {
+            $fields['show_cardholder_name_fake'] = array(
+                'title' => esc_attr__('Cardholder Name Field', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => __('Disable the cardholder name field', 'woo-rede'),
+                'default' => 'no',
+                'description' => esc_attr__('Hide the cardholder name field and use the billing name from the order instead.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Enable this option to use the billing name instead of collecting the cardholder name separately.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Disables the cardholder name input and uses the billing name instead.', 'woo-rede')),
+                    $badge
+                ),
+            );
+        }
+
+        // Bloco de parcelamento (apenas crédito).
+        if (in_array($gatewayId, array('rede_credit', 'maxipago_credit'), true)) {
+            $fields['Installment_fake'] = array(
+                'title' => esc_attr__('Installment', 'woo-rede'),
+                'type' => 'title',
+            );
+
+            $fields['interest_or_discount_fake'] = array(
+                'title' => esc_attr__('Installment Settings', 'woo-rede'),
+                'type' => 'select',
+                'class' => 'wc-enhanced-select',
+                'default' => 'interest',
+                'options' => array(
+                    'interest' => __('Interest', 'woo-rede'),
+                    'discount' => __('Discount', 'woo-rede'),
+                ),
+                'description' => esc_attr__('Allows the user to select discount or interest on credit card installments.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Select the option interest or discount. Save to continue configuration.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Defines whether the installment will apply interest or offer a discount.', 'woo-rede')),
+                    $badge
+                ),
+            );
+
+            $fields['interest_show_percent_fake'] = array(
+                'title' => __('Display interest percentage', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => __('Display interest percentage. Default (enabled)', 'woo-rede'),
+                'default' => 'yes',
+                'description' => __('The percentage applied to each installment will be displayed to the customer during checkout.', 'woo-rede'),
+                'desc_tip' => true,
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => __('Displays the interest percentage at checkout.', 'woo-rede')),
+                    $badge
+                ),
+            );
+
+            $fields['installment_interest_fake'] = array(
+                'title' => __('Interest on installments', 'woo-rede'),
+                'type' => 'checkbox',
+                'default' => 'no',
+                'description' => esc_attr__('Allows payment with interest in installments.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Enable to allow interest to be charged on installment payments.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Applies an interest rate to each installment.', 'woo-rede')),
+                    $badge
+                ),
+            );
+
+            $fields['installment_discount_fake'] = array(
+                'title' => __('Discount on installments', 'woo-rede'),
+                'type' => 'checkbox',
+                'default' => 'no',
+                'desc_tip' => esc_attr__('Enable to give a discount when the customer chooses to pay in installments.', 'woo-rede'),
+                'description' => esc_attr__('Enables payment with discount on installments.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Applies a discount per installment when selected.', 'woo-rede')),
+                    $badge
+                ),
+            );
+
+            $fields['min_interest_fake'] = array(
+                'title' => __('Minimum installment for no interest', 'woo-rede'),
+                'type' => 'number',
+                'default' => '0',
+                'description' => esc_attr__('Sets the minimum accepted installment value.', 'woo-rede'),
+                'desc_tip' => esc_attr__('Set the minimum value of each installment for the sale to be considered interest-free.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array(
+                        'min' => '0',
+                        'step' => '1',
+                        'data-title-description' => esc_attr__('Defines the lowest possible value for each installment.', 'woo-rede'),
+                    ),
+                    $badgeTop($gatewayId . '_installment_interest')
+                ),
+            );
+
+            // Gera 1..18 para permitir controle dinâmico pelo seletor de limite.
+            for ($c = 1; $c <= 18; ++$c) {
+                $fields[$c . 'x_fake'] = array(
+                    'title' => __('Installment interest', 'woo-rede') . ' ' . $c . 'x',
+                    'type' => 'number',
+                    'default' => '0',
+                    'description' => __('This option defines the interest on the installment as a percentage. Only accepts numbers.', 'woo-rede'),
+                    'custom_attributes' => array_merge(
+                        array(
+                            'min' => '0',
+                            'step' => '0.01',
+                            'data-title-description' => sprintf(
+                                /* translators: %d: installment count */
+                                esc_attr__('Interest applied when customer selects to pay in %dx. Leave 0 for no interest.', 'woo-rede'),
+                                $c
+                            ),
+                        ),
+                        $badgeTop($gatewayId . '_installment_interest')
+                    ),
+                );
+
+                $fields[$c . 'x_discount_fake'] = array(
+                    'title' => __('Installment discount', 'woo-rede') . ' ' . $c . 'x',
+                    'type' => 'number',
+                    'default' => '0',
+                    'desc_tip' => false,
+                    'description' => __('This option defines the discount on the installment as a percentage. Only accepts numbers.', 'woo-rede'),
+                    'custom_attributes' => array_merge(
+                        array(
+                            'min' => '0',
+                            'step' => '0.01',
+                            'max' => '100',
+                            'data-title-description' => sprintf(
+                                /* translators: %d: installment count */
+                                esc_attr__('Discount applied when customer selects to pay in %dx. Leave 0 for no discount.', 'woo-rede'),
+                                $c
+                            ),
+                        ),
+                        $badgeTop($gatewayId . '_installment_discount')
+                    ),
+                );
+            }
+
+            $limitOptions = array();
+            for ($i = 1; $i <= 21; ++$i) {
+                $limitOptions[(string) $i] = $i . 'x';
+            }
+
+            $fields['max_parcels_number_fake'] = array(
+                'title' => esc_attr__('Max installments', 'woo-rede'),
+                'type' => 'select',
+                'class' => 'wc-enhanced-select',
+                'default' => '12',
+                'description' => esc_attr__('Set the maximum number of installments allowed in credit transactions.', 'woo-rede'),
+                'desc_tip' => true,
+                'options' => $limitOptions,
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Maximum number of installments.', 'woo-rede')),
+                    $badge
+                ),
+            );
+        }
+
+        // Remove fakes cuja chave-base já existe no formulário do FREE (evita duplicar
+        // campos que o PRO sobrescreve).
+        if (! empty($existing)) {
+            foreach (array_keys($fields) as $fakeKey) {
+                if ('_fake' === substr($fakeKey, -5) && in_array(substr($fakeKey, 0, -5), $existing, true)) {
+                    unset($fields[$fakeKey]);
+                }
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Força os campos PRO de um gateway de cartão aos valores padrão quando a licença
+     * não está ativa. Executado ao salvar as configurações (WooCommerce Settings API).
+     * Garante que nenhum recurso PRO permaneça habilitado no banco, cobrindo tanto o
+     * HTML manipulado quanto os campos "fake" replicados no plano gratuito.
+     *
+     * @param array $settings Configurações do gateway prestes a serem salvas.
+     * @return array
+     */
+    final public static function lknRedeEnforceProFieldsOnSave(array $settings): array
+    {
+        if (self::isProLicenseValid()) {
+            return $settings;
+        }
+
+        // Remove as chaves "fake" (nunca devem persistir).
+        foreach (array_keys($settings) as $key) {
+            if ('_fake' === substr($key, -5)) {
+                unset($settings[$key]);
+            }
+        }
+
+        $defaults = array(
+            'convert_to_brl' => 'no',
+            'currency_quote' => '',
+            'custom_css_short_code' => '',
+            'custom_css_block_editor' => '',
+            'auto_refund_on_cancel' => 'no',
+            'auto_capture' => 'yes',
+            'card_type_restriction' => 'both',
+            'hide_card_type_selector' => 'no',
+            'interest_or_discount' => 'interest',
+            'interest_show_percent' => 'yes',
+            'installment_interest' => 'no',
+            'installment_discount' => 'no',
+            'min_interest' => '0',
+            'show_cardholder_name' => 'no',
+            'abecs_norms' => 'no',
+        );
+
+        foreach ($defaults as $key => $value) {
+            if (array_key_exists($key, $settings)) {
+                $settings[$key] = $value;
+            }
+        }
+
+        for ($c = 1; $c <= 24; ++$c) {
+            if (array_key_exists($c . 'x', $settings)) {
+                $settings[$c . 'x'] = '0';
+            }
+            if (array_key_exists($c . 'x_discount', $settings)) {
+                $settings[$c . 'x_discount'] = '0';
+            }
+        }
+
+        return $settings;
+    }
+
+    /**
+     * Verifica se o gateway deve usar as mensagens padronizadas ABECS.
+     *
+     * Recurso exclusivo do plano PRO: sem licença PRO ativa, o resultado é sempre
+     * falso (fluxo legado), independentemente do valor salvo na opção. Com licença
+     * ativa, vale o valor da opção por gateway; se ainda não salva, fica habilitado
+     * por padrão.
+     *
+     * @param string $gateway_id ID do gateway (rede_credit, rede_debit, ...).
+     * @return bool
+     */
+    final public static function isAbecsEnabled($gateway_id = ''): bool
+    {
+        // Camada de licença: ABECS é um recurso do plano PRO. Sem licença ativa,
+        // todos os gateways caem para o fluxo legado — mesmo que a opção esteja
+        // como "yes" na base (ex.: HTML manipulado pelo lojista).
+        if (! self::isProLicenseValid()) {
+            return false;
+        }
+
+        $gateway_id = (string) $gateway_id;
+
+        // Sem gateway definido, o resultado segue a licença PRO (uso interno/PRO).
+        if ('' === $gateway_id) {
+            return true;
+        }
+
+        $settings = get_option("woocommerce_{$gateway_id}_settings", array());
+
+        if (is_array($settings) && array_key_exists('abecs_norms', $settings)) {
+            return 'yes' === $settings['abecs_norms'];
+        }
+
+        // Opção ainda não salva: com PRO ativo fica habilitado por padrão.
+        return true;
+    }
+
+    /**
+     * Verifica se o seletor de tipo de cartão deve ser escondido no checkout (Rede Débito).
+     *
+     * Recurso exclusivo do plano PRO: sem licença PRO ativa o resultado é sempre
+     * falso, ignorando qualquer valor salvo na opção (ex.: HTML do painel manipulado
+     * pelo lojista para forçar a ativação). Com licença ativa, vale o valor da opção;
+     * se ainda não salva, fica desabilitado por padrão (seletor exibido).
+     *
+     * @param string $gateway_id ID do gateway (ex.: rede_debit).
+     * @return bool
+     */
+    final public static function isHideCardTypeSelectorEnabled($gateway_id = ''): bool
+    {
+        // Camada de licença: sem PRO ativo, o recurso não se aplica.
+        if (! self::isProLicenseValid()) {
+            return false;
+        }
+
+        $gateway_id = (string) $gateway_id;
+
+        if ('' === $gateway_id) {
+            return false;
+        }
+
+        $settings = get_option("woocommerce_{$gateway_id}_settings", array());
+
+        return is_array($settings) && isset($settings['hide_card_type_selector']) && 'yes' === $settings['hide_card_type_selector'];
+    }
+
+    /**
+     * Retorna o estilo de template 3DS efetivo do gateway.
+     *
+     * O template "modern"/"compact" é um recurso exclusivo do plano PRO. Sem licença
+     * PRO ativa o resultado é sempre 'basic', ignorando o valor salvo na opção (ex.:
+     * valor antigo persistido ou HTML do painel manipulado pelo lojista). Com licença
+     * ativa vale o valor da opção ('basic', 'modern' ou 'compact').
+     *
+     * @param string $gateway_id ID do gateway (ex.: rede_debit).
+     * @return string 'basic', 'modern' ou 'compact'.
+     */
+    final public static function get3dsTemplateStyle($gateway_id = ''): string
+    {
+        $gateway_id = (string) $gateway_id;
+
+        // Camada de licença: sem PRO ativo o recurso não se aplica.
+        if (! self::isProLicenseValid() || '' === $gateway_id) {
+            return 'basic';
+        }
+
+        $settings = get_option("woocommerce_{$gateway_id}_settings", array());
+        $style = (is_array($settings) && isset($settings['3ds_template_style'])) ? $settings['3ds_template_style'] : 'basic';
+
+        return in_array($style, array('modern', 'compact'), true) ? $style : 'basic';
+    }
+
+    /**
      * Força valores padrão para campos PRO se a licença não for válida (com notificação)
      * 
      * @param string $gateway_id ID do gateway (rede_credit, rede_debit, etc.)
@@ -995,7 +1699,12 @@ class LknIntegrationRedeForWoocommerceHelper
             'convert_to_brl' => 'no',
             'auto_capture' => 'yes',
             '3ds_template_style' => 'basic',
-            'payment_complete_status' => 'processing'
+            'payment_complete_status' => 'processing',
+            'abecs_norms' => 'no',
+            'hide_card_type_selector' => 'no',
+            'show_card_brand_icons' => 'yes',
+            'hide_rede_logo' => 'no',
+            'show_cardholder_name' => 'no'
         );
 
         // Reset campos de parcelas específicas
@@ -1009,6 +1718,14 @@ class LknIntegrationRedeForWoocommerceHelper
         foreach ($pro_fields_defaults as $field => $default_value) {
             if (isset($settings[$field])) {
                 $settings[$field] = $default_value;
+            }
+        }
+
+        // Seção "Fields" (label/placeholder por layout) é PRO: some sem licença.
+        $settings['fields_template'] = 'standard';
+        foreach (array_keys($settings) as $key) {
+            if (0 === strpos($key, 'field_label_') || 0 === strpos($key, 'field_placeholder_')) {
+                unset($settings[$key]);
             }
         }
 
@@ -1036,7 +1753,12 @@ class LknIntegrationRedeForWoocommerceHelper
             'convert_to_brl' => 'no',
             'auto_capture' => 'yes',
             '3ds_template_style' => 'basic',
-            'payment_complete_status' => 'processing'
+            'payment_complete_status' => 'processing',
+            'abecs_norms' => 'no',
+            'hide_card_type_selector' => 'no',
+            'show_card_brand_icons' => 'yes',
+            'hide_rede_logo' => 'no',
+            'show_cardholder_name' => 'no'
         );
 
         // Reset campos de parcelas específicas
@@ -1050,6 +1772,14 @@ class LknIntegrationRedeForWoocommerceHelper
         foreach ($pro_fields_defaults as $field => $default_value) {
             if (isset($settings[$field])) {
                 $settings[$field] = $default_value;
+            }
+        }
+
+        // Seção "Fields" (label/placeholder por layout) é PRO: some sem licença.
+        $settings['fields_template'] = 'standard';
+        foreach (array_keys($settings) as $key) {
+            if (0 === strpos($key, 'field_label_') || 0 === strpos($key, 'field_placeholder_')) {
+                unset($settings[$key]);
             }
         }
 
@@ -1283,7 +2013,8 @@ class LknIntegrationRedeForWoocommerceHelper
         $httpStatusDescription = self::getHttpStatusDescription($httpStatus);
         $httpStatusFormatted = $httpStatus && $httpStatus !== 'N/A' ? $httpStatus . ' - ' . $httpStatusDescription : 'N/A';
 
-        $translatedReturnMessage = LknIntegrationRedeForWoocommerceAbecsCodes::translate($returnCode, $returnMessage);
+        $abecs_gateway_id = (is_object($gatewayInstance) && isset($gatewayInstance->id)) ? $gatewayInstance->id : '';
+        $translatedReturnMessage = LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($abecs_gateway_id, $returnCode, $returnMessage);
         $returnCodeRaw = !empty($returnCode) ? (string) $returnCode : '';
         $returnCodeFormatted = '' !== $returnCodeRaw ? $returnCodeRaw . ' - ' . $translatedReturnMessage : 'N/A';
 

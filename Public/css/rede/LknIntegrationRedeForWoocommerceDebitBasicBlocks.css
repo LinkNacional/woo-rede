@@ -1,0 +1,128 @@
+/**
+ * Rede Débito/Crédito — layout Basic (padrão) do checkout em Blocos (Gutenberg).
+ *
+ * Normaliza os campos e selects do Basic em Blocos: 50px de altura e borda
+ * levemente arredondada (8px), iguais aos layouts Moderno/Compacto. No Basic o
+ * WooCommerce não traz CSS próprio do Rede, então os componentes seguiam o estilo
+ * padrão do tema (alturas/raios divergentes). Enfileirado só quando o layout
+ * ativo é o Basic.
+ *
+ * @package Lknwoo\IntegrationRedeForWoocommerce
+ */
+
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input input {
+    height: 50px !important;
+    box-sizing: border-box !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+    /* Força fundo branco sobre o background do tema. */
+    background-color: #fff !important;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .lknIntegrationRedeForWoocommerceSelectBlocks select {
+    height: 50px !important;
+    box-sizing: border-box !important;
+    /* Força raio/borda do plugin sobre o CSS do tema (.wd select). */
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+    background-color: #fff !important;
+}
+
+/* === Label flutuante (padrão único) ========================================
+ * Repouso: label centralizada dentro do input.
+ * Ativa (foco OU com valor): a label sobe para o topo e diminui o texto.
+ * Blur sem valor: volta ao repouso. O `is-active` é aplicado pelo WooCommerce
+ * Blocks (foco/valor); `:focus-within` reforça o disparo já no foco. */
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input {
+    position: relative;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input input {
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+    /* Alinha o texto do input com a label flutuante (left: 12px). O WooCommerce
+       Blocks reduz o padding-left para 9px no estado ativo, desalinhando. */
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input label {
+    position: absolute;
+    left: 12px;
+    top: 25px !important;
+    transform: translateY(-50%) !important;
+    transform-origin: top left;
+    margin: 0;
+    font-size: 16.8px !important;
+    line-height: 22px;
+    transition: top .18s ease, transform .18s ease;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input.is-active input,
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input:focus-within input {
+    padding-top: 24px !important;
+    padding-bottom: 8px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input.is-active label,
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input:focus-within label {
+    top: 8px !important;
+    transform: translateY(0) scale(.82) !important;
+}
+
+/* Selects do tipo de cartão / parcelas no Basic (Gutenberg): 1.2rem (só eles). */
+#radio-control-wc-payment-method-options-rede_debit__content .lknIntegrationRedeForWoocommerceSelectBlocks select {
+    font-size: 16.8px !important;
+}
+
+/* Placeholder dos inputs do Basic (Blocos) sempre em CINZA — o tema costuma
+   deixá-lo escuro (quase preto). Só os inputs (o select não tem placeholder). */
+#radio-control-wc-payment-method-options-rede_debit__content input::placeholder {
+    color: #adb5bd !important;
+    opacity: 1 !important;
+}
+
+/* Botão de finalizar custom no layout padrão (Blocos) — recurso PRO. Mesmo
+ * estilo azul dos layouts moderno/compacto. */
+#radio-control-wc-payment-method-options-rede_debit__content .rede-basic-submit-button {
+  width: 100%;
+  height: 50px;
+  box-sizing: border-box;
+  margin-top: 18px;
+  background-color: #306FC5 !important;
+  color: #fff !important;
+  border: 1px solid #2557a3 !important;
+  border-radius: 8px;
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase !important;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .rede-basic-submit-button:hover {
+  background-color: #2557a3 !important;
+  color: #fff !important;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .rede-basic-submit-button.blocked,
+#radio-control-wc-payment-method-options-rede_debit__content .rede-basic-submit-button:disabled {
+  background-color: #cccccc !important;
+  color: #666666 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+/* Descrição do gateway no layout Basic em Blocos: 0.8rem, cinza azulado. */
+#radio-control-wc-payment-method-options-rede_debit__content .basic-gateway-description {
+  text-align: center;
+  margin-top: 12px;
+  color: #8e9ba8;
+  font-size: 11.2px;
+}

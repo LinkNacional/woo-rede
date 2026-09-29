@@ -459,6 +459,21 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                 )
             ),
 
+            'abecs_norms' => array(
+                'title' => esc_attr__('ABECS standard messages', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => __('Enable ABECS-standard return messages', 'woo-rede'),
+                'default' => LknIntegrationRedeForWoocommerceHelper::isAbecsEnabled($this->id) ? 'yes' : 'no',
+                'desc_tip' => esc_attr__('Use the official e.Rede (ABECS) return messages instead of the default messages.', 'woo-rede'),
+                'description' => esc_attr__('Default: enabled when the PRO license is active.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array(
+                        'data-title-description' => esc_attr__('Use the official e.Rede (ABECS) return messages. Disable to keep the previous default messages.', 'woo-rede')
+                    ),
+                    ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() ? array('lkn-pro-badge' => 'true') : array()
+                ),
+            ),
+
             'developers' => array(
                 'title' => esc_attr__('Developer', 'woo-rede'),
                 'type' => 'title',
@@ -479,19 +494,22 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
 
         // PRO section (send configs)
         $pro_plugin_active = LknIntegrationRedeForWoocommerceHelper::isProLicenseValid();
-        if ($pro_plugin_active && $this->get_option('debug') == 'yes') {
-            $this->form_fields['send_configs'] = array(
-                'title' => __('WhatsApp Support', 'woo-rede'),
-                'type'  => 'button',
-                'id'    => 'sendConfigs',
-                'description' => __('Enable Debug Mode and click Save Changes to get quick support via WhatsApp.', 'woo-rede'),
-                'desc_tip' => '',
-                'custom_attributes' => array(
+        // Suporte WhatsApp: funcional só no PRO; no plano gratuito fica cinza (badge PRO).
+        $this->form_fields['send_configs'] = array(
+            'title' => __('WhatsApp Support', 'woo-rede'),
+            'type'  => 'button',
+            'id'    => 'sendConfigs',
+            'description' => __('Enable Debug Mode and click Save Changes to get quick support via WhatsApp.', 'woo-rede'),
+            'desc_tip' => '',
+            'disabled' => ! $pro_plugin_active,
+            'custom_attributes' => array_merge(
+                array(
                     'merge-top' => "woocommerce_{$this->id}_debug",
                     'data-title-description' => __('Send the settings for this payment method to WordPress Support.', 'woo-rede')
-                )
-            );
-        }
+                ),
+                ! $pro_plugin_active ? array('lkn-pro-badge' => 'true') : array()
+            )
+        );
 
         if ($this->get_option('debug') == 'yes') {
             $this->form_fields['show_order_logs'] =  array(
@@ -529,8 +547,14 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
             'max_parcels_number' => $this->get_option('max_parcels_number'),
         ), $this->id);
 
-        if (! empty($customConfigs)) {
-            $this->form_fields = array_merge($this->form_fields, $customConfigs);
+        if (LknIntegrationRedeForWoocommerceHelper::isProLicenseValid()) {
+            if (! empty($customConfigs)) {
+                $this->form_fields = array_merge($this->form_fields, $customConfigs);
+            }
+        } else {
+            // Licença PRO inativa: replica os campos PRO como fakes interativos
+            // (selo PRO). Preserva os campos reais de licença quando o PRO está presente.
+            $this->form_fields = array_merge($this->form_fields, LknIntegrationRedeForWoocommerceHelper::lknRedeGetFakeProFields($this->id, $customConfigs, array_keys($this->form_fields)));
         }
     }
 
@@ -614,15 +638,25 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
 
         wp_enqueue_style('wc-rede-checkout-webservice');
 
-        wp_enqueue_style('card-style', $plugin_url . 'Public/css/card.css', array(), '1.0.0', 'all');
-        wp_enqueue_style('select-style', $plugin_url . 'Public/css/lknIntegrationRedeForWoocommerceSelectStyle.css', array(), '1.0.0', 'all');
+        // Versão por filemtime: garante que alterações no CSS carreguem sem hard refresh.
+        $rede_css_dir = plugin_dir_path(LknIntegrationRedeForWoocommerceWcRede::FILE) . '../Public/css/';
+        $rede_css_ver = function ($rel) use ($rede_css_dir) {
+            $path = $rede_css_dir . $rel;
+            return '1.0.0.' . (file_exists($path) ? filemtime($path) : '0');
+        };
+
+        wp_enqueue_style('card-style', $plugin_url . 'Public/css/card.css', array(), $rede_css_ver('card.css'), 'all');
+        wp_enqueue_style('select-style', $plugin_url . 'Public/css/lknIntegrationRedeForWoocommerceSelectStyle.css', array(), $rede_css_ver('lknIntegrationRedeForWoocommerceSelectStyle.css'), 'all');
 
         // Enfileira CSS específico para débito apenas se não estiver enfileirado
         if (!wp_style_is('rede-debit-style', 'enqueued')) {
-            wp_enqueue_style('rede-debit-style', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceCardShortcode.css', array(), '1.0.0', 'all');
+            wp_enqueue_style('rede-debit-style', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceCardShortcode.css', array(), $rede_css_ver('rede/LknIntegrationRedeForWoocommerceCardShortcode.css'), 'all');
         }
 
         wp_enqueue_script('woo-rede-js', $plugin_url . 'Public/js/creditCard/rede/wooRedeCredit.js', array(), '1.0.0', true);
+        // Padronização dos campos de cartão (número/validade/CVC): máscara,
+        // filtro de dígitos, inputmode numérico e normalização da validade.
+        wp_enqueue_script('rede-card-fields', $plugin_url . 'Public/js/rede-card-fields.js', array(), '1.0.0', true);
         wp_localize_script('woo-rede-js', 'wooRedeVars', array(
             'debug' => defined('WP_DEBUG') && WP_DEBUG,
             'ajaxurl' => admin_url('admin-ajax.php'),
@@ -717,7 +751,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
 
         // Adiciona notas ao pedido
         /* translators: %s: return message from payment processor */
-        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $return_message));
+        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $return_code, $return_message));
         $order->add_order_note('[' . $this->id . '] ' . $status_note . ' ' . $note);
 
         if ($return_code == '00') {
@@ -816,17 +850,22 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
         }
         
         if ($response_code !== 200 && $response_code !== 201) {
-            $error_message = 'Transaction error';
+            $abecs_enabled = LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id);
+            $abecs_fallback = __('Transaction error', 'woo-rede');
+            // Legado (v5.4.10): usa a mensagem da Rede quando existir, senão 'Erro na transação'.
+            $legacy_message = 'Erro na transação';
             $return_code = $response_data['returnCode'] ?? '';
 
             if (isset($response_data['returnMessage'])) {
-                $error_message = $response_data['returnMessage'];
+                $abecs_fallback = $response_data['returnMessage'];
+                $legacy_message = $response_data['returnMessage'];
             } elseif (isset($response_data['errors']) && is_array($response_data['errors'])) {
-                $error_message = implode(', ', $response_data['errors']);
+                $abecs_fallback = implode(', ', $response_data['errors']);
+                $legacy_message = $abecs_fallback;
             }
 
-            $error_message = LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $error_message);
-            if ('' !== $return_code) {
+            $error_message = LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $return_code, $abecs_fallback, $legacy_message);
+            if ($abecs_enabled && '' !== $return_code) {
                 $error_message .= ' (Error code: ' . $return_code . ')';
             }
             
@@ -851,10 +890,14 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
         }
         
         if (!isset($response_data['returnCode']) || $response_data['returnCode'] !== '00') {
+            $abecs_enabled = LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id);
             $return_code = $response_data['returnCode'] ?? '';
-            $raw_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : 'Transaction declined';
-            $error_message = LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $raw_message);
-            if ('' !== $return_code) {
+            $raw_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : '';
+            $abecs_fallback = '' !== $raw_message ? $raw_message : __('Transaction declined', 'woo-rede');
+            // Legado (v5.4.10): usa a mensagem da Rede quando existir, senão 'Transação recusada'.
+            $legacy_message = '' !== $raw_message ? $raw_message : 'Transação recusada';
+            $error_message = LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $return_code, $abecs_fallback, $legacy_message);
+            if ($abecs_enabled && '' !== $return_code) {
                 $error_message .= ' (Error code: ' . $return_code . ')';
             }
             

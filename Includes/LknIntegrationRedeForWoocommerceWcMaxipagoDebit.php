@@ -289,10 +289,32 @@ final class LknIntegrationRedeForWoocommerceWcMaxipagoDebit extends LknIntegrati
             );
         }
 
+        // Suporte WhatsApp: funcional só no PRO; no plano gratuito fica cinza (badge PRO).
+        $this->form_fields['send_configs'] = array(
+            'title' => __('WhatsApp Support', 'woo-rede'),
+            'type'  => 'button',
+            'id'    => 'sendConfigs',
+            'description' => __('Enable Debug Mode and click Save Changes to get quick support via WhatsApp.', 'woo-rede'),
+            'desc_tip' => '',
+            'disabled' => ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid(),
+            'custom_attributes' => array_merge(
+                array(
+                    'merge-top' => "woocommerce_{$this->id}_debug",
+                    'data-title-description' => __('Send the settings for this payment method to WordPress Support.', 'woo-rede')
+                ),
+                ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() ? array('lkn-pro-badge' => 'true') : array()
+            )
+        );
+
         $customConfigs = apply_filters('integration_rede_for_woocommerce_get_custom_configs', $this->form_fields, array(), $this->id);
 
-        if (! empty($customConfigs)) {
-            $this->form_fields = array_merge($this->form_fields, $customConfigs);
+        if (LknIntegrationRedeForWoocommerceHelper::isProLicenseValid()) {
+            if (! empty($customConfigs)) {
+                $this->form_fields = array_merge($this->form_fields, $customConfigs);
+            }
+        } else {
+            // Licença PRO inativa: replica os campos PRO como fakes interativos (selo PRO).
+            $this->form_fields = array_merge($this->form_fields, LknIntegrationRedeForWoocommerceHelper::lknRedeGetFakeProFields($this->id, $customConfigs, array_keys($this->form_fields)));
         }
     }
 

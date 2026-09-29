@@ -5,11 +5,16 @@
 */
 #maxipagoDebitPaymentForm .paymentMethodDescription {
     display: inline-flex;
-    margin: 0 0 20px;
+    margin: 12px 0 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 1rem;
+}
+
+#maxipagoDebitPaymentForm .paymentMethodDescription p {
+    font-size: 11.2px;
+    color: #8e9ba8;
 }
 
 #maxipagoDebitPaymentForm .paymentMethodDescription #logoMaxipago {

@@ -1,0 +1,216 @@
+/**
+ * Lightbox de imagens do layout (Thickbox do WordPress) — redesign com moldura.
+ *
+ * O JS (lkn-*-thickbox.js) aumenta a janela criando um "gutter" ao redor da
+ * imagem; o CSS usa esse espaço para colocar os controles FORA da imagem, numa
+ * moldura clara (branco puxado por cinza).
+ *
+ *  - moldura clara (#f6f7f7) com a imagem centralizada;
+ *  - fechar no canto superior-direito do gutter; setas centralizadas nas laterais
+ *    ao centro vertical da imagem, com o ícone (chevron CSS) centralizado no círculo;
+ *  - sem outline/foco visível ao clicar (foco de teclado só via :focus-visible).
+ */
+
+/* ---- Backdrop ---- */
+#TB_overlay {
+  background: rgba(0, 0, 0, 0.9) !important;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+/* ---- Moldura (container) ao redor da imagem ---- */
+#TB_window {
+  box-sizing: border-box !important;
+  padding: var(--lkn-tb-gap, 72px) !important;
+  background: #f6f7f7 !important;
+  border: 1px solid #dcdcde !important;
+  border-radius: 14px !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5) !important;
+  overflow: visible !important;
+}
+
+/* ---- Imagem ---- */
+#TB_ImageOff {
+  display: block;
+  line-height: 0;
+  text-decoration: none;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+#TB_ImageOff:focus,
+#TB_ImageOff:focus-visible,
+#TB_ImageOff:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+#TB_window img#TB_Image,
+#TB_window img#TB_Image:focus {
+  display: block;
+  margin: 0 auto !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+  outline: none !important;
+}
+
+/* Miniaturas de origem (preview): sem outline/realce ao clicar. */
+a.thickbox,
+a.thickbox:focus,
+a.thickbox:active,
+a.thickbox img {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- Legenda (abaixo da imagem, dentro da moldura) ---- */
+#TB_caption {
+  float: none !important;
+  height: auto !important;
+  padding: 14px 12px 0 !important;
+  text-align: center !important;
+  color: #1d2327 !important;
+  font-size: 14px !important;
+  font-weight: 600;
+  line-height: 1.4 !important;
+}
+
+#TB_secondLine {
+  display: block;
+  margin-top: 4px;
+  color: #646970 !important;
+  font-size: 12px !important;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+}
+
+/* "Prev/Next" do core fica no DOM só para acessibilidade. */
+#TB_prev,
+#TB_next {
+  font-size: 0 !important;
+}
+
+/* ---- Controles (fechar + setas): círculos claros, estilo WP ---- */
+#TB_closeWindowButton,
+#TB_prev a,
+#TB_next a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 1px solid #dcdcde;
+  background: #ffffff;
+  color: #1d2327;
+  border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#TB_closeWindowButton:hover,
+#TB_prev a:hover,
+#TB_next a:hover {
+  background: #f0f0f1;
+}
+
+#TB_closeWindowButton:focus-visible,
+#TB_prev a:focus-visible,
+#TB_next a:focus-visible {
+  box-shadow: 0 0 0 2px #2271b1, 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Fechar: canto superior-direito do gutter (FORA da imagem). */
+#TB_closeWindow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  float: none;
+  height: 0;
+  padding: 0;
+  z-index: 6;
+}
+
+#TB_closeWindowButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  z-index: 2;
+}
+
+#TB_closeWindowButton:hover { transform: scale(1.06); }
+#TB_closeWindowButton:active { transform: scale(0.95); }
+
+#TB_closeWindowButton .tb-close-icon {
+  position: static;
+  top: auto;
+  right: auto;
+  width: auto;
+  height: auto;
+  line-height: 1;
+  color: #1d2327;
+  /* Centraliza o ícone dentro do botão (Flexbox), sem depender de inline styles. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#TB_closeWindowButton .tb-close-icon:before {
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Setas: círculos nas laterais do gutter, alinhadas ao CENTRO da imagem. */
+#TB_prev a,
+#TB_next a {
+  position: absolute;
+  top: var(--lkn-img-center, 50%);
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  text-decoration: none;
+  z-index: 4;
+  /* Esconde o texto "« Anterior/Próximo »" do core: sem isso, ele ocupa espaço
+     ao lado do chevron e desalinha/estoura o círculo. O chevron é o ::before. */
+  font-size: 0 !important;
+  line-height: 0 !important;
+  color: transparent !important;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Centralizadas no gutter (offset 12 / botão 44 → precisa gutter ≥ 60). */
+#TB_prev a { left: 12px; }
+#TB_next a { right: 12px; }
+
+/* Ícone (SVG) centralizado no círculo. Um ícone de verdade fica mais nítido e
+   alinhado do que desenhar o chevron com bordas. */
+#TB_prev a:before,
+#TB_next a:before {
+  content: "";
+  display: block;
+  width: 14px;
+  height: 14px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 14px 14px;
+}
+
+#TB_prev a:before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d2327' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E");
+}
+
+#TB_next a:before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d2327' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E");
+}
+
+#TB_prev a:hover { transform: translateY(-50%) scale(1.06); }
+#TB_next a:hover { transform: translateY(-50%) scale(1.06); }
+#TB_prev a:active { transform: translateY(-50%) scale(0.95); }
+#TB_next a:active { transform: translateY(-50%) scale(0.95); }

@@ -115,7 +115,9 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             return false;
         }
 
-        if (empty($_POST['rede_debit_holder_name'])) {
+        // Recurso PRO: com o campo do titular desabilitado não exige o nome aqui
+        // (o nome é obtido do pedido em process_payment).
+        if (! $this->isCardholderNameDisabled() && empty($_POST['rede_debit_holder_name'])) {
             wc_add_notice(esc_attr__('Cardholder name is a required field', 'woo-rede'), 'error');
 
             return false;
@@ -226,7 +228,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         }
         
         /* translators: %s: return message from payment processor */
-        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::translate($return_code, $return_message));
+        $status_note = sprintf('Rede[%s]', LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $return_code, $return_message));
         $order->add_order_note('[' . $this->id . '] ' . $status_note . ' ' . $note);
 
         if ($return_code == '00') {
@@ -363,7 +365,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             }
             
             // Salvar metadados em caso de erro da requisição
-            $error_message = 'Request error: ' . $response->get_error_message();
+            $error_message = 'Erro na requisição: ' . $response->get_error_message();
             $translated_error_message = $this->translateRedeErrorMessage(44, $error_message);
             
             if ($order) {
@@ -415,7 +417,8 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         }
 
         if ($response_code !== 200 && $response_code !== 201) {
-            $error_message = 'Transaction error';
+            $abecs_enabled = LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id);
+            $error_message = $abecs_enabled ? __('Transaction error', 'woo-rede') : 'Erro na transação';
             $return_code = $response_data['returnCode'] ?? 500;
 
             if (isset($response_data['returnMessage'])) {
@@ -459,7 +462,8 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
 
         // Se não há 3DS requerido, verificar se a transação foi aprovada
         if (!isset($response_data['threeDSecure']) && (!isset($response_data['returnCode']) || $response_data['returnCode'] !== '00')) {
-            $error_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : 'Transaction declined';
+            $abecs_enabled = LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id);
+            $error_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : ($abecs_enabled ? __('Transaction declined', 'woo-rede') : 'Transação recusada');
             $return_code = $response_data['returnCode'] ?? 33;
             
             // Traduzir mensagem de erro se disponível
@@ -831,7 +835,11 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'convert_to_brl' => 'no',
                 'auto_capture' => 'yes',
                 '3ds_template_style' => 'basic',
-                'payment_complete_status' => 'processing'
+                'payment_complete_status' => 'processing',
+                'abecs_norms' => 'no',
+                'hide_card_type_selector' => 'no',
+                'show_card_brand_icons' => 'yes',
+                'hide_rede_logo' => 'no'
             );
 
             // Forçar campos PRO básicos para valores padrão
@@ -1028,7 +1036,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 ),
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__('Choose the status that approved payments should have. "Processing" is recommended for most cases.', 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array())
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array())
             ),
 
             'enabled_fix_load_script' => array(
@@ -1048,21 +1056,75 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'type' => 'title',
             ),
 
+            'show_card_animation' => array(
+                'title'       => esc_attr__('Show animated card', 'woo-rede'),
+                'type'        => 'checkbox',
+                'label'       => esc_attr__('Show animated card during checkout', 'woo-rede'),
+                'description' => esc_attr__('Displays a card with visual animations during the order payment checkout.', 'woo-rede'),
+                'desc_tip'    => esc_attr__('Enable to improve the visual experience at checkout.', 'woo-rede'),
+                'default'     => 'yes',
+                'custom_attributes' => array(
+                    'data-title-description' => esc_attr__('Displays a card with visual animations during the order payment checkout.', 'woo-rede'),
+                ),
+            ),
+
+            'show_card_brand_icons' => array(
+                'title'       => esc_attr__('Show card brand icons', 'woo-rede'),
+                'type'        => 'checkbox',
+                'label'       => esc_attr__('Enable display of card brand icons', 'woo-rede'),
+                'description' => esc_attr__('Show or hide card brand icons on the checkout page.', 'woo-rede'),
+                'desc_tip'    => esc_attr__('Enable to display card brand icons on the checkout page.', 'woo-rede'),
+                'default'     => 'yes',
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Allows you to show or hide card brand icons on the checkout.', 'woo-rede')),
+                    !$isProValid ? array('lkn-pro-badge' => 'true') : array()
+                ),
+            ),
+
+            'hide_rede_logo' => array(
+                'title'       => esc_attr__('Hide Rede logo', 'woo-rede'),
+                'type'        => 'checkbox',
+                'label'       => esc_attr__('Hide the Rede logo shown with the description', 'woo-rede'),
+                'description' => esc_attr__('Hides the Rede logo displayed next to the payment method description on the checkout.', 'woo-rede'),
+                'desc_tip'    => esc_attr__('By default the Rede logo is shown with the description. Enable to hide it.', 'woo-rede'),
+                'default'     => 'no',
+                'custom_attributes' => array_merge(
+                    array('data-title-description' => esc_attr__('Hides the Rede logo displayed next to the payment method description on the checkout.', 'woo-rede')),
+                    !$isProValid ? array('lkn-pro-badge' => 'true') : array()
+                ),
+            ),
+
             'card_type_restriction' => array(
                 'title' => esc_attr__('Card Type Restriction', 'woo-rede'),
                 'type' => 'select',
                 'class' => 'wc-enhanced-select',
                 'description' => esc_attr__('Choose which card types are accepted for payment. This setting controls whether customers can use credit cards, debit cards, or both.', 'woo-rede'),
                 'desc_tip' => esc_attr__('Select the card types that will be accepted during payment processing. This helps control the payment flow based on your business needs.', 'woo-rede'),
-                'default' => 'debit_only',
+                'default' => $isProValid ? 'debit_only' : 'both',
                 'options' => array(
                     'debit_only' => esc_attr__('Debit Cards Only', 'woo-rede'),
                     'credit_only' => esc_attr__('Credit Cards Only', 'woo-rede'),
                     'both' => esc_attr__('Both Credit and Debit Cards', 'woo-rede'),
                 ),
-                'custom_attributes' => array(
-                    'data-title-description' => esc_attr__('Control which card types customers can use for payment. Choose "Debit Only" for the current debit gateway configuration.', 'woo-rede')
+                'custom_attributes' => array_merge(
+                    array(
+                        'data-title-description' => esc_attr__('Control which card types customers can use for payment. Choose "Debit Only" for the current debit gateway configuration.', 'woo-rede')
+                    ),
+                    !$isProValid ? array('lkn-pro-badge' => 'true') : array()
                 )
+            ),
+
+            'hide_card_type_selector' => array(
+                'title' => esc_attr__('Hide Card Type Selector', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => esc_attr__('Do not show the card type selector on the checkout', 'woo-rede'),
+                'description' => esc_attr__('When enabled, the card type selector is hidden on the checkout. Available only when a single card type is accepted ("Debit Cards Only" or "Credit Cards Only").', 'woo-rede'),
+                'desc_tip' => esc_attr__('Hide the card type selector from customers on the checkout page. It is only available when only debit or only credit cards are accepted.', 'woo-rede'),
+                'default' => 'no',
+                'custom_attributes' => array_merge(array(
+                    'data-title-description' => esc_attr__('Hide the card type selector on the checkout. Available only when only debit or only credit cards are accepted.', 'woo-rede'),
+                    'merge-top' => "woocommerce_{$this->id}_card_type_restriction",
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
             ),
 
             'auto_capture' => array(
@@ -1074,7 +1136,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'default' => 'yes',
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__("Automatically captures the payment once authorized by Rede.", 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
             ),
 
             '3ds_fallback_behavior' => array(
@@ -1102,11 +1164,33 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'default' => 'basic',
                 'options' => array(
                     'basic' => esc_attr__('Basic Template', 'woo-rede'),
-                    'modern' => esc_attr__('Modern Template (PRO)', 'woo-rede'),
+                    // O sufixo "(PRO)" só faz sentido sem licença ativa; com PRO
+                    // ativo o recurso está liberado e o rótulo fica redundante.
+                    'modern' => $isProValid
+                        ? esc_attr__('Modern Template', 'woo-rede')
+                        : esc_attr__('Modern Template (PRO)', 'woo-rede'),
+                    'compact' => $isProValid
+                        ? esc_attr__('Compact Template', 'woo-rede')
+                        : esc_attr__('Compact Template (PRO)', 'woo-rede'),
                 ),
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__('Choose between basic and modern 3DS authentication templates. Modern template provides enhanced visual design and better user experience during payment authentication.', 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array())
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array())
+            ),
+
+            'abecs_norms' => array(
+                'title' => esc_attr__('ABECS standard messages', 'woo-rede'),
+                'type' => 'checkbox',
+                'label' => __('Enable ABECS-standard return messages', 'woo-rede'),
+                'default' => LknIntegrationRedeForWoocommerceHelper::isAbecsEnabled($this->id) ? 'yes' : 'no',
+                'desc_tip' => esc_attr__('Use the official e.Rede (ABECS) return messages instead of the default messages.', 'woo-rede'),
+                'description' => esc_attr__('Default: enabled when the PRO license is active.', 'woo-rede'),
+                'custom_attributes' => array_merge(
+                    array(
+                        'data-title-description' => esc_attr__('Use the official e.Rede (ABECS) return messages. Disable to keep the previous default messages.', 'woo-rede')
+                    ),
+                    !$isProValid ? array('lkn-pro-badge' => 'true') : array()
+                ),
             ),
 
             'installment' => array(
@@ -1162,14 +1246,14 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'description' => esc_attr__('Allows the user to select discount or interest on credit card installments.', 'woo-rede'),
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__("Defines whether the installment will apply interest or offer a discount. Save to load more settings.", 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
             ),
             'interest_show_percent' => array(
                 'title' => __('Display interest percentage', 'woo-rede'),
                 'label' => __('Display interest percentage.', 'woo-rede'),
                 'type' => 'checkbox',
                 'description' => __('By enabling this feature, the percentage applied to each installment will be displayed to the customer during checkout.', 'woo-rede'),
-                'custom_attributes' => !$isProValid ? array('lkn-is-pro' => 'true') : array(),
+                'custom_attributes' => !$isProValid ? array('lkn-pro-badge' => 'true') : array(),
                 'default' => 'yes'
             ),
             'installment_interest' => array(
@@ -1181,7 +1265,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'description' => esc_attr__('Allows payment with interest in installments. Save to continue configuration.', 'woo-rede'),
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__("Applies an interest rate to each installment. Use this if you want to charge extra per installment.", 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
             ),
             'installment_discount' => array(
                 'title' => __('Discount on installments', 'woo-rede'),
@@ -1190,7 +1274,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'description' => esc_attr__('Enables payment with discount on installments.', 'woo-rede'),
                 'custom_attributes' => array_merge(array(
                     'data-title-description' => esc_attr__("Applies a discount per installment when selected. Useful to encourage multi-payment options.", 'woo-rede')
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
                 'default' => 'no',
             )
         ));
@@ -1206,7 +1290,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'max' => '100',
                 'merge-top' => "woocommerce_{$this->id}_installment_interest",
                 'data-title-description' => esc_attr__('Minimum interest percentage that will be applied regardless of installment number.', 'woo-rede')
-            ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+            ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
             'description' => __('Minimum interest percentage that will be applied regardless of installment number.', 'woo-rede'),
         );
 
@@ -1227,7 +1311,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                     'merge-top' => "woocommerce_{$this->id}_installment_interest",
                     // translators: %d is the number of installments
                     'data-title-description' => sprintf(esc_attr__('Interest applied when customer selects to pay in %dx. Leave 0 for no interest.', 'woo-rede'), $i)
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
                 'description' => __('This option defines the interest on the installment as a percentage. Only accepts numbers. For example, for 10% interest, enter 10. Leave it blank or enter zero for an installment without an interest rate.', 'woo-rede'),
             );
 
@@ -1244,7 +1328,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                     'merge-top' => "woocommerce_{$this->id}_installment_discount",
                     // translators: %d is the number of installments
                     'data-title-description' => sprintf(esc_attr__('Discount applied when customer selects to pay in %dx. Leave 0 for no discount.', 'woo-rede'), $i)
-                ), !$isProValid ? array('lkn-is-pro' => 'true') : array()),
+                ), !$isProValid ? array('lkn-pro-badge' => 'true') : array()),
                 'description' => __('This option defines the discount on the installment as a percentage. Only accepts numbers. For example, for 10% discount, enter 10. Leave it blank or enter zero for an installment without a discount rate.', 'woo-rede'),
             );
         }
@@ -1288,6 +1372,23 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             );
         }
 
+        // Suporte WhatsApp: funcional só no PRO; no plano gratuito fica cinza (badge PRO).
+        $this->form_fields['send_configs'] = array(
+            'title' => __('WhatsApp Support', 'woo-rede'),
+            'type'  => 'button',
+            'id'    => 'sendConfigs',
+            'description' => __('Enable Debug Mode and click Save Changes to get quick support via WhatsApp.', 'woo-rede'),
+            'desc_tip' => '',
+            'disabled' => ! $isProValid,
+            'custom_attributes' => array_merge(
+                array(
+                    'merge-top' => "woocommerce_{$this->id}_debug",
+                    'data-title-description' => __('Send the settings for this payment method to WordPress Support.', 'woo-rede')
+                ),
+                ! $isProValid ? array('lkn-pro-badge' => 'true') : array()
+            )
+        );
+
         $this->form_fields['transactions'] = array(
             'title' => esc_attr__('Transactions', 'woo-rede'),
             'id' => 'transactions_title',
@@ -1296,9 +1397,252 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
 
         $customConfigs = apply_filters('integration_rede_for_woocommerce_get_custom_configs', $this->form_fields, array(), $this->id);
 
-        if (! empty($customConfigs)) {
-            $this->form_fields = array_merge($this->form_fields, $customConfigs);
+        // Seção "Fields": personalização de label/placeholder por layout (PRO).
+        $this->form_fields = array_merge($this->form_fields, $this->lknRedeGetFieldsCustomizationFields());
+
+        if (LknIntegrationRedeForWoocommerceHelper::isProLicenseValid()) {
+            if (! empty($customConfigs)) {
+                $this->form_fields = array_merge($this->form_fields, $customConfigs);
+            }
+        } else {
+            // Licença PRO inativa: replica os campos PRO como fakes interativos (selo PRO).
+            $this->form_fields = array_merge($this->form_fields, LknIntegrationRedeForWoocommerceHelper::lknRedeGetFakeProFields($this->id, $customConfigs, array_keys($this->form_fields)));
         }
+
+        // Editor "Fields": o seletor de Layout (3ds_template_style, real) passa a
+        // viver aqui, logo após o select "Checkout", e o antigo select "Template"
+        // (que só servia ao preview) é removido — evita duplicar a escolha de layout.
+        $this->move_layout_field_to_fields_section();
+    }
+
+    /**
+     * Move os campos da seção "Fields" (select "Checkout" + Layout real
+     * 3ds_template_style) para logo após o título Fields e remove o select
+     * "Template" (fields_preview_template), que era redundante.
+     *
+     * Também move, para LOGO ABAIXO do preview, as configurações que afetam o
+     * formulário (tipo de cartão, ocultar seletor de tipo e campo do titular).
+     * São os MESMOS campos/opções de sempre (mudam de lugar, não de lógica).
+     */
+    private function move_layout_field_to_fields_section(): void
+    {
+        $fields = $this->form_fields;
+
+        if (! isset($fields['fields_section'])) {
+            return;
+        }
+
+        // Campos que vivem dentro da seção Fields, nesta ordem, logo após o título.
+        $section_fields = array();
+        foreach (array('checkout_type', '3ds_template_style') as $candidate) {
+            if (isset($fields[$candidate])) {
+                $section_fields[] = $candidate;
+            }
+        }
+
+        // Configurações que afetam o formulário: exibidas ABAIXO do preview.
+        $below_preview_fields = array();
+        foreach (array('card_type_restriction', 'hide_card_type_selector', 'show_cardholder_name', 'show_cardholder_name_fake') as $candidate) {
+            if (isset($fields[$candidate])) {
+                $below_preview_fields[] = $candidate;
+            }
+        }
+
+        if (empty($section_fields) && empty($below_preview_fields)) {
+            return;
+        }
+
+        $reordered = array();
+        foreach ($fields as $key => $value) {
+            if ('fields_preview_template' === $key
+                || in_array($key, $section_fields, true)
+                || in_array($key, $below_preview_fields, true)) {
+                continue; // remove o Template; os campos são reinseridos nas posições-alvo
+            }
+            $reordered[$key] = $value;
+            if ('fields_section' === $key) {
+                foreach ($section_fields as $sf) {
+                    $reordered[$sf] = $fields[$sf];
+                }
+            }
+            if ('fields_preview' === $key) {
+                foreach ($below_preview_fields as $sf) {
+                    $reordered[$sf] = $fields[$sf];
+                }
+            }
+        }
+
+        $this->form_fields = $reordered;
+    }
+
+    /**
+     * Seção "Fields": editor visual (preview + lápis) para personalizar
+     * label/placeholder de cada campo de cartão, por layout (Basic/Modern/Compact)
+     * e por tipo de checkout (Blocks/Classic). Recurso PRO — sem licença aparece
+     * como demonstração e não é persistido (ver enforceProFieldDefaults()).
+     *
+     * Os valores são persistidos pelos campos ocultos field_label_* /
+     * field_placeholder_* (mesmo fluxo de salvamento do WooCommerce).
+     *
+     * @return array
+     */
+    private function lknRedeGetFieldsCustomizationFields(): array
+    {
+        $fields = array();
+        $templates = LknIntegrationRedeForWoocommerceHelper::getCheckoutFieldTemplates();
+        $defs = LknIntegrationRedeForWoocommerceHelper::getCheckoutFieldDefinitions();
+        $modes = array('blocks', 'classic');
+
+        $is_pro = LknIntegrationRedeForWoocommerceHelper::isProLicenseValid();
+        $badge = $is_pro ? array() : array('lkn-pro-badge' => 'true');
+
+        $fields['fields_section'] = array(
+            'title' => __('Fields', 'woo-rede'),
+            'type'  => 'title',
+        );
+
+        // Tipo de checkout (Blocos/Gutenberg x Shortcode/Clássico). Define qual
+        // preview é exibido para personalizar label/placeholder. O default vem da
+        // página de checkout padrão do WooCommerce (has_blocks). Não força o
+        // frontend: cada checkout lê os overrides do seu próprio modo.
+        $fields['checkout_type'] = array(
+            'title'       => __('Checkout', 'woo-rede'),
+            'type'        => 'select',
+            'class'       => 'wc-enhanced-select',
+            'default'     => LknIntegrationRedeForWoocommerceHelper::getDefaultCheckoutMode(),
+            'description' => __('Choose which checkout is previewed below so you can edit its labels/placeholders.', 'woo-rede'),
+            'desc_tip'    => __('Detected automatically from the WordPress checkout page. Block (Gutenberg) uses floating labels; the classic shortcode shows the label above the input, which allows setting a placeholder.', 'woo-rede'),
+            'options'     => array(
+                'blocks'  => __('Block (Gutenberg)', 'woo-rede'),
+                'classic' => __('Shortcode/Classic', 'woo-rede'),
+            ),
+            // Título-descrição (frase curta sob o título) + selo "PRO" (quando free).
+            // Diferente da 'description' (explicação exibida abaixo do select).
+            'custom_attributes' => array_merge(
+                array('data-title-description' => __('Select which checkout the preview uses.', 'woo-rede')),
+                $badge
+            ),
+        );
+
+        // (O select "Template" foi removido: o layout é escolhido pelo campo de
+        // Layout real, movido para cá em move_layout_field_to_fields_section().)
+
+        // Editor visual (preview dos formulários + lápis de edição).
+        $fields['fields_preview'] = array(
+            'title'       => __('Preview', 'woo-rede'),
+            'type'        => 'lkn_fields_preview',
+            'description' => __('Below is the result: the checkout form rendered with the selected checkout and template.', 'woo-rede'),
+            'desc_tip'    => __('Click the pencil next to a label or placeholder to edit it, then use "Save changes" to apply.', 'woo-rede'),
+            // Recurso PRO: exibe o selo "PRO" no título.
+            'custom_attributes' => $badge,
+        );
+
+        foreach ($modes as $mode) {
+            foreach ($templates as $template => $template_label) {
+                foreach ($defs as $field_key => $def) {
+                    $fields['field_label_' . $mode . '_' . $template . '_' . $field_key] = array(
+                        'type'    => 'lkn_fields_hidden',
+                        'default' => $def['label'],
+                        'custom_attributes' => array(
+                            'data-lkn-field'    => $field_key,
+                            'data-lkn-kind'     => 'label',
+                            'data-lkn-mode'     => $mode,
+                            'data-lkn-template' => $template,
+                        ),
+                    );
+
+                    // Placeholder existe em todos os templates do clássico e, nos
+                    // blocos, apenas no compacto.
+                    if (LknIntegrationRedeForWoocommerceHelper::checkoutModeHasPlaceholder($mode, $template) && '' !== (string) $def['placeholder']) {
+                        $fields['field_placeholder_' . $mode . '_' . $template . '_' . $field_key] = array(
+                            'type'    => 'lkn_fields_hidden',
+                            'default' => $def['placeholder'],
+                            'custom_attributes' => array(
+                                'data-lkn-field'    => $field_key,
+                                'data-lkn-kind'     => 'placeholder',
+                                'data-lkn-mode'     => $mode,
+                                'data-lkn-template' => $template,
+                            ),
+                        );
+                    }
+                }
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Campo oculto que persiste um override de label/placeholder (seção Fields).
+     *
+     * Mantém o mesmo nome/chave dos campos anteriores (field_label_* /
+     * field_placeholder_*) para que o salvamento via WooCommerce continue idêntico.
+     *
+     * @param string $key
+     * @param array  $data
+     * @return string
+     */
+    public function generate_lkn_fields_hidden_html($key, $data)
+    {
+        $field_key = $this->get_field_key($key);
+        $defaults  = array('default' => '', 'custom_attributes' => array());
+        $data      = wp_parse_args($data, $defaults);
+        $value     = $this->get_option($key, $data['default']);
+
+        ob_start();
+        ?>
+        <tr valign="top" class="lkn-fields-hidden-row" style="display:none;">
+            <td colspan="2">
+                <input type="hidden"
+                    name="<?php echo esc_attr($field_key); ?>"
+                    id="<?php echo esc_attr($field_key); ?>"
+                    value="<?php echo esc_attr($value); ?>"
+                    <?php echo $this->get_custom_attribute_html($data); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+            </td>
+        </tr>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Editor visual da seção Fields: renderiza o preview dos formulários do
+     * checkout (Blocks/Classic) para cada template.
+     *
+     * @param string $key
+     * @param array  $data
+     * @return string
+     */
+    public function generate_lkn_fields_preview_html($key, $data)
+    {
+        $field_key = $this->get_field_key($key);
+        $gateway_id = $this->id;
+        $defaults = array(
+            'title'       => '',
+            'desc_tip'    => false,
+            'description' => '',
+            'custom_attributes' => array(),
+        );
+        $data = wp_parse_args($data, $defaults);
+
+        ob_start();
+        ?>
+        <tr valign="top" class="lkn-fields-preview-row">
+            <th scope="row" class="titledesc">
+                <label for="<?php echo esc_attr($field_key); ?>"><?php echo esc_html($data['title']); ?> <?php echo $this->get_tooltip_html($data); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></label>
+            </th>
+            <td class="forminp">
+                <fieldset>
+                    <legend class="screen-reader-text"><span><?php echo esc_html($data['title']); ?></span></legend>
+                    <input type="text" class="lkn-fields-preview-input" name="<?php echo esc_attr($field_key); ?>" id="<?php echo esc_attr($field_key); ?>" style="display:none;" data-title-description="<?php echo esc_attr($data['description']); ?>" <?php echo $this->get_custom_attribute_html($data); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
+                    <div class="lkn-fields-editor" data-gateway="<?php echo esc_attr($gateway_id); ?>">
+                        <?php include plugin_dir_path(__FILE__) . 'templates/admin/lkn-rede-fields-preview.php'; ?>
+                    </div>
+                    <?php echo $this->get_description_html($data); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                </fieldset>
+            </td>
+        </tr>
+        <?php
+        return ob_get_clean();
     }
 
     public function checkoutScripts(): void
@@ -1318,27 +1662,91 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
 
         wp_enqueue_style('wc-rede-checkout-webservice');
 
-        wp_enqueue_style('card-style', $plugin_url . 'Public/css/card.css', array(), '1.0.0', 'all');
-        wp_enqueue_style('select-style', $plugin_url . 'Public/css/lknIntegrationRedeForWoocommerceSelectStyle.css', array(), '1.0.0', 'all');
+        // Versão por filemtime: garante que alterações no CSS carreguem sem hard
+        // refresh (a versão fixa anterior deixava o browser em cache).
+        $rede_css_dir = plugin_dir_path(LknIntegrationRedeForWoocommerceWcRede::FILE) . '../Public/css/';
+        $rede_css_ver = function ($rel) use ($rede_css_dir) {
+            $path = $rede_css_dir . $rel;
+            return '1.0.0.' . (file_exists($path) ? filemtime($path) : '0');
+        };
+
+        // CSS do cartão animado só é necessário quando a animação está ligada.
+        $lkn_show_card_animation = ('yes' === $this->get_option('show_card_animation', 'yes'));
+        if ($lkn_show_card_animation) {
+            wp_enqueue_style('card-style', $plugin_url . 'Public/css/card.css', array(), $rede_css_ver('card.css'), 'all');
+        }
+        wp_enqueue_style('select-style', $plugin_url . 'Public/css/lknIntegrationRedeForWoocommerceSelectStyle.css', array(), $rede_css_ver('lknIntegrationRedeForWoocommerceSelectStyle.css'), 'all');
 
         // Enfileira CSS específico para débito apenas se não estiver enfileirado
         if (!wp_style_is('rede-debit-style', 'enqueued')) {
-            wp_enqueue_style('rede-debit-style', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceCardShortcode.css', array(), '1.0.0', 'all');
+            wp_enqueue_style('rede-debit-style', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceCardShortcode.css', array(), $rede_css_ver('rede/LknIntegrationRedeForWoocommerceCardShortcode.css'), 'all');
         }
 
-        // Enfileira CSS do template moderno apenas se PRO estiver ativo e template configurado como modern
-        if (LknIntegrationRedeForWoocommerceHelper::isProLicenseValid() && $this->get_option('3ds_template_style') === 'modern') {
-            wp_enqueue_style('lknwoo-modern-template', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceModernTemplate.css', array(), '1.0.0', 'all');
+        // Enfileira CSS do template moderno/compacto apenas se o estilo efetivo for
+        // "modern"/"compact" (recurso PRO — sem licença ativa get3dsTemplateStyle()
+        // força "basic").
+        $lkn_template_style = LknIntegrationRedeForWoocommerceHelper::get3dsTemplateStyle($this->id);
+        if ('modern' === $lkn_template_style) {
+            wp_enqueue_style('lknwoo-modern-template', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceModernTemplate.css', array(), $rede_css_ver('rede/LknIntegrationRedeForWoocommerceModernTemplate.css'), 'all');
+        } elseif ('compact' === $lkn_template_style) {
+            wp_enqueue_style('lknwoo-compact-template', $plugin_url . 'Public/css/rede/LknIntegrationRedeForWoocommerceCompactTemplate.css', array(), $rede_css_ver('rede/LknIntegrationRedeForWoocommerceCompactTemplate.css'), 'all');
+            // JS do compacto clássico compilado pelo webpack (npm run build):
+            // bandeiras do CAMPO de número + ícones de validade/código.
+            $compact_js_rel  = 'Public/js/debitCard/rede/wooRedeDebitCompactCompiled.js';
+            $compact_js_path = plugin_dir_path(LknIntegrationRedeForWoocommerceWcRede::FILE) . '../' . $compact_js_rel;
+            $compact_js_ver  = '1.0.0' . '.' . (file_exists($compact_js_path) ? filemtime($compact_js_path) : '0');
+            wp_enqueue_script('wooRedeDebit-compact-js', $plugin_url . $compact_js_rel, array('jquery'), $compact_js_ver, true);
+            wp_localize_script('wooRedeDebit-compact-js', 'redeDebitCompact', array(
+                'ajaxurl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('redeCardNonce'),
+                'assets' => array(
+                    'visa' => $plugin_url . 'Includes/assets/cardTemplate/visa-icon.svg',
+                    'mastercard' => $plugin_url . 'Includes/assets/cardTemplate/mastercard-icon.svg',
+                    'elo' => $plugin_url . 'Includes/assets/cardTemplate/elo-icon.svg',
+                    'calendar' => $plugin_url . 'Includes/assets/cardTemplate/calendar.svg',
+                    'key' => $plugin_url . 'Includes/assets/cardTemplate/key.svg',
+                ),
+            ));
+        }
+
+        // Faixa de bandeiras no TOPO do formulário (todos os layouts clássicos):
+        // realça a bandeira conforme o BIN digitado. A faixa existe quando a opção
+        // "Show card brand icons" está ligada (renderizada no PHP). NÃO cuida das
+        // bandeiras do CAMPO do compacto (essas são do wooRedeDebitCompact).
+        $brands_js_rel  = 'Public/js/debitCard/rede/wooRedeDebitBrands.js';
+        $brands_js_path = plugin_dir_path(LknIntegrationRedeForWoocommerceWcRede::FILE) . '../' . $brands_js_rel;
+        $brands_js_ver  = '1.0.0' . '.' . (file_exists($brands_js_path) ? filemtime($brands_js_path) : '0');
+        wp_enqueue_script('wooRedeDebit-brands-js', $plugin_url . $brands_js_rel, array('jquery'), $brands_js_ver, true);
+        wp_localize_script('wooRedeDebit-brands-js', 'redeDebitBrands', array(
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('redeCardNonce'),
+        ));
+
+        // Botão de finalizar custom (#rede-debit-submit-btn) — recurso PRO. Aparece
+        // nos layouts moderno/compacto e também no padrão (quando PRO). É ligado ao
+        // botão nativo do WooCommerce (#place_order) por este script compartilhado.
+        if (LknIntegrationRedeForWoocommerceHelper::isProLicenseValid()) {
+            $submit_js_rel  = 'Public/js/debitCard/rede/wooRedeDebitClassicSubmit.js';
+            $submit_js_path = plugin_dir_path(LknIntegrationRedeForWoocommerceWcRede::FILE) . '../' . $submit_js_rel;
+            $submit_js_ver  = '1.0.0' . '.' . (file_exists($submit_js_path) ? filemtime($submit_js_path) : '0');
+            wp_enqueue_script('wooRedeDebit-classic-submit-js', $plugin_url . $submit_js_rel, array('jquery'), $submit_js_ver, true);
         }
 
         
         wp_enqueue_script('wooRedeDebit-js', $plugin_url . 'Public/js/debitCard/rede/wooRedeDebit.js', array(), '1.0.0', true);
-        wp_enqueue_script('woo-rede-animated-card-jquery', $plugin_url . 'Public/js/jquery.card.js', array('jquery', 'wooRedeDebit-js'), '2.5.0', true);
+        // Padronização dos campos de cartão (número/validade/CVC): máscara,
+        // filtro de dígitos, inputmode numérico e normalização da validade.
+        wp_enqueue_script('rede-card-fields', $plugin_url . 'Public/js/rede-card-fields.js', array(), '1.0.0', true);
+        // O cartão animado (jquery.card.js) só é carregado quando habilitado.
+        if ($lkn_show_card_animation) {
+            wp_enqueue_script('woo-rede-animated-card-jquery', $plugin_url . 'Public/js/jquery.card.js', array('jquery', 'wooRedeDebit-js'), '2.5.0', true);
+        }
 
         wp_localize_script('wooRedeDebit-js', 'wooRedeDebit', array(
             'debug' => defined('WP_DEBUG') && WP_DEBUG,
             'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('rede_debit_payment_fields_nonce'),
+            'showCard' => $lkn_show_card_animation ? 'yes' : 'no',
         ));
 
         apply_filters('integration_rede_for_woocommerce_set_custom_css', get_option('woocommerce_rede_debit_settings')['custom_css_short_code'] ?? false);
@@ -1381,8 +1789,30 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             );
         }
 
-        // Captura o tipo de cartão selecionado
-        $card_type = isset($_POST['rede_debit_card_type']) ? sanitize_text_field(wp_unslash($_POST['rede_debit_card_type'])) : 'debit';
+        // Tipo de cartão. Anti-manipulação: recusa (exceção) valores fora de
+        // credit/debit ou divergentes da restrição de um único tipo — evita gerar
+        // uma transação de crédito/débito indevida a partir de POST adulterado.
+        $card_type_restriction = LknIntegrationRedeForWoocommerceHelper::getCardTypeRestriction($this->id);
+        $required_card_type = null;
+        if ($card_type_restriction === 'credit_only') {
+            $required_card_type = 'credit';
+        } elseif ($card_type_restriction === 'debit_only') {
+            $required_card_type = 'debit';
+        }
+
+        $posted_card_type = isset($_POST['rede_debit_card_type']) ? strtolower(sanitize_text_field(wp_unslash($_POST['rede_debit_card_type']))) : '';
+        if ('' !== $posted_card_type) {
+            if (!in_array($posted_card_type, array('credit', 'debit'), true)) {
+                throw new Exception(esc_html__('Invalid card type.', 'woo-rede'));
+            }
+            if (null !== $required_card_type && $posted_card_type !== $required_card_type) {
+                throw new Exception(esc_html__('The selected card type is not accepted by this gateway.', 'woo-rede'));
+            }
+            $card_type = $posted_card_type;
+        } else {
+            // Sem valor enviado (ex.: seletor oculto): usa o tipo exigido pela restrição.
+            $card_type = (null !== $required_card_type) ? $required_card_type : 'debit';
+        }
         
         // Captura o número de parcelas (apenas para crédito)
         $installments = 1;
@@ -1399,6 +1829,16 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             'card_holder' => isset($_POST['rede_debit_holder_name']) ? sanitize_text_field(wp_unslash($_POST['rede_debit_holder_name'])) : '',
             'card_type' => $card_type,
             'installments' => $installments,
+        );
+
+        // Recurso PRO: quando o campo do titular está desabilitado, o nome é
+        // obtido do pedido (filtro registrado pelo plugin PRO), garantindo o
+        // titular correto mesmo sem o campo no checkout.
+        $cardData['card_holder'] = apply_filters(
+            'integration_rede_for_woocommerce_get_cardholder_name',
+            $cardData['card_holder'],
+            $this,
+            $order
         );
 
         try {
@@ -1598,11 +2038,66 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
     }
 
     /**
-     * Traduz mensagens de erro da Rede baseado no código de retorno (ABECS/3DS).
+     * Traduz mensagens de erro da Rede baseado no código de retorno.
+     *
+     * Com as normas ABECS habilitadas usa o catálogo oficial e.Rede (inglês).
+     * Com as normas desabilitadas mantém as mensagens padrão da v5.4.10 (pt-BR).
      */
     private function translateRedeErrorMessage($returnCode, $originalMessage)
     {
-        return LknIntegrationRedeForWoocommerceAbecsCodes::translate($returnCode, $originalMessage);
+        if (LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id)) {
+            return LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $returnCode, $originalMessage);
+        }
+
+        $error_translations = array(
+            '200' => 'Autenticação realizada com sucesso',
+            '201' => 'Autenticação não exigida',
+            '202' => 'Portador não autenticado',
+            '203' => 'Serviço não habilitado. Por favor, contate a Rede',
+            '204' => 'Portador não registrado no programa de autenticação da central do cartão',
+            '220' => 'Pedido de transação com autenticação recebida. URL de redirecionamento enviada',
+            '250' => 'Parâmetro obrigatório não está presente',
+            '251' => 'Formato do parâmetro inválido',
+            '252' => 'Parâmetro obrigatório não está presente',
+            '253' => 'Parâmetro enviado com tamanho inválido',
+            '254' => 'Formato do parâmetro inválido',
+            '255' => 'Parâmetro obrigatório não está presente',
+            '256' => 'Parâmetro enviado com tamanho inválido',
+            '257' => 'Formato do parâmetro inválido',
+            '258' => 'Parâmetro obrigatório não está presente',
+            '259' => 'Parâmetro obrigatório não está presente',
+            '260' => 'Parâmetro obrigatório não está presente',
+            '261' => 'Parâmetro obrigatório não está presente',
+            '269' => 'ChallengePreference: Formato do parâmetro inválido',
+            '3000' => 'ColorDepth: Parâmetro obrigatório não está presente',
+            '3001' => 'DeviceType3ds: Parâmetro obrigatório não está presente',
+            '3002' => 'JavaEnabled: Parâmetro obrigatório não está presente',
+            '3003' => 'Language: Parâmetro obrigatório não está presente',
+            '3004' => 'TimeZoneOffset: Parâmetro obrigatório não está presente',
+            '3005' => 'ScreenHeight: Parâmetro obrigatório não está presente',
+            '3006' => 'ScreenWidth: Parâmetro obrigatório não está presente',
+            '3007' => 'ColorDepth: Tamanho do parâmetro inválido',
+            '3008' => 'DeviceType3ds: Tamanho do parâmetro inválido',
+            '3009' => 'Language: Tamanho do parâmetro inválido',
+            '3010' => 'TimeZoneOffset: Tamanho do parâmetro inválido',
+            '3011' => 'ScreenHeight: Tamanho do parâmetro inválido',
+            '3012' => 'ScreenWidth: Formato do parâmetro inválido',
+            '3013' => 'ColorDepth: Formato do parâmetro inválido',
+            '3014' => 'DeviceType3ds: Formato do parâmetro inválido',
+            '3015' => 'JavaEnabled: Formato do parâmetro inválido',
+            '3016' => 'Language: Formato do parâmetro inválido',
+            '3017' => 'TimeZoneOffset: Formato do parâmetro inválido',
+            '3018' => 'ScreenHeight: Formato do parâmetro inválido',
+            '3019' => 'ScreenWidth: Formato do parâmetro inválido'
+        );
+
+        $return_code_str = (string) $returnCode;
+
+        if (isset($error_translations[$return_code_str])) {
+            return $error_translations[$return_code_str];
+        }
+
+        return $originalMessage;
     }
 
     /**
@@ -1790,7 +2285,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
     public function getInstallments($order_total = 0)
     {
         $installments = array();
-        $card_type_restriction = $this->get_option('card_type_restriction', 'debit_only');
+        $card_type_restriction = LknIntegrationRedeForWoocommerceHelper::getCardTypeRestriction($this->id);
         
         // Só gera parcelas se permitir crédito
         if ($card_type_restriction === 'credit_only' || $card_type_restriction === 'both') {
@@ -1851,6 +2346,15 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         return $installments;
     }
 
+    /**
+     * O template de débito (shortcode) já exibe a descrição do gateway no
+     * rodapé; não ecoamos de novo no topo do payment_box (evita duplicação).
+     */
+    protected function shouldEchoDescription(): bool
+    {
+        return false;
+    }
+
     protected function getCheckoutForm($order_total = 0): void
     {
         $wc_get_template = 'woocommerce_get_template';
@@ -1881,13 +2385,31 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             }
         }
 
+        // Seleciona o template do checkout clássico conforme o estilo efetivo.
+        // 'modern'/'compact' são recursos PRO (get3dsTemplateStyle() força 'basic'
+        // sem licença).
+        $lkn_template_style = LknIntegrationRedeForWoocommerceHelper::get3dsTemplateStyle($this->id);
+        if ('compact' === $lkn_template_style) {
+            $lkn_debit_template = 'debitCard/redePaymentDebitCompactForm.php';
+        } elseif ('modern' === $lkn_template_style) {
+            $lkn_debit_template = 'debitCard/redePaymentDebitModernForm.php';
+        } else {
+            $lkn_debit_template = 'debitCard/redePaymentDebitForm.php';
+        }
+
         $wc_get_template(
-            'debitCard/redePaymentDebitForm.php',
+            $lkn_debit_template,
             array(
                 'installments' => $this->getInstallments($order_total),
                 'installments_number' => $installments_number,
-                'card_type_restriction' => $this->get_option('card_type_restriction', 'debit_only'),
+                'card_type_restriction' => LknIntegrationRedeForWoocommerceHelper::getCardTypeRestriction($this->id),
+                'hide_card_type_selector' => LknIntegrationRedeForWoocommerceHelper::isHideCardTypeSelectorEnabled($this->id) ? 'yes' : 'no',
                 'card_type' => $card_type,
+                'show_card_animation' => $this->get_option('show_card_animation', 'yes'),
+                'show_card_brand_icons' => $this->get_option('show_card_brand_icons', 'yes'),
+                'hide_rede_logo' => $this->get_option('hide_rede_logo', 'no'),
+                // Recurso PRO: ocultar o campo do titular no checkout clássico.
+                'show_cardholder_name' => $this->isCardholderNameDisabled() ? 'yes' : 'no',
             ),
             'woocommerce/rede/',
             LknIntegrationRedeForWoocommerceWcRede::getTemplatesPath()

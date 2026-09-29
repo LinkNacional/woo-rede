@@ -1,106 +1,95 @@
 (function ($) {
     'use strict';
 
-    $(document).ready(function() {
-        // Observer para detectar mudanças no DOM
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                mutation.addedNodes.forEach(function(node) {
-                    if (node.nodeType === 1) { // Element node
-                        // Verifica se o campo woocommerce_rede_debit_interest_or_discount foi adicionado
-                        const interestOrDiscountField = $(node).find('#woocommerce_rede_debit_interest_or_discount');
-                        if (interestOrDiscountField.length > 0 || $(node).is('#woocommerce_rede_debit_interest_or_discount')) {
-                            initInstallmentLogic();
-                        }
+    // Dependência de exibição dos campos de parcelamento (juros x desconto + limite),
+    // cobrindo campos reais (PRO ativo) e "fake" (showcase do free).
+    //
+    // Atenção: o layout admin move os campos com `merge-top` para dentro de um
+    // container (`.lkn-rede-container-campos`) e oculta o <tr> original. Por isso,
+    // para os campos mesclados controlamos a visibilidade do próprio <fieldset> —
+    // usar o <tr> acabaria ocultando o bloco-pai inteiro.
+    $(window).on('load', function () {
+        var match = window.location.search.match(/[?&]section=([^&]+)/);
+        var section = match ? decodeURIComponent(match[1]) : '';
+        if (!section) {
+            return;
+        }
+
+        var base = 'woocommerce_' + section + '_';
+        var baseEsc = base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var suffixes = ['', '_fake'];
+
+        var isChecked = function (key) {
+            var $radios = $('input[name="' + key + '-control"]');
+            if ($radios.length) {
+                return $radios.filter(':checked').map(function () { return this.value; }).get().indexOf('1') !== -1;
+            }
+            var el = document.getElementById(key);
+            return !!(el && el.checked);
+        };
+
+        var toggleField = function (el, show) {
+            if (!el) {
+                return;
+            }
+            var $el = $(el);
+            // Campo movido por merge-top: alterna o fieldset (o tr original está oculto
+            // e o tr mais próximo seria o do campo-pai).
+            if ($el.closest('.lkn-rede-container-campos').length) {
+                $el.closest('fieldset').toggle(show);
+            } else {
+                $el.closest('tr').toggle(show);
+            }
+        };
+
+        var apply = function () {
+            suffixes.forEach(function (suffix) {
+                var $sel = $('#' + base + 'interest_or_discount' + suffix);
+                if (!$sel.length) {
+                    return;
+                }
+
+                var mode = $sel.val();
+                var interestChecked = isChecked(base + 'installment_interest' + suffix);
+                var discountChecked = isChecked(base + 'installment_discount' + suffix);
+                var $limit = $('#' + base + 'max_parcels_number' + suffix);
+                var limit = $limit.length ? (parseInt($limit.val(), 10) || 18) : 18;
+
+                toggleField(document.getElementById(base + 'installment_interest' + suffix), mode === 'interest');
+                toggleField(document.getElementById(base + 'installment_discount' + suffix), mode === 'discount');
+
+                var nxRe = new RegExp('^' + baseEsc + '(\\d+)x' + suffix + '$');
+                var nxDiscRe = new RegExp('^' + baseEsc + '(\\d+)x_discount' + suffix + '$');
+
+                document.querySelectorAll('input[id^="' + base + '"]').forEach(function (el) {
+                    var mDisc = el.id.match(nxDiscRe);
+                    var mInt = el.id.match(nxRe);
+                    if (mDisc) {
+                        toggleField(el, parseInt(mDisc[1], 10) <= limit && mode === 'discount' && discountChecked);
+                    } else if (mInt) {
+                        toggleField(el, parseInt(mInt[1], 10) <= limit && mode === 'interest' && interestChecked);
                     }
                 });
             });
+        };
+
+        // O select2 dispara 'change' via jQuery; a delegação cobre o select2 e os rádios.
+        $(document).on('change select2:select select2:unselect', function (e) {
+            var t = e.target;
+            if (!t) {
+                return;
+            }
+            var name = t.name || t.id || '';
+            if (name.indexOf(base + 'interest_or_discount') === 0 ||
+                name.indexOf(base + 'installment_interest') === 0 ||
+                name.indexOf(base + 'installment_discount') === 0 ||
+                name.indexOf(base + 'max_parcels_number') === 0) {
+                apply();
+            }
         });
 
-        // Inicia o observer
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-
-        // Verifica se o campo já existe na página
-        if ($('#woocommerce_rede_debit_interest_or_discount').length > 0) {
-            initInstallmentLogic();
-        }
-
-        function initInstallmentLogic() {
-            const $interestOrDiscountField = $('#woocommerce_rede_debit_interest_or_discount');
-            const $installmentInterestCheckbox = $('#woocommerce_rede_debit_installment_interest');
-            const $installmentDiscountCheckbox = $('#woocommerce_rede_debit_installment_discount');
-
-            // Função para controlar a exibição dos campos de juros
-            function toggleInterestFields() {
-                const isInterestSelected = $interestOrDiscountField.val() === 'interest';
-                const isInterestCheckboxChecked = $installmentInterestCheckbox.is(':checked');
-
-                if (isInterestSelected) {
-                    // Mostra o bloco de interesse e esconde o bloco de desconto
-                    $('#woocommerce_rede_debit_installment_interest').closest('tr').show();
-                    $('#woocommerce_rede_debit_installment_discount').closest('tr').hide();
-
-                    if (isInterestCheckboxChecked) {
-                        // Exibe todos os campos de juros
-                        $('#woocommerce_rede_debit_min_interest').closest('fieldset').show();
-                        
-                        // Exibe todos os campos que seguem o padrão woocommerce_rede_debit_[numero]x
-                        $('[id^="woocommerce_rede_debit_"][id$="x"]:not([id*="_discount"])').closest('fieldset').show();
-                    } else {
-                        // Esconde todos os campos de juros
-                        $('#woocommerce_rede_debit_min_interest').closest('fieldset').hide();
-                        
-                        // Esconde todos os campos que seguem o padrão woocommerce_rede_debit_[numero]x
-                        $('[id^="woocommerce_rede_debit_"][id$="x"]:not([id*="_discount"])').closest('fieldset').hide();
-                    }
-                }
-            }
-
-            // Função para controlar a exibição dos campos de desconto
-            function toggleDiscountFields() {
-                const isDiscountSelected = $interestOrDiscountField.val() === 'discount';
-                const isDiscountCheckboxChecked = $installmentDiscountCheckbox.is(':checked');
-
-                if (isDiscountSelected) {
-                    // Mostra o bloco de desconto e esconde o bloco de interesse
-                    $('#woocommerce_rede_debit_installment_discount').closest('tr').show();
-                    $('#woocommerce_rede_debit_installment_interest').closest('tr').hide();
-
-                    if (isDiscountCheckboxChecked) {
-                        // Exibe todos os campos de desconto que seguem o padrão woocommerce_rede_debit_[numero]x_discount
-                        $('[id^="woocommerce_rede_debit_"][id$="x_discount"]').closest('fieldset').show();
-                    } else {
-                        // Esconde todos os campos de desconto que seguem o padrão woocommerce_rede_debit_[numero]x_discount
-                        $('[id^="woocommerce_rede_debit_"][id$="x_discount"]').closest('fieldset').hide();
-                    }
-                }
-            }
-
-            // Função principal para aplicar toda a lógica
-            function applyInstallmentLogic() {
-                toggleInterestFields();
-                toggleDiscountFields();
-            }
-
-            // Event listeners
-            $interestOrDiscountField.on('change', function() {
-                applyInstallmentLogic();
-            });
-
-            $installmentInterestCheckbox.on('change', function() {
-                toggleInterestFields();
-            });
-
-            $installmentDiscountCheckbox.on('change', function() {
-                toggleDiscountFields();
-            });
-
-            // Aplica a lógica inicial
-            applyInstallmentLogic();
-        }
+        // Reaplica após o layout admin terminar de mover os campos (merge-top).
+        setTimeout(apply, 250);
+        setTimeout(apply, 800);
     });
-
 })(jQuery);

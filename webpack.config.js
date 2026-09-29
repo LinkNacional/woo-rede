@@ -7,7 +7,9 @@ module.exports = {
     debitCardMaxipago: './Public/js/debitCard/maxipago/lknIntegrationMaxipagoForWoocommerceCheckout.js',
     creditCardRede: './Public/js/creditCard/rede/lknIntegrationRedeForWoocommerceCheckout.js',
     debitCardRede: './Public/js/debitCard/rede/lknIntegrationRedeForWoocommerceCheckout.js',
-    lknRedeAnalytics: './Admin/js/analytics/lknRedeAnalytics.tsx'
+    lknRedeAnalytics: './Admin/js/analytics/lknRedeAnalytics.tsx',
+    // JS do layout compacto (checkout clássico/shortcode): bandeiras + ícones.
+    wooRedeDebitCompact: './Public/js/debitCard/rede/wooRedeDebitCompact.js'
   },
   output: {
     filename: (pathData) => {

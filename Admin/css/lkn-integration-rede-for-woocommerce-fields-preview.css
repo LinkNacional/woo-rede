@@ -1,0 +1,543 @@
+/**
+ * Estilos do editor visual da seção "Fields" (preview + lápis) — Rede.
+ *
+ * O preview reaproveita os CSS reais do checkout (enfileirados no admin); este
+ * arquivo cobre o "chrome" do editor (lápis, popover) e uma base para os campos
+ * de Blocks quando o CSS do checkout em blocos não está presente no admin.
+ *
+ * @package Lknwoo\IntegrationRedeForWoocommerce
+ */
+
+.lkn-fields-editor__hint {
+  margin: 0 0 12px;
+  color: #50575e;
+  font-size: 13px;
+}
+
+.lkn-fields-editor__stage {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.lkn-fields-preview {
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  padding: 20px;
+  background: #fff;
+}
+
+.lkn-fields-preview[hidden] {
+  display: none !important;
+}
+
+/* ---- Base dos campos de Blocks (label flutuante) ---- */
+.lkn-fields-editor .wc-block-components-text-input {
+  position: relative;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.lkn-fields-editor .wc-block-components-text-input__input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 50px;
+  padding: 18px 34px 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+}
+
+/* Base das labels dos campos de Blocks (Modern/Compact sobrescrevem com o CSS
+   próprio, enfileirado). */
+.lkn-fields-editor .wc-block-components-text-input label {
+  position: absolute;
+  top: 7px;
+  left: 12px;
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+  font-weight: 500;
+  color: #767676;
+}
+
+/* Blocks Basic: o input do preview está vazio/sem foco, então a label fica no
+   estado DEFAULT (centralizada, tamanho normal). Escopado em
+   .lkn-fields-preview--blocks-standard para não afetar Modern/Compact. */
+.lkn-fields-editor .lkn-fields-preview--blocks-standard #radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input label {
+  position: absolute !important;
+  top: 50% !important;
+  left: 12px !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 16.8px !important;
+  font-weight: 400 !important;
+  color: #767676 !important;
+}
+
+.lkn-fields-editor .required {
+  color: #d63638;
+}
+
+/* ---- Campos classic ---- */
+.lkn-fields-editor .form-row {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.lkn-fields-editor .lkn-input-wrap {
+  position: relative;
+  display: block;
+}
+
+.lkn-fields-editor .lkn-input-wrap input.input-text {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 36px;
+}
+
+.lkn-fields-editor .lkn-preview-svg {
+  width: 16px;
+  height: 16px;
+  color: #158cba;
+}
+
+/* ---- Lápis editável ---- */
+.lkn-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #ffd100;
+  color: #1e1e1e;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+  transition: transform 0.1s ease, background 0.1s ease;
+  /* Fica acima dos ícones/branding dos campos (não fica apagado/atrás). */
+  z-index: 3;
+}
+
+.lkn-edit-btn:hover,
+.lkn-edit-btn:focus {
+  background: #ffc400;
+  transform: scale(1.1);
+  outline: none;
+}
+
+.lkn-edit-btn--ph {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+}
+
+.lkn-edit-btn--ph:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lkn-fields-editor__stage .lkn-edit-text {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
+}
+
+/* Linhas reais de configuração ficam ocultas (persistem os valores). */
+.lkn-fields-hidden-row {
+  display: none !important;
+}
+
+/* Popover de edição. */
+.lkn-edit-popover {
+  position: absolute;
+  z-index: 100000;
+  min-width: 260px;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.lkn-edit-popover__label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #50575e;
+}
+
+.lkn-edit-popover input[type="text"] {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.lkn-edit-popover__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Classic (shortcode): a label fica ACIMA do input, como nos templates reais do
+   shortcode. O CSS real do checkout clássico (enfileirado no admin) aplica isso; o
+   preview NÃO reposiciona a label para dentro do input aqui, para que o campo
+   aceite o placeholder sem concorrência com a label. */
+
+/* Botão "Place order" do preview Basic (Blocks e Classic): replica o componente
+   Button do checkout em Blocos do WooCommerce (o CSS de blocos não é carregado
+   no admin). Mesmo visual do Cielo. */
+.lkn-fields-editor .lkn-preview-order {
+  width: 100%;
+  /* O espaçamento de 18px fica no próprio botão (ver regra abaixo); o wrapper
+     não adiciona margem para não somar (2× margin-top). */
+  margin-top: 0;
+}
+
+/* O botão de finalizar do preview tem a PRÓPRIA margem de 18px (mesmo padrão do
+   checkout). O wrapper .lkn-preview-order e as seções .payment-submit-section
+   ficam zeradas para não somar. Como a margem agora está no botão (dentro do
+   .lkn-preview-btn flex), o lápis de edição é re-centrado em cada template. */
+.lkn-fields-editor .lkn-fields-preview .lkn-preview-order,
+.lkn-fields-editor .lkn-fields-preview .payment-submit-section {
+  margin-top: 0 !important;
+}
+
+.lkn-fields-editor .lkn-fields-preview .lkn-preview-order .wc-block-components-button,
+.lkn-fields-editor .lkn-fields-preview .lkn-preview-order .rede-basic-submit-button,
+.lkn-fields-editor .lkn-fields-preview .lkn-preview-order .modern-submit-button,
+.lkn-fields-editor .lkn-fields-preview .lkn-preview-order .rede-compact-submit-button,
+.lkn-fields-editor .lkn-fields-preview .modern-submit-button,
+.lkn-fields-editor .lkn-fields-preview .rede-compact-submit-button {
+  margin-top: 18px !important;
+}
+
+.lkn-fields-editor .lkn-preview-order .wc-block-components-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  height: 50px;
+  padding: 0 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #306FC5;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: not-allowed;
+}
+
+.lkn-fields-editor .lkn-preview-order .wc-block-components-button__text {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Descrição do preview (exibida ABAIXO do botão): mesmo estilo do checkout real
+   e sincronizada com o campo "Description" das configurações. */
+.lkn-fields-editor .lkn-preview-description {
+  display: block;
+  margin-top: 12px !important;
+  margin-bottom: 0 !important;
+  color: #8e9ba8 !important;
+  font-size: 11.2px !important;
+  font-style: normal !important;
+  text-align: center !important;
+  line-height: 1.4;
+}
+
+/* ---- Preview Modern (admin): label DENTRO do input (flutuante) ----
+   O CSS enfileirado do template moderno deixa a label ACIMA do campo; aqui ela
+   volta para dentro da caixa (como placeholder). Escopo no Modern, admin-only.
+   O select de "tipo de cartão" não tem label e o de "parcelas" mantém a label
+   fora (acima), como no checkout real. */
+.lkn-fields-editor .lkn-fields-preview--blocks-modern .modern-template-container .wc-block-components-text-input {
+  position: relative;
+}
+
+.lkn-fields-editor .lkn-fields-preview--blocks-modern .modern-template-container .wc-block-components-text-input label {
+  position: absolute !important;
+  top: 50% !important;
+  left: 12px !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  color: #767676 !important;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.lkn-fields-editor .lkn-fields-preview--blocks-modern .modern-template-container .wc-block-components-text-input label .lkn-edit-btn {
+  pointer-events: auto;
+}
+
+/* ---- Preview: inputs/selects em largura total ----
+ * O painel limita os campos a 400px (.lkn-rede-field-body). No editor, deixamos
+ * os campos do preview em 100% (só aqui, admin-only). !important vence o limite. */
+.lkn-fields-editor input,
+.lkn-fields-editor select {
+  max-width: 100% !important;
+}
+
+/* Os selects não esticavam para a altura do container pai (linhas em flex). */
+.lkn-fields-editor select {
+  height: 100% !important;
+}
+
+/* ---- Blocos do preview: altura fixa de 50px ----
+ * No Cielo o container dos selects não tem altura definida, então o
+ * height:100% não resultava em 50px (no Rede o campo-base já fixa 50px).
+ * Aqui fixamos os campos/selects do preview em 50px, padronizando os modelos. */
+.lkn-fields-editor .lkn-fields-preview input,
+.lkn-fields-editor .lkn-fields-preview select {
+  height: 50px !important;
+}
+
+/* O lápis não herda negrito/uppercase/limites dos labels onde está (fica
+   idêntico ao do placeholder). */
+.lkn-fields-editor .lkn-edit-btn {
+  font-weight: 400;
+  text-transform: none;
+  flex: 0 0 auto;
+}
+
+/* Compacto: labels iguais ao do "tipo de cartão" no preview (fonte normal, um
+   pouco maior). A label é um flex: quando o TEXTO é longo ele trunca com "..." e
+   o LÁPIS permanece visível. Admin-only. */
+.lkn-fields-editor .lkn-fields-preview--blocks-compact #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container label,
+.lkn-fields-editor .lkn-fields-preview--classic-compact .rede-compact-classic .rede-compact-field label {
+  display: inline-flex !important;
+  align-items: center;
+  max-width: 100%;
+  font-weight: normal !important;
+  font-size: 14px !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+}
+
+/* Só o TEXTO da label trunca (com "..."); o lápis nunca é cortado. */
+.lkn-fields-editor .lkn-fields-preview--blocks-compact #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container label .lkn-edit-text,
+.lkn-fields-editor .lkn-fields-preview--classic-compact .rede-compact-classic .rede-compact-field label .lkn-edit-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* As bandeiras do campo de número não são renderizadas no preview (compacto);
+   remove o padding-right que o checkout reserva para elas no compacto clássico. */
+.lkn-fields-editor .lkn-fields-preview--classic-compact .rede-compact-classic .rede-compact-field--number .rede-compact-input-wrap input {
+  padding-right: 12px !important;
+}
+
+/* O lápis dentro da label fica colado ao texto/asterisco — afasta um pouco
+   (só os lápis de LABEL; os de placeholder, que ficam fora, não mudam). */
+.lkn-fields-editor label .lkn-edit-btn {
+  margin-left: 6px;
+}
+
+/* ---- Padronização: controles (input/select) com 50px de altura e borda 8px ----
+ * Containers de select têm height própria no CSS do checkout e esticavam o campo
+ * ("puxado"); aqui zeramos a altura do container e fixamos o controle em 50px,
+ * com o mesmo raio de borda do modelo moderno. */
+.lkn-fields-editor .lkn-fields-preview input,
+.lkn-fields-editor .lkn-fields-preview select {
+  height: 50px !important;
+  min-height: 50px !important;
+  box-sizing: border-box !important;
+  border-radius: 8px !important;
+  line-height: 1 !important;
+}
+
+/* Botões de finalizar do preview: 50px de altura e borda 8px, como os campos. */
+.lkn-fields-editor .lkn-fields-preview .modern-submit-button,
+.lkn-fields-editor .lkn-fields-preview .rede-compact-submit-button,
+.lkn-fields-editor .lkn-fields-preview .cielo-submit-button,
+.lkn-fields-editor .lkn-fields-preview .lkn-preview-order .wc-block-components-button {
+  height: 50px !important;
+  min-height: 50px !important;
+  box-sizing: border-box !important;
+  border-radius: 8px !important;
+}
+
+.lkn-fields-editor .lkn-fields-preview .lkn-credit-debit-card-type-select,
+.lkn-fields-editor .lkn-fields-preview .lkn-select-type,
+.lkn-fields-editor .lkn-fields-preview .lknIntegrationRedeForWoocommerceSelectBlocks,
+.lkn-fields-editor .lkn-fields-preview .lkn-rede-field-body {
+  height: auto !important;
+}
+
+/* Lápis do PLACEHOLDER no compacto (blocks): o container reserva padding-top:22px
+   para a label flutuante, então o `top:50%` centralizava no box com o padding e o
+   lápis ficava acima do input. Centraliza na ÁREA DO INPUT (abaixo da label). */
+.lkn-fields-editor .lkn-fields-preview--blocks-compact .wc-block-components-text-input .lkn-edit-btn--ph {
+  top: 30px !important;
+  bottom: 0 !important;
+  transform: none !important;
+  margin: auto 0;
+}
+
+.lkn-fields-editor .lkn-fields-preview--blocks-compact .wc-block-components-text-input .lkn-edit-btn--ph:hover {
+  transform: scale(1.1) !important;
+}
+
+/* ---- Botões "Place order" em cinza claro (preview) ----
+ * Todos os botões de finalizar dos modelos ficam cinza claro (a ideia é mostrar
+ * que estão desabilitados no preview), neutralizando o azul dos CSS do checkout. */
+.lkn-fields-editor .lkn-fields-preview .lkn-preview-order .wc-block-components-button,
+.lkn-fields-editor .lkn-fields-preview .modern-submit-button,
+.lkn-fields-editor .lkn-fields-preview .rede-compact-submit-button,
+.lkn-fields-editor .lkn-fields-preview .cielo-submit-button {
+  background-color: #e2e2e2 !important;
+  color: #5a5a5a !important;
+  border: 1px solid #ccc !important;
+  cursor: not-allowed !important;
+}
+
+.lkn-fields-editor .lkn-fields-preview .lkn-preview-order .wc-block-components-button:hover,
+.lkn-fields-editor .lkn-fields-preview .modern-submit-button:hover,
+.lkn-fields-editor .lkn-fields-preview .rede-compact-submit-button:hover,
+.lkn-fields-editor .lkn-fields-preview .cielo-submit-button:hover {
+  background-color: #e2e2e2 !important;
+  color: #5a5a5a !important;
+}
+
+/* O botão do preview é `disabled`. O CSS real do compacto pinta o estado
+ * `:disabled` (e, nos Blocos, a regra escopada pelo ID do container vence o
+ * cinza). Elevamos a especificidade (inclusive com o ID) para garantir o cinza
+ * claro "bloqueado" em repouso E no hover, sem efeito de hover/cor por cima. */
+.lkn-fields-editor .lkn-fields-preview .lkn-preview-order .wc-block-components-button:disabled,
+.lkn-fields-editor .lkn-fields-preview .modern-submit-button:disabled,
+.lkn-fields-editor .lkn-fields-preview .rede-compact-submit-button:disabled,
+.lkn-fields-editor .lkn-fields-preview .rede-compact-submit-button:disabled:hover,
+.lkn-fields-editor .lkn-fields-preview #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-submit-button:disabled,
+.lkn-fields-editor .lkn-fields-preview #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-submit-button:disabled:hover,
+.lkn-fields-editor .lkn-fields-preview .cielo-submit-button:disabled {
+  background-color: #e2e2e2 !important;
+  color: #5a5a5a !important;
+  /* A borda azul do compacto vem de uma regra escopada pelo ID do container
+     (border: 1px solid #2557a3 !important), que vence o cinza das classes acima.
+     Repetimos a borda cinza aqui, com a mesma especificidade (ID), para vencer. */
+  border: 1px solid #ccc !important;
+  cursor: not-allowed !important;
+}
+
+/* Botão de finalizar com texto editável: o lápis (fora do <button>) fica
+   posicionado sobre o botão, à direita. */
+.lkn-fields-editor .lkn-preview-btn {
+  position: relative;
+  /* Sem flex, o botão inline-flex cria um "line-box" com descender e o lápis
+     (top:50%) desalinha verticalmente. Flex elimina o line-box → o lápis centraliza. */
+  display: flex;
+  width: 100%;
+}
+
+.lkn-fields-editor .lkn-preview-btn .lkn-edit-btn--over {
+  position: absolute;
+  /* O botão tem margin-top:18px dentro do wrapper (flex). Compensa os 9px
+     (metade de 18) para o lápis continuar centralizado no botão. */
+  top: calc(50% + 9px);
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+.lkn-fields-editor .lkn-preview-btn .lkn-edit-btn--over:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lkn-fields-editor .lkn-preview-btn .lkn-edit-text {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.25);
+}
+
+/* ---- Labels do preview: texto longo trunca com "..." e o LÁPIS fica sempre
+   visível (não é escondido pelo overflow do label que o CSS do compacto aplica
+   sem escopo). Vale para todos os templates (Basic/Modern/Compact). ---- */
+.lkn-fields-editor .lkn-fields-preview label {
+  display: inline-flex !important;
+  align-items: center;
+  flex-wrap: nowrap;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.lkn-fields-editor .lkn-fields-preview label .lkn-edit-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Rede compact (blocks): o preview reaproveita a marcação do componente de label
+   flutuante do WooCommerce Blocks só para herdar o estilo do input. No entanto o
+   layout compacto NÃO tem label flutuante — é label ACIMA + placeholder. Por isso
+   neutralizamos o estado flutuante: a label vira um bloco estático acima do input
+   e a transição/estado (`is-active` / `:focus-within`) não move nada. Só o admin;
+   o checkout real é regido pelo CSS próprio do layout. */
+.lkn-fields-editor .lkn-fields-preview--blocks-compact #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container .wc-block-components-text-input {
+  display: flex !important;
+  flex-direction: column !important;
+  padding-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.lkn-fields-editor .lkn-fields-preview--blocks-compact #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container .wc-block-components-text-input label,
+.lkn-fields-editor .lkn-fields-preview--blocks-compact #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container .wc-block-components-text-input.is-active label,
+.lkn-fields-editor .lkn-fields-preview--blocks-compact #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container .wc-block-components-text-input:focus-within label {
+  position: static !important;
+  order: -1;
+  top: auto !important;
+  transform: none !important;
+  transition: none !important;
+  margin: 0 0 6px !important;
+}
+
+/* Sem label flutuante, o input não precisa do padding/realce que o estado ativo
+   adicionava — mantém o campo estável ao focar. */
+.lkn-fields-editor .lkn-fields-preview--blocks-compact #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container .wc-block-components-text-input input,
+.lkn-fields-editor .lkn-fields-preview--blocks-compact #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-container .wc-block-components-text-input:focus-within input {
+  padding: 0 12px !important;
+  transition: none !important;
+}
+
+/* As bandeiras do campo de número não são renderizadas no preview; remove o
+   padding-right que o checkout reserva para elas (senão fica um vazio à direita). */
+.lkn-fields-editor .lkn-fields-preview--blocks-compact #radio-control-wc-payment-method-options-rede_debit__content .rede-compact-field--number input {
+  padding-right: 12px !important;
+}
+
+/* ---- Padroniza a largura das prévias (Basic/Modern/Compact) ----
+ * Todas passam a ter a MESMA largura cheia do card (base: a casca do compacto),
+ * sem padding extra. Assim nenhuma fica mais fina que a outra. Admin-only. */
+.lkn-fields-editor .lkn-fields-preview,
+.lkn-fields-editor .lkn-fields-preview > #radio-control-wc-payment-method-options-rede_debit__content,
+.lkn-fields-editor .lkn-fields-preview .lkn-blocks-basic,
+.lkn-fields-editor .lkn-fields-preview .modern-template-container,
+.lkn-fields-editor .lkn-fields-preview .rede-compact-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.lkn-fields-editor .lkn-fields-preview > #radio-control-wc-payment-method-options-rede_debit__content {
+  padding: 0 !important;
+}
+
+/* O editor ocupa a largura total disponível. */
+.lkn-fields-editor {
+  width: 100%;
+}

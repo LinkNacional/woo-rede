@@ -6,12 +6,52 @@
   background-color: #f3f4f6;
 }
 
-#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input label {
-  top: 50% !important;
+/* === Label flutuante (padrão único) ========================================
+ * Repouso: label centralizada dentro do input.
+ * Ativa (foco OU com valor): a label sobe para o topo e diminui o texto.
+ * Blur sem valor: volta ao repouso. O `is-active` é aplicado pelo WooCommerce
+ * Blocks (foco/valor); `:focus-within` reforça o disparo já no foco. */
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input {
+  position: relative;
 }
 
-#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input.is-active label {
-  top: 0 !important;
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input input {
+  height: 50px;
+  box-sizing: border-box;
+  /* Só topo/base + left: preserva os laterais (ex.: padding-right dos ícones em
+   * .modern-field-with-icon). O padding-left fixa em 12px para casar com a label
+   * flutuante (left: 12px) — o WooCommerce Blocks reduz para 9px no estado ativo,
+   * o que desalinhava o texto em relação à label. O line-height entra em 25px
+   * (igual base nativa) porque o input tinha 50px (combinando com padding 0). */
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 12px !important;
+  line-height: 1 !important;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input label {
+  position: absolute;
+  left: 12px;
+  top: 25px !important;
+  transform: translateY(-50%) !important;
+  transform-origin: top left;
+  margin: 0;
+  font-size: 16.8px !important;
+  line-height: 22px;
+  transition: top .18s ease, transform .18s ease;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input.is-active input,
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input:focus-within input {
+  padding-top: 24px;
+  padding-bottom: 8px;
+  padding-left: 12px !important;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input.is-active label,
+#radio-control-wc-payment-method-options-rede_debit__content .wc-block-components-text-input:focus-within label {
+  top: 8px !important;
+  transform: translateY(0) scale(.82) !important;
 }
 
 .modern-template-container {
@@ -50,14 +90,14 @@
 .modern-field-with-icon input {
   background: #ffffff !important;
   border: 1px solid #d1d5db !important;
-  border-radius: 4px !important;
+  border-radius: 8px !important;
   padding: 0 40px 0 12px;
   width: 100%;
   box-sizing: border-box;
-  height: 3.125em !important;
+  height: 50px !important;
   font-size: 14px !important;
   font-family: inherit !important;
-  line-height: 3.125em !important;
+  line-height: 1 !important;
   vertical-align: middle !important;
 }
 
@@ -90,27 +130,30 @@
   margin-bottom: 8px;
   font-weight: 500;
   color: #374151;
-  font-size: 14px !important;
+  font-size: 12.6px !important;
   font-family: inherit !important;
 }
 
 .modern-select {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
+  background-color: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
   padding: 0 35px 0 12px !important;
   width: 100%;
   box-sizing: border-box;
   appearance: none;
-  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23666" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 12px;
-  height: 3.125em !important;
+  -webkit-appearance: none;
+  /* Seta própria: usa background-image + !important para não ser apagada pelo
+     tema (que aplica background shorthand com !important). */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 16px !important;
+  height: 50px !important;
   font-size: 14px !important;
   color: rgb(60, 60, 66) !important;
   font-family: inherit !important;
-  line-height: 3.125em !important;
+  line-height: 1 !important;
   vertical-align: middle !important;
 }
 
@@ -123,20 +166,26 @@
 /* Submit button */
 .modern-submit-button {
   width: 100%;
-  background-color: #306FC5;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 15px 20px;
+  height: 50px;
+  box-sizing: border-box;
+  /* Mesmo espaçamento (18px) acima do botão de finalizar em todos os templates. */
+  margin-top: 18px;
+  background-color: #306FC5 !important;
+  color: #fff !important;
+  border: 1px solid #2557a3;
+  border-radius: 8px;
+  padding: 0 20px;
   font-size: 14px !important;
   font-weight: 600;
+  text-transform: uppercase !important;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease-in-out;
   font-family: inherit !important;
 }
 
 .modern-submit-button:hover {
-  background-color: #2563eb;
+  background-color: #2557a3 !important;
+  color: #fff !important;
 }
 
 .modern-submit-button:focus {
@@ -145,7 +194,7 @@
 }
 
 .modern-submit-button:active {
-  background-color: #1e40af;
+  color: #fff !important;
 }
 
 /* Estado bloqueado do botão */
@@ -172,14 +221,14 @@
 .modern-template-container .wc-block-components-text-input input {
   background: #ffffff !important;
   border: 1px solid #d1d5db !important;
-  border-radius: 4px !important;
+  border-radius: 8px !important;
   padding: 0 12px;
   width: 100%;
   box-sizing: border-box;
-  height: 3.125em !important;
+  height: 50px !important;
   font-size: 14px !important;
   font-family: inherit !important;
-  line-height: 3.125em !important;
+  line-height: 1 !important;
   vertical-align: middle !important;
 }
 
@@ -194,7 +243,7 @@
   margin-bottom: 8px;
   font-weight: 500;
   color: #374151;
-  font-size: 14px !important;
+  font-size: 12.6px !important;
   font-family: inherit !important;
 }
 
@@ -231,11 +280,11 @@
 /* Gateway description styling */
 .modern-gateway-description {
   text-align: center;
-  margin-top: 0px !important;
+  margin-top: 12px !important;
   padding: 0px 10px 10px 10px !important;
   border-radius: 4px;
-  color: #6b7280;
-  font-size: 14px !important;
+  color: #8e9ba8;
+  font-size: 11.2px !important;
   font-family: inherit !important;
   line-height: 1.4;
 }
@@ -243,4 +292,210 @@
 /* Override any conflicting styles */
 .modern-template-container * {
   box-sizing: border-box;
+}
+/* ==========================================================================
+ * Moderno do checkout CLÁSSICO (shortcode) — .rede-modern-classic
+ * Espelha o layout moderno do Cielo, adaptado ao Rede. Escopado para não
+ * afetar o moderno dos Blocos (.modern-template-container).
+ * ========================================================================== */
+
+.rede-payment-form.rede-modern-classic {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.rede-modern-classic * {
+  box-sizing: border-box;
+}
+
+/* Faixa de bandeiras */
+.rede-modern-classic .rede-card-brands-container {
+  text-align: center;
+  margin: 20px 0 25px 0;
+  padding: 15px 0;
+}
+
+.rede-modern-classic .rede-card-brands {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(233, 236, 239, 0.6);
+}
+
+.rede-modern-classic .rede-card-brands img {
+  width: 40px;
+  height: auto;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.rede-modern-classic .rede-card-brands img.is-dim {
+  filter: grayscale(100%) !important;
+  opacity: 0.35 !important;
+}
+
+/* Campos */
+.rede-modern-classic .modern-field {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.rede-modern-classic .field-group {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 16px;
+}
+
+.rede-modern-classic .field-half {
+  flex: 1;
+  width: 100%;
+  min-width: 200px;
+}
+
+.rede-modern-classic .field-label {
+  display: block;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 8px;
+  font-size: 12.6px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rede-modern-classic .field-label .required {
+  color: #dc3545;
+  margin-left: 3px;
+}
+
+.rede-modern-classic .field-input,
+.rede-modern-classic .field-select {
+  width: 100% !important;
+  height: 50px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  border: 2px solid #e9ecef !important;
+  padding: .5em .8em !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  font-family: inherit !important;
+  background-color: #ffffff !important;
+  color: #495057 !important;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+/* Seta própria do plugin APENAS no select (o input não deve ter seta). O tema
+   usa appearance:none e o reset de background apagaria a seta nativa. */
+.rede-modern-classic .field-select {
+  padding-right: 40px !important;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 16px !important;
+}
+
+.rede-modern-classic .field-input:focus,
+.rede-modern-classic .field-select:focus {
+  border-color: #306FC5 !important;
+  box-shadow: 0 0 0 2px rgba(48, 111, 197, 0.1);
+}
+
+/* Placeholder dos inputs em cinza (sem isso ele herda o color #495057 do input
+   e parece preenchido). Só os inputs — o select não tem placeholder. Vale para
+   o moderno do shortcode (.rede-modern-classic) e o moderno dos Blocos
+   (container #radio-control-…), onde o tema costuma deixar o placeholder escuro. */
+.rede-modern-classic .field-input::placeholder {
+  color: #adb5bd;
+  opacity: 1;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .modern-template-container input::placeholder {
+  color: #adb5bd !important;
+  opacity: 1 !important;
+}
+
+.rede-modern-classic .field-wrapper {
+  display: flex;
+  position: relative;
+}
+
+.rede-modern-classic .field-wrapper .field-input {
+  padding-right: 40px !important;
+}
+
+.rede-modern-classic .field-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.rede-modern-classic .field-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  margin: 0;
+}
+
+.rede-modern-classic .payment-submit-section {
+  /* O espaçamento de 18px fica no próprio botão; o wrapper não adiciona margem. */
+  margin-top: 0;
+  text-align: center;
+}
+
+.rede-modern-classic .modern-submit-button {
+  width: 100% !important;
+}
+
+.rede-modern-classic .modern-gateway-description {
+  text-align: center;
+  margin-top: 12px;
+  color: #8e9ba8;
+  font-size: 11.2px !important;
+}
+
+@media (max-width: 768px) {
+  .rede-modern-classic .field-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .rede-modern-classic .field-half {
+    width: 100%;
+  }
+}
+
+/* Selects do tipo de cartão / parcelas no Moderno (Gutenberg): 1.2rem (só eles). */
+#radio-control-wc-payment-method-options-rede_debit__content .modern-select {
+  font-size: 16.8px !important;
+}
+
+/* === Fundo branco forçado nos inputs/select do checkout em Blocos ===
+ * O tema (ex.: Woodmart) aplica background via regra de alta especificidade e
+ * `!important` (`:is(.wc-block-checkout) [class*=wc-block-components] :is(input..)`).
+ * As regras sem ID acima perdem nessa disputa; estas com o ID do container
+ * (#radio-control-...) vencem por conterem um ID. */
+#radio-control-wc-payment-method-options-rede_debit__content .modern-template-container .wc-block-components-text-input input,
+#radio-control-wc-payment-method-options-rede_debit__content .modern-field-with-icon input {
+  background-color: #fff !important;
+}
+
+#radio-control-wc-payment-method-options-rede_debit__content .modern-select {
+  background-color: #fff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
 }

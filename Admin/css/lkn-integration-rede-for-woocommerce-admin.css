@@ -17,7 +17,7 @@ textarea:disabled {
     background-color: #333;
     color: #fff;
     text-align: center;
-    font-size: .8em;
+    font-size: 11.2px;
     border-radius: 3px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
     position: absolute;
@@ -38,7 +38,7 @@ textarea:disabled {
 .lknIntegrationRedeForWoocommerceBecomePRO {
     text-decoration: none;
     color: #FF0D08;
-    font-size: 0.84rem;
+    font-size: 11.76px;
     font-weight: bold;
     font-family: "Inter", sans-serif;
     position: absolute;
@@ -609,4 +609,36 @@ textarea:disabled {
     background: white;
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+/* Botão de suporte WhatsApp fake (showcase PRO): cinza e não clicável no plano free.
+   Usa background-color (não o shorthand background) para NÃO apagar o ícone do
+   WhatsApp que o JS define inline via background:url(...). */
+.woocommerce table.form-table input[id$="_send_configs"]:disabled,
+input[id$="_send_configs"]:disabled {
+    background-color: #f0f0f1 !important;
+    color: #a7aaad !important;
+    border: 1px solid #dcdcde !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+/* Botão "Validar Licença" fake (showcase PRO): cinza e não clicável, sem ação.
+   Especificidade alta + !important para vencer .input-text/.components-button do WooCommerce. */
+.woocommerce table.form-table input[id$="_validate_license_fake"],
+input[id$="_validate_license_fake"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: auto;
+    padding: .5em 1.2em !important;
+    background: #f0f0f1 !important;
+    border: 1px solid #dcdcde !important;
+    color: #a7aaad !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
 }

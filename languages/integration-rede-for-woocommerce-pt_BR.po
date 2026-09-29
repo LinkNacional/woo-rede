@@ -660,3 +660,21 @@ msgstr "MarcosAlexandre"
 #. Author URI of the plugin
 msgid "https://marcosalexandre.dev/"
 msgstr "https://marcosalexandre.dev/"
+
+msgid "Fields"
+msgstr "Campos"
+
+msgid "Layout to customize"
+msgstr "Layout para personalizar"
+
+msgid "Choose which layout the fields below refer to."
+msgstr "Escolha a qual layout os campos abaixo se referem."
+
+msgid "Only the selected layout shows its fields below."
+msgstr "Apenas o layout selecionado exibe seus campos abaixo."
+
+msgid "Label — %1$s (%2$s)"
+msgstr "Rótulo — %1$s (%2$s)"
+
+msgid "Placeholder — %1$s (%2$s)"
+msgstr "Placeholder — %1$s (%2$s)"

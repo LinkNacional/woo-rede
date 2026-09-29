@@ -198,6 +198,10 @@
         }
 
         document.querySelectorAll('.form-table > tbody > tr').forEach(tr => {
+            // As linhas de campos ocultos da seção "Fields" não passam pelo transform.
+            if (tr.classList.contains('lkn-fields-hidden-row')) {
+                return;
+            }
             const td = tr.querySelector('td');
             const th = tr.querySelector('th');
             if (td && th) {
@@ -250,8 +254,11 @@
                         const dataTitleDescription = fieldConfig.getAttribute('data-title-description');
                         descriptionTitle.innerHTML = dataTitleDescription ?? '';
                         
-                        // Verificar se o campo tem atributo lkn-is-pro="true"
-                        const isProField = fieldConfig.getAttribute('lkn-is-pro') === 'true';
+                        // Campos marcados como PRO: lkn-is-pro (travado) ou lkn-pro-badge
+                        // (selo PRO, porém editável — usado nos campos fake do plano free).
+                        const isProField = fieldConfig.getAttribute('lkn-is-pro') === 'true'
+                            || fieldConfig.getAttribute('lkn-pro-badge') === 'true';
+                        const isProLocked = fieldConfig.getAttribute('lkn-is-pro') === 'true';
                         if (isProField) {
                             // Criar o link PRO dinamicamente
                             const proLink = document.createElement('a');
@@ -268,20 +275,21 @@
                             
                             titleHeader.appendChild(proLink);
                             
-                            // Desabilitar o campo automaticamente
-                            if (!fieldConfig.hasAttribute('disabled')) {
-                                fieldConfig.disabled = true;
-                            }
-                            // fieldConfig.readOnly = true;
-                            
-                            // Se for um campo select, aplicar estilo cinza no select2
-                            if (fieldConfig.tagName.toLowerCase() === 'select') {
-                                const selectId = fieldConfig.id;
-                                const select2Container = document.querySelector(`#select2-${selectId}-container`);
-                                if (select2Container) {
-                                    select2Container.style.opacity = '0.6';
-                                    select2Container.style.filter = 'grayscale(0.5)';
-                                    select2Container.style.pointerEvents = 'none';
+                            // Só bloqueia de fato os campos exclusivos do PRO (lkn-is-pro).
+                            // Os campos com lkn-pro-badge permanecem editáveis (fakes).
+                            if (isProLocked) {
+                                if (!fieldConfig.hasAttribute('disabled')) {
+                                    fieldConfig.disabled = true;
+                                }
+                                // Se for um campo select, aplicar estilo cinza no select2
+                                if (fieldConfig.tagName.toLowerCase() === 'select') {
+                                    const selectId = fieldConfig.id;
+                                    const select2Container = document.querySelector(`#select2-${selectId}-container`);
+                                    if (select2Container) {
+                                        select2Container.style.opacity = '0.6';
+                                        select2Container.style.filter = 'grayscale(0.5)';
+                                        select2Container.style.pointerEvents = 'none';
+                                    }
                                 }
                             }
                         }
@@ -348,46 +356,159 @@
                         if (fieldId === 'woocommerce_rede_debit_3ds_template_style' && typeof lknWcRedeLayoutSettings !== 'undefined') {
                             const previewContainer = document.createElement('div');
                             previewContainer.style.marginTop = '10px';
-                            
-                            const previewLabel = document.createElement('p');
-                            previewLabel.textContent = 'Preview:';
-                            previewLabel.style.margin = '5px 0';
-                            previewLabel.style.fontWeight = 'bold';
-                            
-                            const previewImage = document.createElement('img');
-                            previewImage.style.maxWidth = '200px';
-                            previewImage.style.width = '100%';
-                            previewImage.style.border = '1px solid #ddd';
-                            previewImage.style.borderRadius = '4px';
-                            
-                            // Função para atualizar a imagem
-                            function updatePreviewImage() {
-                                const selectedValue = fieldConfig.value;
-                                if (selectedValue === 'basic' && lknWcRedeLayoutSettings.basic) {
-                                    previewImage.src = lknWcRedeLayoutSettings.basic;
-                                    previewImage.alt = 'Basic Template Preview';
-                                } else if (selectedValue === 'modern' && lknWcRedeLayoutSettings.modern) {
-                                    previewImage.src = lknWcRedeLayoutSettings.modern;
-                                    previewImage.alt = 'Modern Template Preview';
+                            // O body do campo é flex (align-items:start), então o
+                            // container encolhe ao conteúdo; width:100% faz a imagem
+                            // (width:100%) ocupar a largura total, como no Cielo.
+                            previewContainer.style.width = '100%';
+
+                            const buildImage = (src, alt, maxW) => {
+                                const img = document.createElement('img');
+                                img.src = src || '';
+                                img.alt = alt || '';
+                                // PRO (imagem única): mesma largura do preview de edição.
+                                // Free (3 miniaturas): pequena, por comparação.
+                                img.style.maxWidth = maxW || '200px';
+                                img.style.width = '100%';
+                                img.style.border = '1px solid #ddd';
+                                img.style.borderRadius = '4px';
+                                img.style.cursor = 'zoom-in';
+                                return img;
+                            };
+
+                            // Envolve a imagem numa âncora .thickbox para abrir no lightbox
+                            // (galeria de visualização) nativo do WordPress, em tamanho maior.
+                            const buildThickbox = (src, alt, maxW) => {
+                                const link = document.createElement('a');
+                                link.className = 'thickbox';
+                                link.rel = 'lkn-rede-layout-gallery';
+                                link.href = src || '';
+                                link.title = alt || '';
+                                link.style.display = 'block';
+                                link.style.cursor = 'zoom-in';
+                                link.appendChild(buildImage(src, alt, maxW));
+                                return link;
+                            };
+
+                            // Rótulo localizado lido do próprio <select> (ex.: "Modelo Básico").
+                            const optionLabel = (value) => {
+                                const opt = Array.from(fieldConfig.options).find(o => o.value === value);
+                                return opt ? opt.textContent.trim() : value;
+                            };
+
+                            // Imagens de preview por tipo de checkout (Block x Shortcode/Clássico).
+                            const redeGatewayId = (typeof lknWcRedeTranslationsInput !== 'undefined' && lknWcRedeTranslationsInput.gateway_id)
+                                ? lknWcRedeTranslationsInput.gateway_id
+                                : 'rede_debit';
+                            const modeSelect = document.getElementById('woocommerce_' + redeGatewayId + '_checkout_type')
+                                || document.querySelector('select[id$="_checkout_type"]');
+                            const getMode = () => {
+                                const v = modeSelect ? String(modeSelect.value || '') : '';
+                                return v === 'classic' ? 'classic' : 'blocks';
+                            };
+                            const getSources = () => lknWcRedeLayoutSettings[getMode()]
+                                || lknWcRedeLayoutSettings.blocks
+                                || lknWcRedeLayoutSettings.classic
+                                || {};
+
+                            // Renderiza/atualiza o preview (redefinido em cada ramo abaixo).
+                            let renderPreview = () => {};
+
+                            const isProField = fieldConfig.getAttribute('lkn-pro-badge') === 'true'
+                                || fieldConfig.getAttribute('lkn-is-pro') === 'true';
+
+                            if (isProField) {
+                                // PRO desabilitado: exibe os modelos para comparação.
+                                previewContainer.style.display = 'flex';
+                                previewContainer.style.flexWrap = 'wrap';
+                                previewContainer.style.gap = '16px';
+
+                                const buildItem = (src, caption) => {
+                                    const item = document.createElement('div');
+                                    item.style.textAlign = 'center';
+                                    if (src) {
+                                        item.appendChild(buildThickbox(src, caption));
+                                        const cap = document.createElement('p');
+                                        cap.textContent = caption;
+                                        cap.style.margin = '6px 0 0';
+                                        cap.style.fontWeight = 'bold';
+                                        cap.style.fontSize = '13px';
+                                        item.appendChild(cap);
+                                    }
+                                    return item;
+                                };
+
+                                renderPreview = () => {
+                                    const sources = getSources();
+                                    previewContainer.innerHTML = '';
+                                    previewContainer.appendChild(buildItem(sources.basic, optionLabel('basic')));
+                                    previewContainer.appendChild(buildItem(sources.modern, optionLabel('modern')));
+                                    previewContainer.appendChild(buildItem(sources.compact, optionLabel('compact')));
+                                };
+                            } else {
+                                // PRO ativo: preview único que segue a opção escolhida.
+                                const previewLabel = document.createElement('p');
+                                previewLabel.textContent = 'Preview:';
+                                previewLabel.style.margin = '5px 0';
+                                previewLabel.style.fontWeight = 'bold';
+
+                                // Envolve a imagem numa âncora .thickbox (lightbox do WP).
+                                const previewLink = document.createElement('a');
+                                previewLink.className = 'thickbox';
+                                previewLink.rel = 'lkn-rede-layout-gallery';
+                                previewLink.style.display = 'block';
+                                previewLink.style.cursor = 'zoom-in';
+                                const previewImage = buildImage('', '', '100%');
+                                previewImage.style.display = 'block';
+                                previewLink.appendChild(previewImage);
+
+                                // Função para atualizar a imagem
+                                function updatePreviewImage() {
+                                    const selectedValue = fieldConfig.value;
+                                    const sources = getSources();
+                                    const src = sources[selectedValue];
+                                    if (src) {
+                                        previewImage.src = src;
+                                        previewImage.alt = selectedValue + ' Template Preview';
+                                        previewImage.style.display = 'block';
+                                        previewLink.href = src;
+                                        previewLink.title = selectedValue + ' Template Preview';
+                                        previewLink.style.display = 'block';
+                                    } else {
+                                        // Sem imagem para este template: evita exibir a
+                                        // imagem anterior.
+                                        previewImage.removeAttribute('src');
+                                        previewImage.style.display = 'none';
+                                        previewLink.removeAttribute('href');
+                                        previewLink.style.display = 'none';
+                                    }
+                                }
+                                renderPreview = updatePreviewImage;
+
+                                // Adicionar evento de mudança usando Select2 event
+                                $(fieldConfig).on('select2:select', function() {
+                                    updatePreviewImage();
+                                });
+
+                                // Fallback para mudanças diretas no select (caso Select2 não esteja ativo)
+                                fieldConfig.addEventListener('change', function() {
+                                    updatePreviewImage();
+                                });
+
+                                previewContainer.appendChild(previewLabel);
+                                previewContainer.appendChild(previewLink);
+                            }
+
+                            // Reage à troca do tipo de checkout (Block x Shortcode/Clássico).
+                            if (modeSelect) {
+                                modeSelect.addEventListener('change', renderPreview);
+                                if (window.jQuery) {
+                                    window.jQuery(modeSelect).on('change select2:select', renderPreview);
                                 }
                             }
-                            
-                            // Configurar imagem inicial
-                            updatePreviewImage();
-                            
-                            // Adicionar evento de mudança usando Select2 event
-                            $(fieldConfig).on('select2:select', function() {
-                                updatePreviewImage();
-                            });
-                            
-                            // Fallback para mudanças diretas no select (caso Select2 não esteja ativo)
-                            fieldConfig.addEventListener('change', function() {
-                                updatePreviewImage();
-                            });
-                            
-                            // Montar a estrutura
-                            previewContainer.appendChild(previewLabel);
-                            previewContainer.appendChild(previewImage);
+
+                            // Render inicial.
+                            renderPreview();
+
                             divBody.appendChild(previewContainer);
                         }
                     }
@@ -420,12 +541,34 @@
             const supportLabel = lknWcRedeTranslations && lknWcRedeTranslations.sendConfigs ? lknWcRedeTranslations.sendConfigs : 'Suporte';
             sendConfigsInput.value = `${supportLabel}`.trim();
 
+            // Plano gratuito (licença PRO inválida): botão apenas decorativo (cinza, sem ação).
+            const redeProLicenseValid = (typeof lknPhpVariables !== 'undefined' && lknPhpVariables.isProLicenseValid);
+            if (!redeProLicenseValid) {
+                sendConfigsInput.type = 'button';
+                sendConfigsInput.disabled = true;
+                sendConfigsInput.style.width = 'fit-content';
+                sendConfigsInput.style.setProperty('padding', '10px 18px 10px 32px', 'important');
+                sendConfigsInput.style.background = 'url("https://cdn.simpleicons.org/whatsapp/999") no-repeat 8px center/18px, #f0f0f1';
+                sendConfigsInput.style.color = '#a7aaad';
+                sendConfigsInput.style.fill = '#a7aaad';
+                sendConfigsInput.style.border = '1px solid #dcdcde';
+                sendConfigsInput.style.borderRadius = '2px';
+                sendConfigsInput.style.fontWeight = 'bold';
+                sendConfigsInput.style.cursor = 'not-allowed';
+                sendConfigsInput.style.outline = 'none';
+                sendConfigsInput.onmouseover = null;
+                sendConfigsInput.onmouseout = null;
+                sendConfigsInput.onclick = null;
+            } else {
+
             // Adiciona o ícone do WhatsApp antes do texto
             sendConfigsInput.style.width = 'fit-content';
-            sendConfigsInput.style.paddingTop = '10px';
-            sendConfigsInput.style.paddingBottom = '10px';
-            sendConfigsInput.style.paddingLeft = '32px';
-            sendConfigsInput.style.paddingRight = '18px';
+            // padding-left generoso (ícone em 8px, 18px de largura) — com !important
+            // para vencer o `.input-text { padding: .5em .8em !important }` do WooCommerce.
+            sendConfigsInput.style.setProperty('padding-top', '10px', 'important');
+            sendConfigsInput.style.setProperty('padding-bottom', '10px', 'important');
+            sendConfigsInput.style.setProperty('padding-left', '32px', 'important');
+            sendConfigsInput.style.setProperty('padding-right', '18px', 'important');
             sendConfigsInput.style.background = 'url("https://cdn.simpleicons.org/whatsapp/white") no-repeat 8px center/18px, #25d366';
             sendConfigsInput.style.color = '#fff';
             sendConfigsInput.style.fill = '#fff';
@@ -510,8 +653,64 @@
                 message += ' Aguardo retorno, obrigado!';
                 window.open(`https://api.whatsapp.com/send/?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`,'_blank');
             };
+            }
         }
         // === LÓGICA DO WHATSAPP - FIM ===
+
+        // === CONDIÇÃO: esconder seletor de tipo de cartão (apenas restrição de um único tipo) ===
+        const lknRestrictionField = document.getElementById('woocommerce_rede_debit_card_type_restriction');
+        const lknHideSelectorField = document.getElementById('woocommerce_rede_debit_hide_card_type_selector');
+
+        if (lknRestrictionField && lknHideSelectorField) {
+            const setHideSelectorAvailability = () => {
+                const isBoth = lknRestrictionField.value === 'both';
+                const label = lknHideSelectorField.closest('label') || lknHideSelectorField.parentElement;
+
+                // NÃO usar 'disabled': o formulário ignora campos com esse atributo no submit.
+                // "Fingimos" o estado desabilitado com atributo próprio + estilo + bloqueio de clique.
+                if (isBoth) {
+                    lknHideSelectorField.setAttribute('data-lkn-fake-disabled', 'true');
+                    lknHideSelectorField.style.pointerEvents = 'none';
+                    lknHideSelectorField.style.opacity = '0.5';
+                    if (label) {
+                        label.setAttribute('data-lkn-fake-disabled', 'true');
+                        label.style.pointerEvents = 'none';
+                        label.style.opacity = '0.5';
+                        label.style.cursor = 'not-allowed';
+                    }
+                } else {
+                    lknHideSelectorField.removeAttribute('data-lkn-fake-disabled');
+                    lknHideSelectorField.style.pointerEvents = '';
+                    lknHideSelectorField.style.opacity = '';
+                    if (label) {
+                        label.removeAttribute('data-lkn-fake-disabled');
+                        label.style.pointerEvents = '';
+                        label.style.opacity = '';
+                        label.style.cursor = '';
+                    }
+                }
+            };
+
+            // Bloqueia o toggle quando "fake disabled" (pointer-events cobre o mouse; isto cobre teclado).
+            const blockWhenFakeDisabled = (event) => {
+                if (lknHideSelectorField.getAttribute('data-lkn-fake-disabled') !== 'true') {
+                    return;
+                }
+                // Só impede a ativação (Espaço/Enter); não bloqueia Tab ou outros atalhos.
+                if (event.type === 'keydown' && event.key !== ' ' && event.key !== 'Enter' && event.key !== 'Spacebar') {
+                    return;
+                }
+                event.preventDefault();
+                event.stopPropagation();
+            };
+            lknHideSelectorField.addEventListener('click', blockWhenFakeDisabled, true);
+            lknHideSelectorField.addEventListener('keydown', blockWhenFakeDisabled, true);
+
+            // Aplica o estado inicial e reage a mudanças no select (inclui select2).
+            setHideSelectorAvailability();
+            jQuery('#woocommerce_rede_debit_card_type_restriction').on('change select2:select', setHideSelectorAvailability);
+        }
+        // === FIM CONDIÇÃO ===
 
     })
 })(jQuery)

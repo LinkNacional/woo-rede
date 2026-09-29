@@ -74,44 +74,12 @@ final class LknIntegrationRedeForWoocommerceAdmin
      */
     public function enqueue_scripts(): void
     {
-        wp_enqueue_script('lknIntegrationRedeForWoocommerceProFields', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-pro-fields.js', array('jquery'), $this->version, false);
+        // Dependência de exibição dos campos PRO (reais e fakes).
+        wp_enqueue_script('lknIntegrationRedeForWoocommerceProInstallments', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-pro-installments.js', array('jquery'), $this->version, false);
 
-        // Só enfileira o script se a versão PRO estiver desativada
-        if (!is_plugin_active('rede-for-woocommerce-pro/rede-for-woocommerce-pro.php')) {
-            wp_enqueue_script('lknIntegrationRedeForWoocommerceProInstallments', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-pro-installments.js', array('jquery'), $this->version, false);
-        }
-
-        wp_localize_script('lknIntegrationRedeForWoocommerceProFields', 'lknPhpProFieldsVariables', array(
-            'proSettings' => __('PRO Settings', 'woo-rede'),
-            'license' => __('License', 'woo-rede'),
-            'currency' => __('Currency Converter', 'woo-rede'),
-            'currencyQuote' => __('Currency Quote', 'woo-rede'),
-            'autoCapture' => __('Auto Capture', 'woo-rede'),
-            'autoCaptureLabel' => __('Enables auto capture', 'woo-rede'),
-            'customCssShortcode' => __('Custom CSS (Shortcode)', 'woo-rede'),
-            'customCssBlockEditor' => __('Custom CSS (Block Editor)', 'woo-rede'),
-            'interestOnInstallments' => __('Interest on installments', 'woo-rede'),
-            'interestOnInstallmentsDescTip' => __('Select the option interest or discount. Save to continue configuration.', 'woo-rede'),
-            'licenseDescTip' => __('License for Rede for WooCommerce plugin extensions.', 'woo-rede'),
-            'currencyDescTip' => __('If enabled, automatically converts the order amount to BRL when processing payment.', 'woo-rede'),
-            'currencyQuoteDescTip' => __('These are the real-time exchange rates, indicating the value of each listed foreign currency in Brazilian Reais (BRL).', 'woo-rede'),
-            'autoCaptureDescTip' => __('By enabling automatic capture, payment is automatically captured immediately after the transaction.', 'woo-rede'),
-            'customCssShortcodeDescTip' => __('Possibility to customize the shortcode CSS. Enter the selector and rules, example: .checkout{color:green;}.', 'woo-rede'),
-            'customCssBlockEditorDescTip' => __('Possibility to customize the CSS in the block editor checkout. Enter the selector and rules, example: .checkout{color:green;}.', 'woo-rede'),
+        wp_localize_script('lknIntegrationRedeForWoocommerceProInstallments', 'lknPhpProFieldsVariables', array(
             'becomePRO' => __('PRO', 'woo-rede'),
-            'licenseDescription' => __('License for Rede plugin extensions.', 'woo-rede'),
-            'currencyDescription' => __('Automatically converts payment amounts to BRL.', 'woo-rede'),
-            'autoCaptureDescription' => __('Automatically captures the payment once authorized by Rede.', 'woo-rede'),
-            'autoCaptureDebitLabel' => __('Enable automatic capture for credit card transactions', 'woo-rede'),
-            'customCssShortcodeDescription' => __('Define CSS rules for the shortcode.', 'woo-rede'),
-            'customCssBlockEditorDescription' => __('Define CSS rules for the block editor.', 'woo-rede'),
-            'interestOnInstallmentsDescription' => __('Enables payment with interest in installments. Save to continue configuration. After enabling installment interest, you can define the amount of interest according to the installment.', 'woo-rede'),
-            'licenseDataDescription' => __('Save to enable other options.', 'woo-rede'),
-            'quoteDataDescription' => __('These are the real-time exchange rates, indicating the value of each listed foreign currency in Brazilian Reais (BRL).', 'woo-rede'),
-            'autoCaptureDataDescription' => __('Automatically captures the payment once authorized by Rede.', 'woo-rede'),
-            'cssShortcodeDataDescription' => __('Customize the Shortcode CSS using selectors and rules.', 'woo-rede'),
-            'cssBlockEditorDataDescription' => __('Customize the Block Editor CSS using selectors and rules.', 'woo-rede'),
-            'installmentInterestDataDescription' => __('Applies an interest rate to each installment. Use this if you want to charge extra per installment.', 'woo-rede'),
+            'fakeProNotice' => __('The features marked with the PRO badge are a preview in the free plan. You can adjust them freely to explore them, but they only take effect with an active PRO license.', 'woo-rede'),
         ));
 
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin.js', array('jquery'), $this->version, false);
@@ -122,6 +90,7 @@ final class LknIntegrationRedeForWoocommerceAdmin
             'install_nonce' => wp_create_nonce('install-plugin_invoice-payment-for-woocommerce'),
             'invoice_plugin_installed' => is_plugin_active('invoice-payment-for-woocommerce/invoice-payment-for-woocommerce.php'),
             'isProActive' => is_plugin_active('rede-for-woocommerce-pro/rede-for-woocommerce-pro.php'),
+            'isProLicenseValid' => LknIntegrationRedeForWoocommerceHelper::isProLicenseValid(),
             'whatsapp_number' => LKN_WC_REDE_WPP_NUMBER,
             'site_url' => get_site_url(),
         ));
@@ -168,7 +137,34 @@ final class LknIntegrationRedeForWoocommerceAdmin
 
         if ('wc-settings' === $page && 'checkout' === $tab && in_array($section, $gateways, true)) {
             wp_enqueue_script('lknIntegrationRedeForWoocommerceAdminClearLogsButton', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-clear-logs-button.js', array('jquery'), $this->version, false);
-            wp_enqueue_script('lknIntegrationRedeForWoocommerceSettingsLayoutScript', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-settings-layout.js', array('jquery'), $this->version, false);
+            // Cache-bust por filemtime: garante que alterações no JS do layout (ex.: preview
+            // do template compacto) carreguem sem depender de bump da versão do plugin.
+            $layout_js_path = plugin_dir_path(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-settings-layout.js';
+            $layout_js_ver  = $this->version . '.' . (file_exists($layout_js_path) ? filemtime($layout_js_path) : '0');
+            wp_enqueue_script('lknIntegrationRedeForWoocommerceSettingsLayoutScript', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-settings-layout.js', array('jquery'), $layout_js_ver, false);
+            // Lightbox nativo do WordPress (Thickbox) para ampliar as imagens do layout.
+            wp_enqueue_script('thickbox');
+            wp_enqueue_style('thickbox');
+            $rede_tb_css = plugin_dir_path(__FILE__) . 'css/lkn-rede-thickbox.css';
+            wp_enqueue_style('lkn-rede-thickbox', plugin_dir_url(__FILE__) . 'css/lkn-rede-thickbox.css', array('thickbox'), $this->version . '.' . (file_exists($rede_tb_css) ? filemtime($rede_tb_css) : '0'));
+            $rede_tb_js = plugin_dir_path(__FILE__) . 'js/lkn-rede-thickbox.js';
+            wp_enqueue_script('lkn-rede-thickbox', plugin_dir_url(__FILE__) . 'js/lkn-rede-thickbox.js', array('thickbox'), $this->version . '.' . (file_exists($rede_tb_js) ? filemtime($rede_tb_js) : '0'), true);
+            // Editor visual da seção "Fields" (preview + lápis de label/placeholder).
+            $fields_preview_js_path = plugin_dir_path(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-fields-preview.js';
+            $fields_preview_js_ver  = $this->version . '.' . (file_exists($fields_preview_js_path) ? filemtime($fields_preview_js_path) : '0');
+            wp_enqueue_script('lknRedeFieldsPreview', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-fields-preview.js', array(), $fields_preview_js_ver, true);
+
+            $fields_preview_css_path = plugin_dir_path(__FILE__) . 'css/lkn-integration-rede-for-woocommerce-fields-preview.css';
+            $fields_preview_css_ver  = $this->version . '.' . (file_exists($fields_preview_css_path) ? filemtime($fields_preview_css_path) : '0');
+            wp_enqueue_style('lknRedeFieldsPreviewStyle', plugin_dir_url(__FILE__) . 'css/lkn-integration-rede-for-woocommerce-fields-preview.css', array(), $fields_preview_css_ver);
+
+            // CSS reais do checkout (para o preview ficar fiel ao front).
+            $rede_public_css = plugin_dir_url(__FILE__) . '../Public/css/';
+            wp_enqueue_style('lknRedeFieldsPreviewCard', $rede_public_css . 'card.css', array(), $this->version);
+            wp_enqueue_style('lknRedeFieldsPreviewSelect', $rede_public_css . 'lknIntegrationRedeForWoocommerceSelectStyle.css', array(), $this->version);
+            wp_enqueue_style('lknRedeFieldsPreviewShortcode', $rede_public_css . 'rede/LknIntegrationRedeForWoocommerceCardShortcode.css', array(), $this->version);
+            wp_enqueue_style('lknRedeFieldsPreviewModern', $rede_public_css . 'rede/LknIntegrationRedeForWoocommerceModernTemplate.css', array(), $this->version);
+            wp_enqueue_style('lknRedeFieldsPreviewCompact', $rede_public_css . 'rede/LknIntegrationRedeForWoocommerceCompactTemplate.css', array(), $this->version);
             wp_enqueue_script('lknIntegrationRedeForWoocommerceCard', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-card.js', array('jquery'), $this->version, false);
             wc_get_template(
                 'adminCard/adminSettingsCard.php',
@@ -193,8 +189,20 @@ final class LknIntegrationRedeForWoocommerceAdmin
                 'alertText' => __('Deseja realmente deletar todos logs dos pedidos?', 'woo-rede')
             ));
             wp_localize_script('lknIntegrationRedeForWoocommerceSettingsLayoutScript', 'lknWcRedeLayoutSettings', array(
-                'basic' => plugin_dir_url(__FILE__) . 'images/basicTemplate.png',
-                'modern' => plugin_dir_url(__FILE__) . 'images/modernTemplate.png',
+                // Previews do layout por tipo de checkout: no checkout em Blocos
+                // (Gutenberg) e no Shortcode/Clássico as telas do cartão são
+                // diferentes, então cada um recebe o seu conjunto de imagens.
+                // O template "basic" (padrão) usa a imagem *-default-version.
+                'blocks' => array(
+                    'basic'   => plugin_dir_url(__FILE__) . 'images/gutenberg-default-version.png',
+                    'modern'  => plugin_dir_url(__FILE__) . 'images/gutenberg-modern-version.png',
+                    'compact' => plugin_dir_url(__FILE__) . 'images/gutenberg-compact-version.png',
+                ),
+                'classic' => array(
+                    'basic'   => plugin_dir_url(__FILE__) . 'images/shortcode-default-version.png',
+                    'modern'  => plugin_dir_url(__FILE__) . 'images/shortcode-modern-version.png',
+                    'compact' => plugin_dir_url(__FILE__) . 'images/shortcode-compact-version.png',
+                ),
             ));
 
             $gateway_settings = get_option('woocommerce_' . $section . '_settings', array());

@@ -235,6 +235,12 @@ final class LknIntegrationRedeForWoocommerce
         $this->loader->add_action('woocommerce_admin_order_data_after_billing_address', $this->wc_maxipago_debit_class, 'displayMeta', 10, 1);
         $this->loader->add_filter('lknRedeGetMerchantAuth', $this->wc_maxipago_credit_class, 'getMerchantAuth');
 
+        // Recursos PRO dos gateways de cartão: ao salvar, força os padrões quando não há
+        // licença ativa (cobre HTML manipulado e os campos "fake" replicados no FREE).
+        foreach (array($this->wc_rede_credit_class->id, $this->wc_rede_debit_class->id, $this->wc_maxipago_credit_class->id, $this->wc_maxipago_debit_class->id) as $lknRedeProGateway) {
+            $this->loader->add_filter('woocommerce_settings_api_sanitized_fields_' . $lknRedeProGateway, $this, 'enforceRedeProFieldsOnSave', 10, 1);
+        }
+
         $this->loader->add_filter('plugin_action_links_' . INTEGRATION_REDE_FOR_WOOCOMMERCE_FILE_BASENAME, $this, 'lknIntegrationRedeForWoocommercePluginRowMeta', 10, 2);
         $this->loader->add_filter('plugin_action_links_' . INTEGRATION_REDE_FOR_WOOCOMMERCE_FILE_BASENAME, $this, 'lknIntegrationRedeForWoocommercePluginRowMetaPro', 10, 2);
 
@@ -253,6 +259,22 @@ final class LknIntegrationRedeForWoocommerce
 
         // Aviso crítico para atualização do plugin PRO
         $this->loader->add_action('admin_notices', $this, 'lkn_pro_update_critical_notice');
+
+        // Aviso + tela de atualização do PRO (padrão woo-better/shipping-simulator).
+        // Aparece quando o PRO está INSTALADO (ativo ou não) e desatualizado, e
+        // atualiza o PRO pelo endpoint de update (json + zip).
+        $pro_update_notice = new LknIntegrationRedeForWoocommerceProUpdateNotice();
+        $this->loader->add_action('admin_menu', $pro_update_notice, 'register_screen');
+        $this->loader->add_action('admin_init', $pro_update_notice, 'maybe_redirect');
+        $this->loader->add_action('admin_enqueue_scripts', $pro_update_notice, 'enqueue_assets');
+        $this->loader->add_action('admin_notices', $pro_update_notice, 'maybe_render_notice');
+        $this->loader->add_action('wp_ajax_lkn_rede_force_update_pro', $pro_update_notice, 'ajax_update_pro');
+        $this->loader->add_action('wp_ajax_lkn_rede_dismiss_pro_update', $pro_update_notice, 'ajax_dismiss');
+
+        // E-mail para os administradores quando a atualização automática do FREE
+        // está habilitada e o PRO continua instalado e desatualizado.
+        $pro_update_email = new LknIntegrationRedeForWoocommerceProUpdateEmail();
+        $this->loader->add_action('admin_init', $pro_update_email, 'maybe_send');
 
         // Hook para ações personalizadas da ordem PIX
         $this->loader->add_filter('woocommerce_order_actions', $this, 'add_pix_verification_action');
@@ -1363,6 +1385,22 @@ final class LknIntegrationRedeForWoocommerce
         return $plugin_meta;
     }
 
+    /**
+     * Ao salvar as configurações de um gateway de cartão sem licença PRO ativa, força
+     * os campos PRO aos valores padrão e descarta as chaves "fake".
+     *
+     * @param array $settings Configurações sanitizadas do gateway.
+     * @return array
+     */
+    public function enforceRedeProFieldsOnSave($settings)
+    {
+        if (is_array($settings) && ! LknIntegrationRedeForWoocommerceHelper::isProLicenseValid()) {
+            $settings = LknIntegrationRedeForWoocommerceHelper::lknRedeEnforceProFieldsOnSave($settings);
+        }
+
+        return $settings;
+    }
+
     public function add_gateway_name_to_notes_global($note_data, $args)
     {
         if (isset($note_data['comment_post_ID'])) {
@@ -1439,7 +1477,7 @@ final class LknIntegrationRedeForWoocommerce
         // Para rede_debit, verificar se permite crédito através da configuração de tipo de cartão
         $show_installments = true;
         if ($chosen_payment_method === 'rede_debit') {
-            $card_type_restriction = isset($settings['card_type_restriction']) ? $settings['card_type_restriction'] : 'debit_only';
+            $card_type_restriction = LknIntegrationRedeForWoocommerceHelper::getCardTypeRestriction('rede_debit');
             
             // Verificar tipo de cartão na sessão
             $session_card_type = WC()->session->get('lkn_card_type_rede_debit');

@@ -39,7 +39,7 @@ const ContentRedeCredit = (props) => {
   }
 
   const formatCreditCardNumber = value => {
-    if (value?.length > 19) return creditObject.rede_credit_number
+    if (value?.length > 24) return creditObject.rede_credit_number
     // Remove caracteres não numéricos
     const cleanedValue = value?.replace(/\D/g, '')
     // Adiciona espaços a cada quatro dígitos
@@ -47,35 +47,40 @@ const ContentRedeCredit = (props) => {
     return formattedValue
   }
 
-  const updateCreditObject = (key, value) => {
-    let isValidDate = false
+  const onlyDigits = value => String(value == null ? '' : value).replace(/\D/g, '')
 
+  // Validade padronizada: só dígitos, sempre MM/AA (sem espaços). Mês de um dígito
+  // 2-9 vira 0X; mês > 12 é limitado a 12; ano com 4 dígitos é cortado para 2
+  // ("25/2035" -> "25/35").
+  const formatExpiryValue = value => {
+    const digits = onlyDigits(value)
+    let month = digits.slice(0, 2)
+    let year = digits.slice(2)
+    if (month.length === 1 && month >= '2' && month <= '9') {
+      month = '0' + month
+    } else if (month.length === 2 && parseInt(month, 10) > 12) {
+      month = '12'
+    }
+    if (year.length > 2) year = year.slice(-2)
+    return year.length ? month + '/' + year : month
+  }
+
+  const formatCvcValue = value => onlyDigits(value).slice(0, 4)
+
+  const updateCreditObject = (key, value) => {
     switch (key) {
       case 'rede_credit_expiry':
-        if (value.length > 7) return
-
-        // Verifica se o valor é uma data válida (MM/YY)
-        isValidDate = /^\d{2}\/\d{2}$/.test(value)
-        if (!isValidDate) {
-          // Remove caracteres não numéricos
-          const cleanedValue = value?.replace(/\D/g, '')
-          let formattedValue = cleanedValue?.replace(/^(.{2})/, '$1 / ')?.trim()
-
-          // Se o tamanho da string for 5, remove o espaço e a barra adicionados anteriormente
-          if (formattedValue.length === 4) {
-            formattedValue = formattedValue.replace(/\s\//, '')
-          }
-
-          // Atualiza o estado
-          setCreditObject({
-            ...creditObject,
-            [key]: formattedValue
-          })
-        }
+        setCreditObject({
+          ...creditObject,
+          [key]: formatExpiryValue(value)
+        })
         return
       case 'rede_credit_cvc':
-        if ((!/^\d+$/.test(value) && value !== '') || value.length > 4) return
-        break
+        setCreditObject({
+          ...creditObject,
+          [key]: formatCvcValue(value)
+        })
+        return
       default:
         break
     }
@@ -154,6 +159,7 @@ const ContentRedeCredit = (props) => {
         id="rede_credit_number"
         label={translationsRedeCredit.cardNumber}
         value={formatCreditCardNumber(creditObject.rede_credit_number)}
+        inputMode="numeric"
         onChange={(value) => {
           updateCreditObject('rede_credit_number', formatCreditCardNumber(value))
         }}
@@ -164,6 +170,7 @@ const ContentRedeCredit = (props) => {
         id="rede_credit_expiry"
         label={translationsRedeCredit.cardExpiringDate}
         value={creditObject.rede_credit_expiry}
+        inputMode="numeric"
         onChange={(value) => {
           updateCreditObject('rede_credit_expiry', value)
         }}
@@ -174,6 +181,7 @@ const ContentRedeCredit = (props) => {
         id="rede_credit_cvc"
         label={translationsRedeCredit.securityCode}
         value={creditObject.rede_credit_cvc}
+        inputMode="numeric"
         onChange={(value) => {
           updateCreditObject('rede_credit_cvc', value)
         }}

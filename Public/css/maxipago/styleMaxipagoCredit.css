@@ -5,11 +5,16 @@
 */
 #maxipago-credit-payment-form .payment-method-description {
     display: inline-flex;
-    margin: 0 0 20px;
+    margin: 12px 0 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 1rem;
+}
+
+#maxipago-credit-payment-form .payment-method-description p {
+    font-size: 0.8rem;
+    color: #8e9ba8;
 }
 
 #maxipago-credit-payment-form .payment-method-description #logo-maxipago {

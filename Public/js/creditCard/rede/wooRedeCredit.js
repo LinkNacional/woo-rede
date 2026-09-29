@@ -66,6 +66,10 @@ window.jQuery(function ($) {
       $form.card({
         container: '#rede-card-animation',
 
+        // A máscara/validação dos campos é responsabilidade do rede-card-fields.js
+        // (padronizado: MM/AA, só dígitos, inputmode). Aqui só a animação do cartão.
+        formatting: false,
+
         /**
            * Selectors
            */
