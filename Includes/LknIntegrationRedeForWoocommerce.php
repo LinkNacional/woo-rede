@@ -260,6 +260,22 @@ final class LknIntegrationRedeForWoocommerce
         // Aviso crítico para atualização do plugin PRO
         $this->loader->add_action('admin_notices', $this, 'lkn_pro_update_critical_notice');
 
+        // Aviso + tela de atualização do PRO (padrão woo-better/shipping-simulator).
+        // Aparece quando o PRO está INSTALADO (ativo ou não) e desatualizado, e
+        // atualiza o PRO pelo endpoint de update (json + zip).
+        $pro_update_notice = new LknIntegrationRedeForWoocommerceProUpdateNotice();
+        $this->loader->add_action('admin_menu', $pro_update_notice, 'register_screen');
+        $this->loader->add_action('admin_init', $pro_update_notice, 'maybe_redirect');
+        $this->loader->add_action('admin_enqueue_scripts', $pro_update_notice, 'enqueue_assets');
+        $this->loader->add_action('admin_notices', $pro_update_notice, 'maybe_render_notice');
+        $this->loader->add_action('wp_ajax_lkn_rede_force_update_pro', $pro_update_notice, 'ajax_update_pro');
+        $this->loader->add_action('wp_ajax_lkn_rede_dismiss_pro_update', $pro_update_notice, 'ajax_dismiss');
+
+        // E-mail para os administradores quando a atualização automática do FREE
+        // está habilitada e o PRO continua instalado e desatualizado.
+        $pro_update_email = new LknIntegrationRedeForWoocommerceProUpdateEmail();
+        $this->loader->add_action('admin_init', $pro_update_email, 'maybe_send');
+
         // Hook para ações personalizadas da ordem PIX
         $this->loader->add_filter('woocommerce_order_actions', $this, 'add_pix_verification_action');
         $this->loader->add_action('woocommerce_order_action_verify_pix_status', $this, 'process_pix_verification_action');
