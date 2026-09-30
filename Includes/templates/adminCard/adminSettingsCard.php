@@ -48,7 +48,7 @@ if (!defined('ABSPATH')) {
                     </a>
                 </div>
                 <div class="lknIntegrationRedeForWoocommerceContactLinks">
-                    <a href=<?php echo esc_url('https://chat.whatsapp.com/IjzHhDXwmzGLDnBfOibJKO'); ?> target="_blank">
+                    <a href=<?php echo esc_url('https://chat.whatsapp.com/C6S3my9Adr818hbeJphPBm'); ?> target="_blank">
                         <?php //phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage 
                         ?>
                         <img src="<?php echo esc_url($whatsapp); ?>" alt="Whatsapp Icon" class="lknIntegrationRedeForWoocommerceContactIcon">
