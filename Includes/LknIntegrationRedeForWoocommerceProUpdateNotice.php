@@ -70,8 +70,8 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
     {
         add_submenu_page(
             '',
-            __('Atualização do plugin PRO', 'woo-rede'),
-            __('Atualização do plugin PRO', 'woo-rede'),
+            __('PRO plugin update', 'woo-rede'),
+            __('PRO plugin update', 'woo-rede'),
             'update_plugins',
             self::SCREEN_SLUG,
             array($this, 'render_screen')
@@ -145,7 +145,7 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
     public function render_screen(): void
     {
         if (! current_user_can('update_plugins')) {
-            wp_die(esc_html__('Você não tem permissão para acessar esta página.', 'woo-rede'));
+            wp_die(esc_html__('You do not have permission to access this page.', 'woo-rede'));
         }
 
         // Se o PRO já foi atualizado, não mostra mais a tela.
@@ -157,27 +157,27 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
         // A tela carregou: marca como exibida para não abrir novamente.
         update_option(self::OPTION_SHOWN, 'yes');
 
-        $free_name = __('Integration Rede Itaú para WooCommerce', 'woo-rede');
-        $pro_name = __('Integração da Rede para WooCommerce Pro', 'woo-rede');
+        $free_name = __('Integration Rede Itaú for WooCommerce', 'woo-rede');
+        $pro_name = __('Integration Rede Itaú for WooCommerce PRO', 'woo-rede');
         $min_version = $this->min_pro_version();
         ?>
         <div class="wrap lkn-pro-update-screen">
             <div class="lkn-pro-update-screen__card">
-                <a href="<?php echo esc_url(admin_url()); ?>" class="lkn-pro-update-screen__close" aria-label="<?php esc_attr_e('Fechar e não mostrar novamente', 'woo-rede'); ?>">
+                <a href="<?php echo esc_url(admin_url()); ?>" class="lkn-pro-update-screen__close" aria-label="<?php esc_attr_e('Close and do not show again', 'woo-rede'); ?>">
                     <span aria-hidden="true">&times;</span>
                 </a>
 
                 <div class="lkn-pro-update-screen__badge" aria-hidden="true">&#9888;&#65039;</div>
 
                 <h1 class="lkn-pro-update-screen__title">
-                    <?php esc_html_e('Atualização importante do plugin PRO', 'woo-rede'); ?>
+                    <?php esc_html_e('Important PRO plugin update', 'woo-rede'); ?>
                 </h1>
 
                 <p class="lkn-pro-update-screen__lead">
                     <?php
                     echo sprintf(
                         /* translators: %1$s: FREE plugin name, %2$s: PRO plugin name, %3$s: minimum PRO version */
-                        esc_html__('O plugin %1$s exige a versão %3$s ou superior do %2$s. Sua versão instalada está desatualizada.', 'woo-rede'),
+                        esc_html__('The plugin %1$s requires version %3$s or higher of %2$s. Your installed version is out of date.', 'woo-rede'),
                         '<strong>' . esc_html($free_name) . '</strong>',
                         '<strong>' . esc_html($pro_name) . '</strong>',
                         '<strong>' . esc_html($min_version) . '</strong>'
@@ -187,20 +187,20 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
 
                 <div class="lkn-pro-update-screen__body">
                     <p>
-                        <?php esc_html_e('Atualize o plugin PRO para evitar falhas na tela de configurações e no checkout. Seus dados não serão alterados.', 'woo-rede'); ?>
+                        <?php esc_html_e('Update the PRO plugin to avoid failures on the settings screen and at checkout. Your data will not be changed.', 'woo-rede'); ?>
                     </p>
                     <ul class="lkn-pro-update-screen__features">
-                        <li>&#128274; <?php esc_html_e('Mais segurança nas transações', 'woo-rede'); ?></li>
-                        <li>&#9889; <?php esc_html_e('Correções e melhorias críticas', 'woo-rede'); ?></li>
-                        <li>&#128179; <?php esc_html_e('Novos recursos de pagamento', 'woo-rede'); ?></li>
+                        <li>&#128274; <?php esc_html_e('More secure transactions', 'woo-rede'); ?></li>
+                        <li>&#9889; <?php esc_html_e('Critical fixes and improvements', 'woo-rede'); ?></li>
+                        <li>&#128179; <?php esc_html_e('New payment features', 'woo-rede'); ?></li>
                     </ul>
                 </div>
 
                 <div class="lkn-pro-update-screen__actions">
-                    <a href="<?php echo esc_url(admin_url()); ?>" class="button button-secondary button-hero"><?php esc_html_e('Agora não', 'woo-rede'); ?></a>
+                    <a href="<?php echo esc_url(admin_url()); ?>" class="button button-secondary button-hero"><?php esc_html_e('Not now', 'woo-rede'); ?></a>
                     <button type="button" class="button button-primary button-hero lkn-pro-update-button">
                         <span class="lkn-pro-update-button__bar" aria-hidden="true"></span>
-                        <span class="lkn-pro-update-button__text"><?php esc_html_e('Atualizar plugin PRO', 'woo-rede'); ?></span>
+                        <span class="lkn-pro-update-button__text"><?php esc_html_e('Update PRO plugin', 'woo-rede'); ?></span>
                     </button>
                 </div>
             </div>
@@ -242,8 +242,8 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
         }
 
         $nonce = wp_create_nonce(self::NONCE_DISMISS);
-        $free_name = __('Integration Rede Itaú para WooCommerce', 'woo-rede');
-        $pro_name = __('Integração da Rede para WooCommerce Pro', 'woo-rede');
+        $free_name = __('Integration Rede Itaú for WooCommerce', 'woo-rede');
+        $pro_name = __('Integration Rede Itaú for WooCommerce PRO', 'woo-rede');
         ?>
         <div class="notice notice-warning is-dismissible lkn-pro-notice lkn-pro-notice--update"
             data-dismissible="lkn-rede-pro-update"
@@ -255,13 +255,13 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
             <div class="lkn-pro-notice__content">
                 <p class="lkn-pro-notice__title">
                     <strong><?php echo esc_html($free_name); ?></strong>
-                    <span class="lkn-pro-notice__badge"><?php esc_html_e('Atualização', 'woo-rede'); ?></span>
+                    <span class="lkn-pro-notice__badge"><?php esc_html_e('Update', 'woo-rede'); ?></span>
                 </p>
                 <p>
                     <?php
                     echo sprintf(
                         /* translators: %1$s: PRO plugin name, %2$s: minimum PRO version */
-                        esc_html__('Uma atualização importante do plugin %1$s está disponível (versão %2$s ou superior). Atualize para evitar falhas na configuração e no checkout.', 'woo-rede'),
+                        esc_html__('An important update for the %1$s plugin is available (version %2$s or higher). Update it to avoid failures in the configuration and at checkout.', 'woo-rede'),
                         '<strong>' . esc_html($pro_name) . '</strong>',
                         '<strong>' . esc_html($this->min_pro_version()) . '</strong>'
                     );
@@ -269,10 +269,10 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
                 </p>
                 <button type="button" class="button button-primary lkn-pro-update-button">
                     <span class="lkn-pro-update-button__bar" aria-hidden="true"></span>
-                    <span class="lkn-pro-update-button__text"><?php esc_html_e('Atualizar plugin PRO', 'woo-rede'); ?></span>
+                    <span class="lkn-pro-update-button__text"><?php esc_html_e('Update PRO plugin', 'woo-rede'); ?></span>
                 </button>
             </div>
-            <button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e('Dispensar este aviso.', 'woo-rede'); ?></span></button>
+            <button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e('Dismiss this notice.', 'woo-rede'); ?></span></button>
         </div>
         <?php
     }
@@ -290,7 +290,7 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
         check_ajax_referer(self::NONCE_UPDATE, 'nonce');
 
         if (! current_user_can('update_plugins') && ! current_user_can('install_plugins')) {
-            wp_send_json_error(array('message' => __('Você não tem permissão para atualizar plugins.', 'woo-rede')));
+            wp_send_json_error(array('message' => __('You do not have permission to update plugins.', 'woo-rede')));
         }
 
         require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -322,7 +322,7 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
         }
 
         if (true !== $result) {
-            $message = __('Nenhuma atualização disponível no momento. Atualize pela tela de Plugins.', 'woo-rede');
+            $message = __('No update available at the moment. Update from the Plugins screen.', 'woo-rede');
             set_transient(self::ERROR_TRANSIENT, $message, 5 * MINUTE_IN_SECONDS);
             wp_send_json_error(array('message' => $message));
         }
@@ -330,7 +330,7 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
         delete_site_transient('update_plugins');
         set_transient(self::SUCCESS_TRANSIENT, 'updated', 5 * MINUTE_IN_SECONDS);
 
-        wp_send_json_success(array('message' => __('Atualizado com sucesso. Recarregando…', 'woo-rede')));
+        wp_send_json_success(array('message' => __('Updated successfully. Reloading…', 'woo-rede')));
     }
 
     /**
@@ -341,7 +341,7 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
         check_ajax_referer(self::NONCE_DISMISS, 'nonce');
 
         if (! current_user_can('update_plugins')) {
-            wp_send_json_error(array('message' => __('Permissão insuficiente.', 'woo-rede')), 403);
+            wp_send_json_error(array('message' => __('Insufficient permission.', 'woo-rede')), 403);
         }
 
         update_option(self::OPTION_DISMISSED, 'yes');
@@ -405,7 +405,7 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
      */
     private function script_data(string $show_on_load = '', string $error_message = ''): array
     {
-        $plugin_name = __('Integration Rede Itaú para WooCommerce', 'woo-rede');
+        $plugin_name = __('Integration Rede Itaú for WooCommerce', 'woo-rede');
 
         return array(
             'ajaxurl' => admin_url('admin-ajax.php'),
@@ -413,20 +413,20 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
             'nonce' => wp_create_nonce(self::NONCE_UPDATE),
             'plugin' => self::PRO_BASENAME,
             'redirectUrl' => admin_url('plugins.php'),
-            'successText' => __('Atualizado!', 'woo-rede'),
+            'successText' => __('Updated!', 'woo-rede'),
             'iconUrl' => INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR_URL . 'Includes/assets/WordpressAssets/icon-256x256.gif',
             'showOnLoad' => $show_on_load,
             'errorMessage' => $error_message,
             'success' => array(
                 'title' => $plugin_name,
-                'badge' => __('Sucesso', 'woo-rede'),
-                'close' => __('Fechar', 'woo-rede'),
-                'message' => __('O plugin PRO foi atualizado com sucesso.', 'woo-rede'),
+                'badge' => __('Success', 'woo-rede'),
+                'close' => __('Close', 'woo-rede'),
+                'message' => __('The PRO plugin was updated successfully.', 'woo-rede'),
             ),
             'error' => array(
                 'title' => $plugin_name,
-                'badge' => __('Erro', 'woo-rede'),
-                'close' => __('Fechar', 'woo-rede'),
+                'badge' => __('Error', 'woo-rede'),
+                'close' => __('Close', 'woo-rede'),
             ),
         );
     }
