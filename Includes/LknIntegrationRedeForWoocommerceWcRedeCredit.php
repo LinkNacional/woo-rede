@@ -513,9 +513,9 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
 
         if ($this->get_option('debug') == 'yes') {
             $this->form_fields['show_order_logs'] =  array(
-                'title' => __('Visualizar Log no Pedido', 'woo-rede'),
+                'title' => __('View Order Log', 'woo-rede'),
                 'type' => 'checkbox',
-                'label' => sprintf('Habilita visualização do log da transação dentro do pedido.', 'woo-rede'),
+                'label' => __('Enables viewing the transaction log within the order.', 'woo-rede'),
                 'default' => 'no',
                 'description' => esc_attr__('Displays Rede transaction logs inside WooCommerce order details.', 'woo-rede'),
                 'desc_tip' => esc_attr__('Useful for quickly viewing payment log data without accessing the system log files.', 'woo-rede'),
@@ -524,7 +524,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                 )
             );
             $this->form_fields['clear_order_records'] =  array(
-                'title' => __('Limpar logs nos Pedidos', 'woo-rede'),
+                'title' => __('Clear Order Logs', 'woo-rede'),
                 'type' => 'button',
                 'id' => 'validateLicense',
                 'class' => 'woocommerce-save-button components-button is-primary',

@@ -1043,7 +1043,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'title' => __('Load on checkout', 'woo-rede'),
                 'type' => 'checkbox',
                 'desc_tip' => esc_attr__('Disable to load the plugin during checkout. Enable to prevent infinite loading errors.', 'woo-rede'),
-                'description' => esc_attr__('Selecione a posição onde o layout PIX será exibido na página de checkout.', 'woo-rede'),
+                'description' => esc_attr__('Select the position where the PIX layout will be displayed on the checkout page.', 'woo-rede'),
                 'custom_attributes' => array(
                     'data-title-description' => esc_attr__("This feature controls the plugin's loading on the checkout page. It's enabled by default to prevent infinite loading errors and should only be disabled if you're experiencing issues with the gateway.", 'woo-rede')
                 ),
@@ -1352,9 +1352,9 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
 
         if ($this->get_option('debug') == 'yes') {
             $this->form_fields['show_order_logs'] =  array(
-                'title' => __('Visualizar Log no Pedido', 'woo-rede'),
+                'title' => __('View Order Log', 'woo-rede'),
                 'type' => 'checkbox',
-                'label' => sprintf('Habilita visualização do log da transação dentro do pedido.', 'woo-rede'),
+                'label' => __('Enables viewing the transaction log within the order.', 'woo-rede'),
                 'default' => 'no',
                 'desc_tip' => esc_attr__('Useful for quickly viewing payment log data without accessing the system log files.', 'woo-rede'),
                 'description' => esc_attr__('Enable this option to log payment requests and responses for troubleshooting purposes.', 'woo-rede'),
@@ -1363,7 +1363,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 ),
             );
             $this->form_fields['clear_order_records'] =  array(
-                'title' => __('Limpar logs nos Pedidos', 'woo-rede'),
+                'title' => __('Clear Order Logs', 'woo-rede'),
                 'type' => 'button',
                 'id' => 'validateLicense',
                 'class' => 'woocommerce-save-button components-button is-primary',

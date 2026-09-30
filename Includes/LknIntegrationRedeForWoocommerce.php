@@ -1117,7 +1117,7 @@ final class LknIntegrationRedeForWoocommerce
         
         // Só adiciona a ação se for um pedido PIX
         if (self::is_pix_gateway($payment_method)) {
-            $actions['verify_pix_status'] = __('Verificar Status PIX', 'woo-rede');
+            $actions['verify_pix_status'] = __('Check PIX Status', 'woo-rede');
         }
         
         return $actions;
@@ -1132,7 +1132,7 @@ final class LknIntegrationRedeForWoocommerce
         
         // Validar se é pedido PIX
         if (!self::is_pix_gateway($payment_method)) {
-            $order->add_order_note('[' . $payment_method . '] ' . __('Verificação PIX: Esta ação é aplicável apenas a pedidos com método de pagamento PIX.', 'woo-rede'));
+            $order->add_order_note('[' . $payment_method . '] ' . __('PIX Verification: This action applies only to orders using the PIX payment method.', 'woo-rede'));
             return;
         }
         
@@ -1145,7 +1145,7 @@ final class LknIntegrationRedeForWoocommerce
         }
         
         if (empty($tId)) {
-            $order->add_order_note('[' . $payment_method . '] ' . __('Verificação PIX: Identificador da transação não localizado nos metadados do pedido.', 'woo-rede'));
+            $order->add_order_note('[' . $payment_method . '] ' . __('PIX Verification: Transaction identifier not found in the order metadata.', 'woo-rede'));
             return;
         }
         
@@ -1160,7 +1160,7 @@ final class LknIntegrationRedeForWoocommerce
             $token_data = LknIntegrationRedeForWoocommerceHelper::get_cached_rede_oauth_token_for_gateway($gateway_id, $environment);
             
             if (!$token_data || empty($token_data['token'])) {
-                throw new \Exception(__('Erro ao obter token de autenticação.', 'woo-rede'));
+                throw new \Exception(__('Error obtaining the authentication token.', 'woo-rede'));
             }
             
             // API v2 da Rede
@@ -1178,7 +1178,7 @@ final class LknIntegrationRedeForWoocommerce
             ));
             
             if (is_wp_error($response)) {
-                throw new \Exception(__('Erro na comunicação com a API: ', 'woo-rede') . $response->get_error_message());
+                throw new \Exception(__('Error communicating with the API: ', 'woo-rede') . $response->get_error_message());
             }
             
             $response_body = json_decode(wp_remote_retrieve_body($response), true);

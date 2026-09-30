@@ -30,7 +30,7 @@ if (!defined('ABSPATH')) {
                         <b>•</b><?php esc_attr_e('WP Plugin', 'woo-rede'); ?>
                     </a>
                     <a target="_blank" href=<?php echo esc_url('https://www.linknacional.com.br/wordpress/suporte/'); ?>>
-                        <b>•</b><?php esc_attr_e('Suporte WP', 'woo-rede'); ?>
+                        <b>•</b><?php esc_attr_e('WP Support', 'woo-rede'); ?>
                     </a>
                 </div>
             </div>

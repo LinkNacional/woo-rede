@@ -184,9 +184,9 @@ final class LknIntegrationRedeForWoocommerceAdmin
                 plugin_dir_path(__FILE__) . '../Includes/templates/'
             );
             wp_localize_script('lknIntegrationRedeForWoocommerceAdminClearLogsButton', 'lknWcRedeTranslations', array(
-                'clearLogs' => __('Limpar Logs', 'woo-rede'),
+                'clearLogs' => __('Clear Logs', 'woo-rede'),
                 'sendConfigs' => __('Wordpress Support', 'woo-rede'),
-                'alertText' => __('Deseja realmente deletar todos logs dos pedidos?', 'woo-rede')
+                'alertText' => __('Do you really want to delete all order logs?', 'woo-rede')
             ));
             wp_localize_script('lknIntegrationRedeForWoocommerceSettingsLayoutScript', 'lknWcRedeLayoutSettings', array(
                 // Previews do layout por tipo de checkout: no checkout em Blocos
@@ -275,12 +275,12 @@ final class LknIntegrationRedeForWoocommerceAdmin
 
         // Verificar se a licença PRO está válida
         if (!LknIntegrationRedeForWoocommerceHelper::isProLicenseValid()) {
-            wp_die(esc_html__('Esta funcionalidade requer o plugin Rede PRO ativo com licença válida.', 'woo-rede'));
+            wp_die(esc_html__('This feature requires the Rede PRO plugin to be active with a valid license.', 'woo-rede'));
         }
 
         // Check user permissions
         if (!current_user_can('manage_woocommerce')) {
-            wp_die(esc_html__('Você não tem permissão para exportar pedidos.', 'woo-rede'));
+            wp_die(esc_html__('You do not have permission to export orders.', 'woo-rede'));
         }
 
         // Generate XLS file
