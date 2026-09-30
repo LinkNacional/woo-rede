@@ -59,7 +59,7 @@ final class LknIntegrationRedeForWoocommerceWcRede
                 if ($options = get_option('woocommerce_rede_settings')) {
                     $credit_options = array(
                         'enabled' => $options['enabled'],
-                        'title' => 'Ativar',
+                        'title' => __('Enable', 'woo-rede'),
 
                         'environment' => $options['environment'],
                         'token' => $options['token'],

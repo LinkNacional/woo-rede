@@ -204,7 +204,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         $token = LknIntegrationRedeForWoocommerceHelper::get_rede_oauth_token_for_gateway($this->id, $order_id);
         
         if ($token === null) {
-            throw new Exception('Não foi possível obter token de autenticação OAuth2 para ' . esc_html($this->id));
+            throw new Exception(__('Could not obtain the OAuth2 authentication token for ', 'woo-rede') . esc_html($this->id));
         }
         
         return $token;
@@ -365,7 +365,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
             }
             
             // Salvar metadados em caso de erro da requisição
-            $error_message = 'Erro na requisição: ' . $response->get_error_message();
+            $error_message = __('Request error: ', 'woo-rede') . $response->get_error_message();
             $translated_error_message = $this->translateRedeErrorMessage(44, $error_message);
             
             if ($order) {
@@ -418,7 +418,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
 
         if ($response_code !== 200 && $response_code !== 201) {
             $abecs_enabled = LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id);
-            $error_message = $abecs_enabled ? __('Transaction error', 'woo-rede') : 'Erro na transação';
+            $error_message = $abecs_enabled ? __('Transaction error', 'woo-rede') : __('Transaction error', 'woo-rede');
             $return_code = $response_data['returnCode'] ?? 500;
 
             if (isset($response_data['returnMessage'])) {
@@ -463,7 +463,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         // Se não há 3DS requerido, verificar se a transação foi aprovada
         if (!isset($response_data['threeDSecure']) && (!isset($response_data['returnCode']) || $response_data['returnCode'] !== '00')) {
             $abecs_enabled = LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id);
-            $error_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : ($abecs_enabled ? __('Transaction declined', 'woo-rede') : 'Transação recusada');
+            $error_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : ($abecs_enabled ? __('Transaction declined', 'woo-rede') : __('Transaction declined', 'woo-rede'));
             $return_code = $response_data['returnCode'] ?? 33;
             
             // Traduzir mensagem de erro se disponível
@@ -898,7 +898,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 // Adicionar notificação de erro/aviso para o administrador
                 add_action('admin_notices', function() {
                     echo '<div class="notice notice-warning is-dismissible">';
-                    echo '<p><strong>Rede Débito/Crédito:</strong> O valor mínimo de parcelas deve ser um número maior ou igual a 5. O valor foi ajustado automaticamente para 5.</p>';
+                    echo __('<p><strong>Rede Debit/Credit:</strong> The minimum installment value must be a number greater than or equal to 5. The value has been automatically adjusted to 5.</p>', 'woo-rede');
                     echo '</div>';
                 });
             } else {
@@ -911,7 +911,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
 
                     add_action('admin_notices', function() {
                         echo '<div class="notice notice-warning is-dismissible">';
-                        echo '<p><strong>Rede Débito/Crédito:</strong> O valor mínimo de parcelas deve ser maior ou igual a 5. O valor foi ajustado automaticamente para 5.</p>';
+                        echo __('<p><strong>Rede Debit/Credit:</strong> The minimum installment value must be greater than or equal to 5. The value has been automatically adjusted to 5.</p>', 'woo-rede');
                         echo '</div>';
                     });
                 }
@@ -1143,15 +1143,15 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'title' => '3DS Comportamento Alternativo',
                 'type' => 'select',
                 'class' => 'wc-enhanced-select',
-                'description' => 'Quando o cartão NÃO está registrado no 3DS (returnCode 204), escolha “Continuar sem 3DS” para autorizar a transação mesmo sem autenticação. Cancelamento ou timeout no desafio 3DS são SEMPRE recusados.',
-                'desc_tip' => 'Aplica-se apenas a cartões não registrados no 3DS. Cancelar/timeout do desafio recusa a transação.',
+                'description' => __('When the card is NOT enrolled in 3DS (returnCode 204), choose “Continue without 3DS” to authorize the transaction even without authentication. Cancelling or timing out the 3DS challenge is ALWAYS declined.', 'woo-rede'),
+                'desc_tip' => __('Applies only to cards not enrolled in 3DS. Cancelling/timing out the challenge declines the transaction.', 'woo-rede'),
                 'default' => 'decline',
                 'options' => array(
-                    'decline' => 'Recusar transação (Opção recomendada)',
+                    'decline' => __('Decline transaction (Recommended option)', 'woo-rede'),
                     'continue' => 'Continuar sem 3DS',
                 ),
                 'custom_attributes' => array(
-                    'data-title-description' => 'Cartão não registrado no 3DS: “Continuar” autoriza sem 3DS. Cancelamento/timeout do desafio: sempre recusa.'
+                    'data-title-description' => __('Card not enrolled in 3DS: “Continue” authorizes without 3DS. Cancelling/timing out the challenge: always declines.', 'woo-rede')
                 )
             ),
 
@@ -2050,45 +2050,45 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         }
 
         $error_translations = array(
-            '200' => 'Autenticação realizada com sucesso',
-            '201' => 'Autenticação não exigida',
-            '202' => 'Portador não autenticado',
-            '203' => 'Serviço não habilitado. Por favor, contate a Rede',
-            '204' => 'Portador não registrado no programa de autenticação da central do cartão',
-            '220' => 'Pedido de transação com autenticação recebida. URL de redirecionamento enviada',
-            '250' => 'Parâmetro obrigatório não está presente',
-            '251' => 'Formato do parâmetro inválido',
-            '252' => 'Parâmetro obrigatório não está presente',
-            '253' => 'Parâmetro enviado com tamanho inválido',
-            '254' => 'Formato do parâmetro inválido',
-            '255' => 'Parâmetro obrigatório não está presente',
-            '256' => 'Parâmetro enviado com tamanho inválido',
-            '257' => 'Formato do parâmetro inválido',
-            '258' => 'Parâmetro obrigatório não está presente',
-            '259' => 'Parâmetro obrigatório não está presente',
-            '260' => 'Parâmetro obrigatório não está presente',
-            '261' => 'Parâmetro obrigatório não está presente',
-            '269' => 'ChallengePreference: Formato do parâmetro inválido',
-            '3000' => 'ColorDepth: Parâmetro obrigatório não está presente',
-            '3001' => 'DeviceType3ds: Parâmetro obrigatório não está presente',
-            '3002' => 'JavaEnabled: Parâmetro obrigatório não está presente',
-            '3003' => 'Language: Parâmetro obrigatório não está presente',
-            '3004' => 'TimeZoneOffset: Parâmetro obrigatório não está presente',
-            '3005' => 'ScreenHeight: Parâmetro obrigatório não está presente',
-            '3006' => 'ScreenWidth: Parâmetro obrigatório não está presente',
-            '3007' => 'ColorDepth: Tamanho do parâmetro inválido',
-            '3008' => 'DeviceType3ds: Tamanho do parâmetro inválido',
-            '3009' => 'Language: Tamanho do parâmetro inválido',
-            '3010' => 'TimeZoneOffset: Tamanho do parâmetro inválido',
-            '3011' => 'ScreenHeight: Tamanho do parâmetro inválido',
-            '3012' => 'ScreenWidth: Formato do parâmetro inválido',
-            '3013' => 'ColorDepth: Formato do parâmetro inválido',
-            '3014' => 'DeviceType3ds: Formato do parâmetro inválido',
-            '3015' => 'JavaEnabled: Formato do parâmetro inválido',
-            '3016' => 'Language: Formato do parâmetro inválido',
-            '3017' => 'TimeZoneOffset: Formato do parâmetro inválido',
-            '3018' => 'ScreenHeight: Formato do parâmetro inválido',
-            '3019' => 'ScreenWidth: Formato do parâmetro inválido'
+            '200' => __('Authentication completed successfully', 'woo-rede'),
+            '201' => __('Authentication not required', 'woo-rede'),
+            '202' => __('Cardholder not authenticated', 'woo-rede'),
+            '203' => __('Service not enabled. Please contact Rede', 'woo-rede'),
+            '204' => __('Cardholder not enrolled in the card network authentication program', 'woo-rede'),
+            '220' => __('Transaction request with authentication received. Redirect URL sent', 'woo-rede'),
+            '250' => __('Required parameter is missing', 'woo-rede'),
+            '251' => __('Invalid parameter format', 'woo-rede'),
+            '252' => __('Required parameter is missing', 'woo-rede'),
+            '253' => __('Parameter sent with invalid length', 'woo-rede'),
+            '254' => __('Invalid parameter format', 'woo-rede'),
+            '255' => __('Required parameter is missing', 'woo-rede'),
+            '256' => __('Parameter sent with invalid length', 'woo-rede'),
+            '257' => __('Invalid parameter format', 'woo-rede'),
+            '258' => __('Required parameter is missing', 'woo-rede'),
+            '259' => __('Required parameter is missing', 'woo-rede'),
+            '260' => __('Required parameter is missing', 'woo-rede'),
+            '261' => __('Required parameter is missing', 'woo-rede'),
+            '269' => __('ChallengePreference: Invalid parameter format', 'woo-rede'),
+            '3000' => __('ColorDepth: Required parameter is missing', 'woo-rede'),
+            '3001' => __('DeviceType3ds: Required parameter is missing', 'woo-rede'),
+            '3002' => __('JavaEnabled: Required parameter is missing', 'woo-rede'),
+            '3003' => __('Language: Required parameter is missing', 'woo-rede'),
+            '3004' => __('TimeZoneOffset: Required parameter is missing', 'woo-rede'),
+            '3005' => __('ScreenHeight: Required parameter is missing', 'woo-rede'),
+            '3006' => __('ScreenWidth: Required parameter is missing', 'woo-rede'),
+            '3007' => __('ColorDepth: Invalid parameter length', 'woo-rede'),
+            '3008' => __('DeviceType3ds: Invalid parameter length', 'woo-rede'),
+            '3009' => __('Language: Invalid parameter length', 'woo-rede'),
+            '3010' => __('TimeZoneOffset: Invalid parameter length', 'woo-rede'),
+            '3011' => __('ScreenHeight: Invalid parameter length', 'woo-rede'),
+            '3012' => __('ScreenWidth: Invalid parameter format', 'woo-rede'),
+            '3013' => __('ColorDepth: Invalid parameter format', 'woo-rede'),
+            '3014' => __('DeviceType3ds: Invalid parameter format', 'woo-rede'),
+            '3015' => __('JavaEnabled: Invalid parameter format', 'woo-rede'),
+            '3016' => __('Language: Invalid parameter format', 'woo-rede'),
+            '3017' => __('TimeZoneOffset: Invalid parameter format', 'woo-rede'),
+            '3018' => __('ScreenHeight: Invalid parameter format', 'woo-rede'),
+            '3019' => __('ScreenWidth: Invalid parameter format', 'woo-rede')
         );
 
         $return_code_str = (string) $returnCode;
@@ -2179,7 +2179,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         ));
 
         if (is_wp_error($response)) {
-            throw new Exception('Erro na requisição de reembolso: ' . esc_html($response->get_error_message()));
+            throw new Exception(__('Refund request error: ', 'woo-rede') . esc_html($response->get_error_message()));
         }
         
         $response_code = wp_remote_retrieve_response_code($response);
@@ -2187,7 +2187,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
         $response_data = json_decode($response_body, true);
         
         if ($response_code !== 200 && $response_code !== 201) {
-            $error_message = 'Erro no reembolso';
+            $error_message = __('Refund error', 'woo-rede');
             if (isset($response_data['message'])) {
                 $error_message = $response_data['message'];
             } elseif (isset($response_data['errors']) && is_array($response_data['errors'])) {
@@ -2320,7 +2320,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                     $customLabel = null; // Resetar a variável a cada iteração
                     $interest = round((float) $this->get_option($i . 'x'), 2);
                     /* translators: %1$d: number of installments, %2$s: installment price */
-                    $label = sprintf('%dx de %s', $i, wp_strip_all_tags(wc_price($order_total / $i)));
+                    $label = sprintf(__('%dx of %s', 'woo-rede'), $i, wp_strip_all_tags(wc_price($order_total / $i)));
 
                     if (($this->get_option('installment_interest') == 'yes' || $this->get_option('installment_discount') == 'yes') && is_plugin_active('rede-for-woocommerce-pro/rede-for-woocommerce-pro.php')) {
                         $customLabel = LknIntegrationRedeForWoocommerceHelper::lknIntegrationRedeProRedeInterest($order_total, $interest, $i, 'label', $this);

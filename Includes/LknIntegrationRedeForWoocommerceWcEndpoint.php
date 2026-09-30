@@ -1003,7 +1003,7 @@ final class LknIntegrationRedeForWoocommerceWcEndpoint
                 $order->update_status($payment_complete_status);
             } else {
                 // Para pagamentos credit sem captura, aguardando captura manual
-                $order->update_status('on-hold', 'Pagamento autorizado, aguardando captura manual.');
+                $order->update_status('on-hold', __('Payment authorized, awaiting manual capture.', 'woo-rede'));
                 wc_reduce_stock_levels($order->get_id());
             }
         } else {

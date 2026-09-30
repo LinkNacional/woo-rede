@@ -434,7 +434,7 @@ final class LknIntegrationRedeForWoocommerceWcPixRede extends WC_Payment_Gateway
                     $order, $pix, isset($pix['tid']) ? $pix['tid'] : 'N/A', $pixExpiration, $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
                     1, $order->get_total(), $order_currency, 'PIX', $this->get_option('pv'), $this->get_option('token'),
                     $pixReference, $orderId, true, 'Pix', 'N/A',
-                    $this, $pixTid, '', '', $pix['returnCode'] ?? '00', $pix['returnMessage'] ?? 'PIX gerado com sucesso'
+                    $this, $pixTid, '', '', $pix['returnCode'] ?? '00', $pix['returnMessage'] ?? __('PIX generated successfully', 'woo-rede')
                 );
 
                 if ('yes' == $this->debug) {
@@ -547,7 +547,7 @@ final class LknIntegrationRedeForWoocommerceWcPixRede extends WC_Payment_Gateway
             $total = wc_price($order->get_total());
             $timeExpiration = $order->get_meta('_wc_rede_pix_integration_time_expiration');
             $dateTime = new DateTime($timeExpiration);
-            $formattedDate = 'Vencimento: ' . $dateTime->format('d/m/Y');
+            $formattedDate = __('Due date: ', 'woo-rede') . $dateTime->format('d/m/Y');
             wc_get_template(
                 '/paymentPixQRCode.php',
                 array(

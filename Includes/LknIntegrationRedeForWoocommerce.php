@@ -456,7 +456,7 @@ final class LknIntegrationRedeForWoocommerce
                 // Se nem mesmo 1x atende o valor mínimo, força 1x à vista
                 if ($i === 1) {
                     /* translators: %1$d: number of installments, %2$s: installment price */
-                    $base_label = sprintf("%dx de %s", 1, wc_price($cart_total));
+                    $base_label = sprintf(__('%dx of %s', 'woo-rede'), 1, wc_price($cart_total));
                     $label = $is_pro_active ? $this->get_installment_label_with_interest(1, $base_label, 'maxipago_credit') : $base_label;
                     $installments[] = [
                         'key' => 1,
@@ -467,7 +467,7 @@ final class LknIntegrationRedeForWoocommerce
             }
             $base_label = sprintf(
                 /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                "%dx de %s", 
+                __('%dx of %s', 'woo-rede'), 
                 $i, 
                 wc_price($installment_value)
             );
@@ -580,7 +580,7 @@ final class LknIntegrationRedeForWoocommerce
                 if ($i === 1) {
                     $base_label = sprintf(
                         /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                        "%dx de %s", 
+                        __('%dx of %s', 'woo-rede'), 
                         1, 
                         wc_price($cart_total)
                     );
@@ -594,7 +594,7 @@ final class LknIntegrationRedeForWoocommerce
             }
             $base_label = sprintf(
                 /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                "%dx de %s", 
+                __('%dx of %s', 'woo-rede'), 
                 $i, 
                 wc_price($installment_value)
             );
@@ -715,7 +715,7 @@ final class LknIntegrationRedeForWoocommerce
                 if ($i === 1) {
                     $base_label = sprintf(
                         /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                        "%dx de %s", 
+                        __('%dx of %s', 'woo-rede'), 
                         1, 
                         wc_price($cart_total)
                     );
@@ -729,7 +729,7 @@ final class LknIntegrationRedeForWoocommerce
             }
             $base_label = sprintf(
                 /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                "%dx de %s", 
+                __('%dx of %s', 'woo-rede'), 
                 $i, 
                 wc_price($installment_value)
             );
@@ -794,18 +794,18 @@ final class LknIntegrationRedeForWoocommerce
                 $nonce_action = 'maxipago_payment_fields_nonce';
                 break;
             default:
-                wp_send_json_error(['message' => 'Método de pagamento não suportado']);
+                wp_send_json_error(['message' => __('Unsupported payment method', 'woo-rede')]);
                 return;
         }
 
         // Verificar nonce para segurança
         if (!wp_verify_nonce($nonce, $nonce_action)) {
-            wp_send_json_error(['message' => 'Nonce inválido']);
+            wp_send_json_error(['message' => __('Invalid nonce', 'woo-rede')]);
             return;
         }
 
         if (empty($payment_method) || $installments < 1) {
-            wp_send_json_error(['message' => 'Parâmetros inválidos']);
+            wp_send_json_error(['message' => __('Invalid parameters', 'woo-rede')]);
             return;
         }
 
@@ -822,7 +822,7 @@ final class LknIntegrationRedeForWoocommerce
                 $session_key = 'lkn_installments_number_maxipago_credit';
                 break;
             default:
-                wp_send_json_error(['message' => 'Método de pagamento não suportado']);
+                wp_send_json_error(['message' => __('Unsupported payment method', 'woo-rede')]);
                 return;
         }
 
@@ -836,7 +836,7 @@ final class LknIntegrationRedeForWoocommerce
             }
             
             $response_data = [
-                'message' => 'Sessão atualizada com sucesso',
+                'message' => __('Session updated successfully', 'woo-rede'),
                 'payment_method' => $payment_method,
                 'installments' => $installments,
                 'session_key' => $session_key
@@ -849,7 +849,7 @@ final class LknIntegrationRedeForWoocommerce
             
             wp_send_json_success($response_data);
         } else {
-            wp_send_json_error(['message' => 'Sessão do WooCommerce não disponível']);
+            wp_send_json_error(['message' => __('WooCommerce session not available', 'woo-rede')]);
         }
     }
 
@@ -904,12 +904,12 @@ final class LknIntegrationRedeForWoocommerce
             if ($gateway === self::GATEWAY_DEBIT) {
                 $show_percent = isset($gatewaySettings['interest_show_percent']) && $gatewaySettings['interest_show_percent'] === 'yes';
                 if ($show_percent) {
-                    return $base_label . ' sem juros';
+                    return $base_label . ' ' . __('interest-free', 'woo-rede');
                 } else {
                     return $base_label;
                 }
             } else {
-                return $base_label . ' sem juros';
+                return $base_label . ' ' . __('interest-free', 'woo-rede');
             }
         }
 
@@ -949,7 +949,7 @@ final class LknIntegrationRedeForWoocommerce
         if ($value === 0) {
             $show_percent = isset($gatewaySettings['interest_show_percent']) && $gatewaySettings['interest_show_percent'] === 'yes';
             if ($show_percent) {
-                return $base_label . ' sem juros';
+                return $base_label . ' ' . __('interest-free', 'woo-rede');
             } else {
                 return $base_label;
             }
@@ -967,13 +967,13 @@ final class LknIntegrationRedeForWoocommerce
             $newInstallmentValue = $total_with_discount / $installment_number;
             $new_label = sprintf(
                 /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                "%dx de %s", 
+                __('%dx of %s', 'woo-rede'), 
                 $installment_number, 
                 wc_price($newInstallmentValue)
             );
             
             if ($show_percent) {
-                return $new_label . " ({$value}% de desconto)";
+                return $new_label . ' ' . sprintf(__('(%s%% discount)', 'woo-rede'), $value);
             } else {
                 return $new_label;
             }
@@ -982,7 +982,7 @@ final class LknIntegrationRedeForWoocommerce
             if ($ignoreInterest) {
                 $show_percent = isset($gatewaySettings['interest_show_percent']) && $gatewaySettings['interest_show_percent'] === 'yes';
                 if ($show_percent) {
-                    return $base_label . ' sem juros';
+                    return $base_label . ' ' . __('interest-free', 'woo-rede');
                 } else {
                     return $base_label;
                 }
@@ -992,13 +992,13 @@ final class LknIntegrationRedeForWoocommerce
                 $newInstallmentValue = $total_with_interest / $installment_number;
                 $new_label = sprintf(
                     /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                    "%dx de %s", 
+                    __('%dx of %s', 'woo-rede'), 
                     $installment_number, 
                     wc_price($newInstallmentValue)
                 );
                 
                 if ($show_percent) {
-                    return $new_label . " ({$value}% de juros)";
+                    return $new_label . ' ' . sprintf(__('(%s%% interest)', 'woo-rede'), $value);
                 } else {
                     return $new_label;
                 }
@@ -1380,7 +1380,7 @@ final class LknIntegrationRedeForWoocommerce
         $plugin_meta['setting'] = sprintf(
             '<a href="%1$s">%2$s</a>',
             admin_url('admin.php?page=wc-settings&tab=checkout'),
-            'Configurações'
+            __('Settings', 'woo-rede')
         );
 
         return $plugin_meta;
@@ -1631,14 +1631,14 @@ final class LknIntegrationRedeForWoocommerce
         // Verificar nonce
         $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
         if (!wp_verify_nonce($nonce, 'redeCardNonce')) {
-            wp_send_json_error(['message' => 'Nonce inválido']);
+            wp_send_json_error(['message' => __('Invalid nonce', 'woo-rede')]);
             return;
         }
 
         // Obter número do cartão
         $number = isset($_POST['number']) ? sanitize_text_field(wp_unslash($_POST['number'])) : '';
         if (empty($number)) {
-            wp_send_json_error(['message' => 'Número do cartão é obrigatório']);
+            wp_send_json_error(['message' => __('Card number is required', 'woo-rede')]);
             return;
         }
 
@@ -1958,13 +1958,13 @@ final class LknIntegrationRedeForWoocommerce
     {
         // Verificar nonce se fornecido
         if (isset($_POST['nonce']) && !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'lkn_rede_orders_nonce')) {
-            wp_send_json_error(array('message' => 'Nonce inválido'));
+            wp_send_json_error(array('message' => __('Invalid nonce', 'woo-rede')));
             return;
         }
 
         // Verificar se é um usuário com permissões adequadas
         if (!current_user_can('manage_woocommerce')) {
-            wp_send_json_error(array('message' => 'Permissões insuficientes'));
+            wp_send_json_error(array('message' => __('Insufficient permissions', 'woo-rede')));
             return;
         }
 
@@ -2056,7 +2056,7 @@ final class LknIntegrationRedeForWoocommerce
             // Se não há pedidos Rede, retornar resultado vazio
             if (empty($rede_order_ids)) {
                 $response_data = array(
-                    'message' => 'Nenhuma transação Rede encontrada',
+                    'message' => __('No Rede transactions found', 'woo-rede'),
                     'orders' => array(),
                     'pagination' => array(
                         'page' => $page,
@@ -2114,7 +2114,7 @@ final class LknIntegrationRedeForWoocommerce
             $response_data = array(
                 'message' => sprintf(
                     /* translators: %1$d is the page number, %2$d is the transactions found, %3$d is the total count */
-                    'Página %d - %d transações Rede encontradas de %d total', 
+                    __('Page %d - %d Rede transactions found out of %d total', 'woo-rede'), 
                     $page, 
                     count($orders_data), 
                     $total_rede_count
@@ -2138,7 +2138,7 @@ final class LknIntegrationRedeForWoocommerce
 
         } catch (Exception $e) {
             $error_data = array(
-                'message' => 'Erro ao buscar pedidos: ' . $e->getMessage()
+                'message' => __('Error fetching orders: ', 'woo-rede') . $e->getMessage()
             );
             
             if ($response_format === 'toon') {
@@ -2212,7 +2212,7 @@ final class LknIntegrationRedeForWoocommerce
                     $current_environment = isset($gateway_settings['environment']) ? $gateway_settings['environment'] : 'sandbox';
 
                     // Mapear ambiente para formato correto
-                    $environment = ($current_environment === 'production') ? 'Produção' : 'Sandbox';
+                    $environment = ($current_environment === 'production') ? __('Production', 'woo-rede') : 'Sandbox';
 
                     if (empty($current_pv) || empty($current_token)) {
                         continue;
