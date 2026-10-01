@@ -5,7 +5,7 @@ Donate link: https://www.linknacional.com/wordpress/plugins/
 Tags: rede, pix, cartao credito, itau, pagamento  
 Requires at least: 6.0
 Tested up to: 7.1  
-Stable tag: 5.5.0
+Stable tag: 5.5.1
 Requires PHP: 8.2
 License: GPL-3.0+  
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -128,6 +128,11 @@ A: Yes — tested up to WordPress 6.8.
 ---
 
 == Changelog ==
+
+### 5.5.1 - 2026-10-01
+* Fix: debit card expiration date (MM/YY) is now validated correctly, avoiding false "expired" errors for future dates.
+* Tweak: success/error card on the PRO plugin update screen and removal of third-party notices.
+* Tweak: updated WhatsApp support group link and PRO notification metadata cleanup on uninstall.
 
 ### 5.5.0 - 2026-09-29
 * Adjustment: Gateway logs updated to comply with ABECS standards.
@@ -306,6 +311,9 @@ A: Yes — tested up to WordPress 6.8.
 ---
 
 == Upgrade Notice ==
+
+### 5.5.1 - 2026-10-01
+* Fix: debit card expiration date (MM/YY) is now validated correctly.
 
 ### 5.5.0 - 2026-09-29
 * ABECS-compliant gateway logs; analytics texts adjusted for translation.
