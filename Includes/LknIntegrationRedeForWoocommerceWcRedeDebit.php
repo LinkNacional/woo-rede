@@ -81,6 +81,27 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
     }
 
     /**
+     * Valida a validade do cartão do débito por mês/ano, sem strtotime.
+     *
+     * O formatter do checkout sempre envia MM/AA; aqui o ano de 2 dígitos é
+     * expandido para 4 antes da comparação, evitando que "05/30" seja lido como
+     * 30 de maio do ano corrente (bug do fluxo legado baseado em strtotime).
+     * Sobrepor este método mantém o fluxo de crédito inalterado.
+     *
+     * @param string $expiry
+     * @throws Exception
+     */
+    protected function validate_expiration_date($expiry)
+    {
+        switch (LknIntegrationRedeForWoocommerceHelper::evaluateCardExpiration($expiry)) {
+            case LknIntegrationRedeForWoocommerceHelper::EXPIRY_INVALID:
+                throw new Exception(esc_attr__('Expiration date must contain 2 or 4 digits', 'woo-rede'));
+            case LknIntegrationRedeForWoocommerceHelper::EXPIRY_EXPIRED:
+                throw new Exception(esc_attr__('Card expiration date must be future.', 'woo-rede'));
+        }
+    }
+
+    /**
      * Fields validation.
      *
      * @return bool
@@ -898,7 +919,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 // Adicionar notificação de erro/aviso para o administrador
                 add_action('admin_notices', function() {
                     echo '<div class="notice notice-warning is-dismissible">';
-                    echo __('<p><strong>Rede Debit/Credit:</strong> The minimum installment value must be a number greater than or equal to 5. The value has been automatically adjusted to 5.</p>', 'woo-rede');
+                    echo '<p><strong>' . esc_html__('Rede Debit/Credit:', 'woo-rede') . '</strong> ' . esc_html__('The minimum installment value must be a number greater than or equal to 5. The value has been automatically adjusted to 5.', 'woo-rede') . '</p>';
                     echo '</div>';
                 });
             } else {
@@ -911,7 +932,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
 
                     add_action('admin_notices', function() {
                         echo '<div class="notice notice-warning is-dismissible">';
-                        echo __('<p><strong>Rede Debit/Credit:</strong> The minimum installment value must be greater than or equal to 5. The value has been automatically adjusted to 5.</p>', 'woo-rede');
+                        echo '<p><strong>' . esc_html__('Rede Debit/Credit:', 'woo-rede') . '</strong> ' . esc_html__('The minimum installment value must be greater than or equal to 5. The value has been automatically adjusted to 5.', 'woo-rede') . '</p>';
                         echo '</div>';
                     });
                 }
@@ -2320,7 +2341,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                     $customLabel = null; // Resetar a variável a cada iteração
                     $interest = round((float) $this->get_option($i . 'x'), 2);
                     /* translators: %1$d: number of installments, %2$s: installment price */
-                    $label = sprintf(__('%dx of %s', 'woo-rede'), $i, wp_strip_all_tags(wc_price($order_total / $i)));
+                    $label = sprintf(__('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags(wc_price($order_total / $i)));
 
                     if (($this->get_option('installment_interest') == 'yes' || $this->get_option('installment_discount') == 'yes') && is_plugin_active('rede-for-woocommerce-pro/rede-for-woocommerce-pro.php')) {
                         $customLabel = LknIntegrationRedeForWoocommerceHelper::lknIntegrationRedeProRedeInterest($order_total, $interest, $i, 'label', $this);

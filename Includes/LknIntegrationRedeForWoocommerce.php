@@ -456,7 +456,7 @@ final class LknIntegrationRedeForWoocommerce
                 // Se nem mesmo 1x atende o valor mínimo, força 1x à vista
                 if ($i === 1) {
                     /* translators: %1$d: number of installments, %2$s: installment price */
-                    $base_label = sprintf(__('%dx of %s', 'woo-rede'), 1, wc_price($cart_total));
+                    $base_label = sprintf(__('%1$dx of %2$s', 'woo-rede'), 1, wc_price($cart_total));
                     $label = $is_pro_active ? $this->get_installment_label_with_interest(1, $base_label, 'maxipago_credit') : $base_label;
                     $installments[] = [
                         'key' => 1,
@@ -467,7 +467,7 @@ final class LknIntegrationRedeForWoocommerce
             }
             $base_label = sprintf(
                 /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                __('%dx of %s', 'woo-rede'), 
+                __('%1$dx of %2$s', 'woo-rede'), 
                 $i, 
                 wc_price($installment_value)
             );
@@ -580,7 +580,7 @@ final class LknIntegrationRedeForWoocommerce
                 if ($i === 1) {
                     $base_label = sprintf(
                         /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                        __('%dx of %s', 'woo-rede'), 
+                        __('%1$dx of %2$s', 'woo-rede'), 
                         1, 
                         wc_price($cart_total)
                     );
@@ -594,7 +594,7 @@ final class LknIntegrationRedeForWoocommerce
             }
             $base_label = sprintf(
                 /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                __('%dx of %s', 'woo-rede'), 
+                __('%1$dx of %2$s', 'woo-rede'), 
                 $i, 
                 wc_price($installment_value)
             );
@@ -715,7 +715,7 @@ final class LknIntegrationRedeForWoocommerce
                 if ($i === 1) {
                     $base_label = sprintf(
                         /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                        __('%dx of %s', 'woo-rede'), 
+                        __('%1$dx of %2$s', 'woo-rede'), 
                         1, 
                         wc_price($cart_total)
                     );
@@ -729,7 +729,7 @@ final class LknIntegrationRedeForWoocommerce
             }
             $base_label = sprintf(
                 /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                __('%dx of %s', 'woo-rede'), 
+                __('%1$dx of %2$s', 'woo-rede'), 
                 $i, 
                 wc_price($installment_value)
             );
@@ -967,12 +967,13 @@ final class LknIntegrationRedeForWoocommerce
             $newInstallmentValue = $total_with_discount / $installment_number;
             $new_label = sprintf(
                 /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                __('%dx of %s', 'woo-rede'), 
+                __('%1$dx of %2$s', 'woo-rede'), 
                 $installment_number, 
                 wc_price($newInstallmentValue)
             );
             
             if ($show_percent) {
+                /* translators: %s: discount percentage, e.g. 5 */
                 return $new_label . ' ' . sprintf(__('(%s%% discount)', 'woo-rede'), $value);
             } else {
                 return $new_label;
@@ -992,12 +993,13 @@ final class LknIntegrationRedeForWoocommerce
                 $newInstallmentValue = $total_with_interest / $installment_number;
                 $new_label = sprintf(
                     /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                    __('%dx of %s', 'woo-rede'), 
+                    __('%1$dx of %2$s', 'woo-rede'), 
                     $installment_number, 
                     wc_price($newInstallmentValue)
                 );
                 
                 if ($show_percent) {
+                    /* translators: %s: interest percentage, e.g. 5 */
                     return $new_label . ' ' . sprintf(__('(%s%% interest)', 'woo-rede'), $value);
                 } else {
                     return $new_label;
@@ -2114,7 +2116,7 @@ final class LknIntegrationRedeForWoocommerce
             $response_data = array(
                 'message' => sprintf(
                     /* translators: %1$d is the page number, %2$d is the transactions found, %3$d is the total count */
-                    __('Page %d - %d Rede transactions found out of %d total', 'woo-rede'), 
+                    __('Page %1$d - %2$d Rede transactions found out of %3$d total', 'woo-rede'), 
                     $page, 
                     count($orders_data), 
                     $total_rede_count

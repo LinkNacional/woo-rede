@@ -356,23 +356,9 @@ abstract class LknIntegrationRedeForWoocommerceWcRedeAbstract extends WC_Payment
             return false;
         }
 
-        //if user filled expiry date with 3 digits,
-        // throw an exception and let him/her/they know.
-        if (isset($posted[$this->id . '_expiry'][2]) && ! isset($posted[$this->id . '_expiry'][3])) {
-            throw new Exception(esc_attr__('Expiration date must contain 2 or 4 digits', 'woo-rede'));
-            return false;
-        }
-
-        if (strtotime(
-            preg_replace(
-                '/(\d{2})\s*\/\s*(\d{4})/',
-                '$2-$1-01',
-                $this->normalize_expiration_date($posted[$this->id . '_expiry'])
-            )
-        ) < strtotime(gmdate('Y-m') . '-01')) {
-            throw new Exception(esc_attr__('Card expiration date must be future.', 'woo-rede'));
-            return false;
-        }
+        // A validação da validade é isolada em validate_expiration_date() para que
+        // um gateway possa sobrepor a checagem (o débito usa mês/ano sem strtotime).
+        $this->validate_expiration_date($posted[$this->id . '_expiry']);
 
         if (! isset($posted[$this->id . '_cvc']) || '' === $posted[$this->id . '_cvc']) {
             throw new Exception(esc_attr__('Please enter card security code', 'woo-rede'));
@@ -385,6 +371,31 @@ abstract class LknIntegrationRedeForWoocommerceWcRedeAbstract extends WC_Payment
         }
 
         return true;
+    }
+
+    /**
+     * Validate the card expiration date (legacy behavior kept as the default).
+     *
+     * @param string $expiry
+     * @throws Exception
+     */
+    protected function validate_expiration_date($expiry)
+    {
+        //if user filled expiry date with 3 digits,
+        // throw an exception and let him/her/they know.
+        if (isset($expiry[2]) && ! isset($expiry[3])) {
+            throw new Exception(esc_attr__('Expiration date must contain 2 or 4 digits', 'woo-rede'));
+        }
+
+        if (strtotime(
+            preg_replace(
+                '/(\d{2})\s*\/\s*(\d{4})/',
+                '$2-$1-01',
+                $this->normalize_expiration_date($expiry)
+            )
+        ) < strtotime(gmdate('Y-m') . '-01')) {
+            throw new Exception(esc_attr__('Card expiration date must be future.', 'woo-rede'));
+        }
     }
 
     /**

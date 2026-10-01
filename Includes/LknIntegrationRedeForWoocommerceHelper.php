@@ -7,6 +7,15 @@ use HelgeSverre\Toon\Toon;
 
 class LknIntegrationRedeForWoocommerceHelper
 {
+    /** Validade do cartão aprovada (data futura ou o próprio mês corrente). */
+    public const EXPIRY_VALID = 'valid';
+
+    /** Cartão vencido (mês/ano anteriores ao mês corrente). */
+    public const EXPIRY_EXPIRED = 'expired';
+
+    /** Formato inválido (não é MM/AA nem MM/AAAA, ou mês fora de 1-12). */
+    public const EXPIRY_INVALID = 'invalid';
+
     final public static function getCartTotal()
     {
         global $woocommerce;
@@ -17,6 +26,46 @@ class LknIntegrationRedeForWoocommerceHelper
             return (float) $woocommerce->cart->total;
         }
         return 0;
+    }
+
+    /**
+     * Avalia a validade do cartão de forma pura (sem WordPress e sem strtotime),
+     * para permitir testes unitários determinísticos e centralizar a regra de
+     * validade usada na validação do checkout.
+     *
+     * Aceita MM/AA e MM/AAAA, com ou sem espaços junto da barra. O ano de 2 dígitos
+     * é expandido para 4 antes da comparação, e a comparação é feita por mês/ano
+     * (o mês corrente inteiro é considerado válido). Assim "05/30" é lido como maio
+     * de 2030, nunca como 30 de maio do ano corrente.
+     *
+     * @param string $expiry Valor bruto do campo de validade (ex.: "05/30", "5 / 2030").
+     * @return string self::EXPIRY_VALID, self::EXPIRY_EXPIRED ou self::EXPIRY_INVALID.
+     */
+    final public static function evaluateCardExpiration($expiry): string
+    {
+        $expiry = trim((string) $expiry);
+
+        // Exige MM/AA ou MM/AAAA, tolerando espaços junto da barra.
+        if (! preg_match('~^(\d{1,2})\s*/\s*(\d{2}|\d{4})$~', $expiry, $matches)) {
+            return self::EXPIRY_INVALID;
+        }
+
+        $month = (int) $matches[1];
+        if ($month < 1 || $month > 12) {
+            return self::EXPIRY_INVALID;
+        }
+
+        $year = (int) $matches[2];
+        if (strlen($matches[2]) === 2) {
+            $year += 2000;
+        }
+
+        // Compara ano/mês como inteiro (ex.: 2026-10 -> 202610). Mês corrente é válido.
+        if (($year * 100 + $month) < (int) gmdate('Ym')) {
+            return self::EXPIRY_EXPIRED;
+        }
+
+        return self::EXPIRY_VALID;
     }
 
     /**
@@ -613,19 +662,19 @@ class LknIntegrationRedeForWoocommerceHelper
                         
                         if ($instance->get_option('interest_show_percent') == 'yes') {
                             /* translators: %1$d: number of installments, %2$s: installment price, %3$s: interest percentage */
-                            return html_entity_decode(sprintf(__('%dx of %s (%s%% interest)', 'woo-rede'), $i, wp_strip_all_tags( wc_price( $final_total / $i)), $interest));
+                            return html_entity_decode(sprintf(__('%1$dx of %2$s (%3$s%% interest)', 'woo-rede'), $i, wp_strip_all_tags( wc_price( $final_total / $i)), $interest));
                         }
                             /* translators: %1$d: number of installments, %2$s: installment price */
-                            return html_entity_decode(sprintf(__('%dx of %s', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
+                            return html_entity_decode(sprintf(__('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
                     } else {
                         // Sem juros, mas ainda aplicar outros valores
                         $final_total = $base_amount + $additional_fees + $tax_amount;
                         if ($instance->get_option('interest_show_percent') == 'yes') {
                             /* translators: %1$d: number of installments, %2$s: installment price */
-                            return html_entity_decode(sprintf(__('%dx of %s', 'woo-rede'), $i, wp_strip_all_tags( wc_price( $final_total / $i)))) . ' ' . __("interest-free", 'woo-rede');
+                            return html_entity_decode(sprintf(__('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags( wc_price( $final_total / $i)))) . ' ' . __("interest-free", 'woo-rede');
                         }
                         /* translators: %1$d: number of installments, %2$s: installment price */
-                        return html_entity_decode(sprintf(__('%dx of %s', 'woo-rede'), $i, wp_strip_all_tags( wc_price( $final_total / $i))));
+                        return html_entity_decode(sprintf(__('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags( wc_price( $final_total / $i))));
                     }
                 } else {
                     $discount = round((float) $instance->get_option($i . 'x_discount'), 0);
@@ -637,13 +686,13 @@ class LknIntegrationRedeForWoocommerceHelper
                     if ($discount >= 1) {
                         if ($instance->get_option('interest_show_percent') == 'yes') {
                             /* translators: %1$d: number of installments, %2$s: installment price, %3$s: discount percentage */
-                            return html_entity_decode(sprintf( __('%dx of %s (%s%% discount)', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i))), $discount));
+                            return html_entity_decode(sprintf( __('%1$dx of %2$s (%3$s%% discount)', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i))), $discount));
                         }
                         /* translators: %1$d: number of installments, %2$s: installment price */
-                        return html_entity_decode(sprintf( __('%dx of %s', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
+                        return html_entity_decode(sprintf( __('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
                     } else {
                         /* translators: %1$d: number of installments, %2$s: installment price */
-                        return html_entity_decode(sprintf( __('%dx of %s', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
+                        return html_entity_decode(sprintf( __('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
                     }
                 }
 

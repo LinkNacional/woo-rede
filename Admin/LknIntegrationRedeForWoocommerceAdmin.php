@@ -378,10 +378,15 @@ final class LknIntegrationRedeForWoocommerceAdmin
 
         // ===== ADICIONAR COLUNAS DINÂMICAS DE PRODUTOS =====
         for ($i = 1; $i <= $max_products; $i++) {
+            /* translators: %d: product index in the dynamic columns */
             $column_definitions[] = array('header' => sprintf(__('Product ID #%d', 'woo-rede'), $i), 'source' => 'product_field', 'field' => 'id', 'product_index' => $i - 1);
+            /* translators: %d: product index in the dynamic columns */
             $column_definitions[] = array('header' => sprintf(__('Product Name #%d', 'woo-rede'), $i), 'source' => 'product_field', 'field' => 'name', 'product_index' => $i - 1);
+            /* translators: %d: product index in the dynamic columns */
             $column_definitions[] = array('header' => sprintf(__('Product Price #%d', 'woo-rede'), $i), 'source' => 'product_field', 'field' => 'price', 'product_index' => $i - 1);
+            /* translators: %d: product index in the dynamic columns */
             $column_definitions[] = array('header' => sprintf(__('Product Quantity #%d', 'woo-rede'), $i), 'source' => 'product_field', 'field' => 'quantity', 'product_index' => $i - 1);
+            /* translators: %d: product index in the dynamic columns */
             $column_definitions[] = array('header' => sprintf(__('Product Attributes #%d', 'woo-rede'), $i), 'source' => 'product_field', 'field' => 'attributes', 'product_index' => $i - 1);
         }
 

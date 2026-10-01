@@ -596,7 +596,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                 $customLabel = null; // Resetar a variável a cada iteração
                 $interest = round((float) $this->get_option($i . 'x'), 2);
                 /* translators: %1$d: number of installments, %2$s: installment price */
-                $label = sprintf(__('%dx of %s', 'woo-rede'), $i, wp_strip_all_tags(wc_price($order_total / $i)));
+                $label = sprintf(__('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags(wc_price($order_total / $i)));
 
                 if (($this->get_option('installment_interest') == 'yes' || $this->get_option('installment_discount') == 'yes') && is_plugin_active('rede-for-woocommerce-pro/rede-for-woocommerce-pro.php')) {
                     $customLabel = LknIntegrationRedeForWoocommerceHelper::lknIntegrationRedeProRedeInterest($order_total, $interest, $i, 'label', $this);
