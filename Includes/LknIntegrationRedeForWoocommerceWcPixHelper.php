@@ -62,7 +62,7 @@ final class LknIntegrationRedeForWoocommerceWcPixHelper
             $customErrorResponse = LknIntegrationRedeForWoocommerceHelper::createCustomErrorResponse(
                 500,
                 44,
-                'Erro na requisição: ' . $response->get_error_message()
+                __('Request error: ', 'woo-rede') . $response->get_error_message()
             );
             
             $default_currency = get_option('woocommerce_currency', 'BRL');
@@ -72,7 +72,7 @@ final class LknIntegrationRedeForWoocommerceWcPixHelper
                 $order, $customErrorResponse, '', '', '',
                 1, $total, $order_currency, '', $pv, $token,
                 $reference, $order_id, true, 'PIX', '',
-                $pixInstance, '', '', '', 44, 'Erro na requisição: ' . $response->get_error_message()
+                $pixInstance, '', '', '', 44, __('Request error: ', 'woo-rede') . $response->get_error_message()
             );
             $order->save();
             

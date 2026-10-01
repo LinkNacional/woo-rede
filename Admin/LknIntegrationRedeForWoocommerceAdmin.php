@@ -184,9 +184,9 @@ final class LknIntegrationRedeForWoocommerceAdmin
                 plugin_dir_path(__FILE__) . '../Includes/templates/'
             );
             wp_localize_script('lknIntegrationRedeForWoocommerceAdminClearLogsButton', 'lknWcRedeTranslations', array(
-                'clearLogs' => __('Limpar Logs', 'woo-rede'),
+                'clearLogs' => __('Clear Logs', 'woo-rede'),
                 'sendConfigs' => __('Wordpress Support', 'woo-rede'),
-                'alertText' => __('Deseja realmente deletar todos logs dos pedidos?', 'woo-rede')
+                'alertText' => __('Do you really want to delete all order logs?', 'woo-rede')
             ));
             wp_localize_script('lknIntegrationRedeForWoocommerceSettingsLayoutScript', 'lknWcRedeLayoutSettings', array(
                 // Previews do layout por tipo de checkout: no checkout em Blocos
@@ -275,12 +275,12 @@ final class LknIntegrationRedeForWoocommerceAdmin
 
         // Verificar se a licença PRO está válida
         if (!LknIntegrationRedeForWoocommerceHelper::isProLicenseValid()) {
-            wp_die(esc_html__('Esta funcionalidade requer o plugin Rede PRO ativo com licença válida.', 'woo-rede'));
+            wp_die(esc_html__('This feature requires the Rede PRO plugin to be active with a valid license.', 'woo-rede'));
         }
 
         // Check user permissions
         if (!current_user_can('manage_woocommerce')) {
-            wp_die(esc_html__('Você não tem permissão para exportar pedidos.', 'woo-rede'));
+            wp_die(esc_html__('You do not have permission to export orders.', 'woo-rede'));
         }
 
         // Generate XLS file
@@ -328,61 +328,66 @@ final class LknIntegrationRedeForWoocommerceAdmin
         // ===== DEFINIÇÃO COMPLETA DE COLUNAS =====
         $column_definitions = array(
             // 1. DADOS BÁSICOS DO PEDIDO (4 campos)
-            array('header' => 'ID do Pedido', 'source' => 'order', 'field' => 'id'),
-            array('header' => 'Data do Pedido', 'source' => 'order', 'field' => 'date_created'),
-            array('header' => 'Status do Pedido', 'source' => 'order', 'field' => 'status'),
-            array('header' => 'Método de Pagamento', 'source' => 'order', 'field' => 'payment_method_title'),
+            array('header' => __('Order ID', 'woo-rede'), 'source' => 'order', 'field' => 'id'),
+            array('header' => __('Order Date', 'woo-rede'), 'source' => 'order', 'field' => 'date_created'),
+            array('header' => __('Order Status', 'woo-rede'), 'source' => 'order', 'field' => 'status'),
+            array('header' => __('Payment Method', 'woo-rede'), 'source' => 'order', 'field' => 'payment_method_title'),
             
             // 2. DADOS DO CLIENTE (5 campos)
-            array('header' => 'Nome do Cliente', 'source' => 'order', 'field' => 'billing_name'),
-            array('header' => 'Email do Cliente', 'source' => 'order', 'field' => 'billing_email'),
-            array('header' => 'Telefone do Cliente', 'source' => 'order', 'field' => 'billing_phone'),
+            array('header' => __('Customer Name', 'woo-rede'), 'source' => 'order', 'field' => 'billing_name'),
+            array('header' => __('Customer Email', 'woo-rede'), 'source' => 'order', 'field' => 'billing_email'),
+            array('header' => __('Customer Phone', 'woo-rede'), 'source' => 'order', 'field' => 'billing_phone'),
             array('header' => 'CPF/CNPJ', 'source' => 'order', 'field' => 'billing_document'),
-            array('header' => 'Tipo de Pessoa', 'source' => 'meta', 'meta_key' => '_billing_persontype', 'format' => 'person_type'),
+            array('header' => __('Person Type', 'woo-rede'), 'source' => 'meta', 'meta_key' => '_billing_persontype', 'format' => 'person_type'),
             
             // 3. DADOS GATEWAY/CARTÃO (5 campos)
-            array('header' => 'Cartão Mascarado', 'source' => 'toon', 'toon_path' => 'gateway.masked', 'meta_key' => 'lkn_rede_gateway_masked'),
-            array('header' => 'Tipo Cartão', 'source' => 'toon', 'toon_path' => 'gateway.type', 'meta_key' => 'lkn_rede_gateway_type', 'format' => 'gateway_type'),
-            array('header' => 'Bandeira', 'source' => 'toon', 'toon_path' => 'gateway.brand', 'meta_key' => 'lkn_rede_gateway_brand'),
-            array('header' => 'Validade', 'source' => 'toon', 'toon_path' => 'gateway.expiry', 'meta_key' => 'lkn_rede_gateway_expiry'),
-            array('header' => 'Portador', 'source' => 'toon', 'toon_path' => 'gateway.holder_name', 'meta_key' => '_wc_rede_transaction_holder'),
+            array('header' => __('Masked Card', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'gateway.masked', 'meta_key' => 'lkn_rede_gateway_masked'),
+            array('header' => __('Card Type', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'gateway.type', 'meta_key' => 'lkn_rede_gateway_type', 'format' => 'gateway_type'),
+            array('header' => __('Card Brand', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'gateway.brand', 'meta_key' => 'lkn_rede_gateway_brand'),
+            array('header' => __('Expiry', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'gateway.expiry', 'meta_key' => 'lkn_rede_gateway_expiry'),
+            array('header' => __('Cardholder', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'gateway.holder_name', 'meta_key' => '_wc_rede_transaction_holder'),
             
             // 4. DADOS TRANSAÇÃO (8 campos)
             array('header' => 'TID', 'source' => 'toon', 'toon_path' => 'transaction.tid', 'meta_key' => '_wc_rede_transaction_id'),
             array('header' => 'NSU', 'source' => 'toon', 'toon_path' => 'transaction.nsu', 'meta_key' => '_wc_rede_transaction_nsu'),
-            array('header' => 'Código Autorização', 'source' => 'toon', 'toon_path' => 'transaction.authorization_code', 'meta_key' => '_wc_rede_transaction_authorization_code'),
-            array('header' => 'Captura', 'source' => 'toon', 'toon_path' => 'transaction.capture', 'meta_key' => 'lkn_rede_transaction_capture', 'format' => 'yes_no'),
-            array('header' => 'Recorrente', 'source' => 'toon', 'toon_path' => 'transaction.recurrent', 'meta_key' => 'lkn_rede_transaction_recurrent', 'format' => 'yes_no'),
-            array('header' => 'Autenticação 3DS', 'source' => 'toon', 'toon_path' => 'transaction.3ds_auth', 'meta_key' => 'lkn_rede_transaction_3ds_auth', 'format' => 'yes_no'),
-            array('header' => 'Parcelas', 'source' => 'toon', 'toon_path' => 'transaction.installments', 'meta_key' => '_wc_rede_installments'),
-            array('header' => 'Valor Parcela', 'source' => 'toon', 'toon_path' => 'transaction.installment_amount', 'meta_key' => 'lkn_rede_transaction_installment_amount'),
+            array('header' => __('Authorization Code', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'transaction.authorization_code', 'meta_key' => '_wc_rede_transaction_authorization_code'),
+            array('header' => __('Capture', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'transaction.capture', 'meta_key' => 'lkn_rede_transaction_capture', 'format' => 'yes_no'),
+            array('header' => __('Recurring', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'transaction.recurrent', 'meta_key' => 'lkn_rede_transaction_recurrent', 'format' => 'yes_no'),
+            array('header' => __('3DS Authentication', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'transaction.3ds_auth', 'meta_key' => 'lkn_rede_transaction_3ds_auth', 'format' => 'yes_no'),
+            array('header' => __('Installments', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'transaction.installments', 'meta_key' => '_wc_rede_installments'),
+            array('header' => __('Installment Amount', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'transaction.installment_amount', 'meta_key' => 'lkn_rede_transaction_installment_amount'),
             
             // 5. VALORES (5 campos)
-            array('header' => 'Total Transação', 'source' => 'toon', 'toon_path' => 'amounts.total', 'meta_key' => '_wc_rede_transaction_amount'),
-            array('header' => 'Subtotal Produtos', 'source' => 'toon', 'toon_path' => 'amounts.subtotal', 'meta_key' => 'lkn_rede_amounts_subtotal'),
-            array('header' => 'Valor Frete', 'source' => 'toon', 'toon_path' => 'amounts.shipping', 'meta_key' => 'lkn_rede_amounts_shipping'),
-            array('header' => 'Juros/Desconto', 'source' => 'toon', 'toon_path' => 'amounts.interest_discount', 'meta_key' => 'lkn_rede_amounts_interest_discount'),
-            array('header' => 'Moeda', 'source' => 'toon', 'toon_path' => 'amounts.currency', 'meta_key' => 'lkn_rede_amounts_currency'),
+            array('header' => __('Transaction Total', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'amounts.total', 'meta_key' => '_wc_rede_transaction_amount'),
+            array('header' => __('Products Subtotal', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'amounts.subtotal', 'meta_key' => 'lkn_rede_amounts_subtotal'),
+            array('header' => __('Shipping Amount', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'amounts.shipping', 'meta_key' => 'lkn_rede_amounts_shipping'),
+            array('header' => __('Interest/Discount', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'amounts.interest_discount', 'meta_key' => 'lkn_rede_amounts_interest_discount'),
+            array('header' => __('Currency', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'amounts.currency', 'meta_key' => 'lkn_rede_amounts_currency'),
             
             // 6. SISTEMA (4 campos)
-            array('header' => 'Ambiente', 'source' => 'toon', 'toon_path' => 'system.environment', 'meta_key' => 'lkn_rede_system_environment', 'format' => 'environment'),
+            array('header' => __('Environment', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'system.environment', 'meta_key' => 'lkn_rede_system_environment', 'format' => 'environment'),
             array('header' => 'Gateway', 'source' => 'toon', 'toon_path' => 'system.gateway', 'meta_key' => 'lkn_rede_system_gateway'),
-            array('header' => 'Referência', 'source' => 'toon', 'toon_path' => 'system.reference', 'meta_key' => 'lkn_rede_system_reference'),
-            array('header' => 'Data/Hora Requisição', 'source' => 'toon', 'toon_path' => 'system.request_datetime', 'meta_key' => 'lkn_rede_system_request_datetime'),
+            array('header' => __('Reference', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'system.reference', 'meta_key' => 'lkn_rede_system_reference'),
+            array('header' => __('Request Date/Time', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'system.request_datetime', 'meta_key' => 'lkn_rede_system_request_datetime'),
             
             // 7. RESPOSTA (3 campos)
-            array('header' => 'Status HTTP', 'source' => 'toon', 'toon_path' => 'response.http_status', 'meta_key' => 'lkn_rede_response_http_status'),
-            array('header' => 'Código Retorno', 'source' => 'toon', 'toon_path' => 'response.return_code', 'meta_key' => '_wc_rede_transaction_return_code'),
-            array('header' => 'Mensagem Retorno', 'source' => 'toon', 'toon_path' => 'response.return_message', 'meta_key' => '_wc_rede_transaction_return_message')
+            array('header' => __('HTTP Status', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'response.http_status', 'meta_key' => 'lkn_rede_response_http_status'),
+            array('header' => __('Return Code', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'response.return_code', 'meta_key' => '_wc_rede_transaction_return_code'),
+            array('header' => __('Return Message', 'woo-rede'), 'source' => 'toon', 'toon_path' => 'response.return_message', 'meta_key' => '_wc_rede_transaction_return_message')
         );
 
         // ===== ADICIONAR COLUNAS DINÂMICAS DE PRODUTOS =====
         for ($i = 1; $i <= $max_products; $i++) {
-            $column_definitions[] = array('header' => "ID Produto #{$i}", 'source' => 'product_field', 'field' => 'id', 'product_index' => $i - 1);
-            $column_definitions[] = array('header' => "Nome Produto #{$i}", 'source' => 'product_field', 'field' => 'name', 'product_index' => $i - 1);
-            $column_definitions[] = array('header' => "Preço Produto #{$i}", 'source' => 'product_field', 'field' => 'price', 'product_index' => $i - 1);
-            $column_definitions[] = array('header' => "Quantidade Produto #{$i}", 'source' => 'product_field', 'field' => 'quantity', 'product_index' => $i - 1);
-            $column_definitions[] = array('header' => "Variáveis Produto #{$i}", 'source' => 'product_field', 'field' => 'attributes', 'product_index' => $i - 1);
+            /* translators: %d: product index in the dynamic columns */
+            $column_definitions[] = array('header' => sprintf(__('Product ID #%d', 'woo-rede'), $i), 'source' => 'product_field', 'field' => 'id', 'product_index' => $i - 1);
+            /* translators: %d: product index in the dynamic columns */
+            $column_definitions[] = array('header' => sprintf(__('Product Name #%d', 'woo-rede'), $i), 'source' => 'product_field', 'field' => 'name', 'product_index' => $i - 1);
+            /* translators: %d: product index in the dynamic columns */
+            $column_definitions[] = array('header' => sprintf(__('Product Price #%d', 'woo-rede'), $i), 'source' => 'product_field', 'field' => 'price', 'product_index' => $i - 1);
+            /* translators: %d: product index in the dynamic columns */
+            $column_definitions[] = array('header' => sprintf(__('Product Quantity #%d', 'woo-rede'), $i), 'source' => 'product_field', 'field' => 'quantity', 'product_index' => $i - 1);
+            /* translators: %d: product index in the dynamic columns */
+            $column_definitions[] = array('header' => sprintf(__('Product Attributes #%d', 'woo-rede'), $i), 'source' => 'product_field', 'field' => 'attributes', 'product_index' => $i - 1);
         }
 
         // Output headers
@@ -544,48 +549,48 @@ final class LknIntegrationRedeForWoocommerceAdmin
             case 'person_type':
                 // Só formatar se for código numérico
                 return match ($value) {
-                    '1' => 'Pessoa Física',
-                    '2' => 'Pessoa Jurídica',
-                    '0' => 'Nenhum',
+                    '1' => __('Natural Person', 'woo-rede'),
+                    '2' => __('Legal Entity', 'woo-rede'),
+                    '0' => __('None', 'woo-rede'),
                     default => $value // Se já está formatado, usar como está
                 };
                 
             case 'gateway_type':
                 // Se já está em português, usar como está
-                if (in_array($value, ['Crédito', 'Débito', 'PIX'])) {
+                if (in_array($value, [__('Credit', 'woo-rede'), __('Debit', 'woo-rede'), 'PIX'])) {
                     return $value;
                 }
                 // Só formatar valores em inglês  
                 $value = strtolower(trim($value));
                 return match ($value) {
-                    'credit', 'creditcard' => 'Crédito',
-                    'debit', 'debitcard' => 'Débito', 
+                    'credit', 'creditcard' => __('Credit', 'woo-rede'),
+                    'debit', 'debitcard' => __('Debit', 'woo-rede'), 
                     'pix' => 'PIX',
                     default => $value
                 };
                 
             case 'yes_no':
                 // Se já está em português, usar como está
-                if (in_array($value, ['Sim', 'Não', 'Sucesso', 'Falha'])) {
+                if (in_array($value, [__('Yes', 'woo-rede'), __('No', 'woo-rede'), __('Success', 'woo-rede'), __('Failure', 'woo-rede')])) {
                     return $value;
                 }
                 // Só formatar valores em inglês ou booleanos
                 if (is_bool($value)) {
-                    return $value ? 'Sim' : 'Não';
+                    return $value ? __('Yes', 'woo-rede') : __('No', 'woo-rede');
                 }
                 $value = strtolower(trim($value));
-                return ($value === 'true' || $value === '1' || $value === 'yes' || $value === 'sim' || $value === 'sucesso') ? 'Sim' : 'Não';
+                return ($value === 'true' || $value === '1' || $value === 'yes' || $value === 'sim' || $value === 'sucesso') ? __('Yes', 'woo-rede') : __('No', 'woo-rede');
                 
             case 'environment':
                 // Se já está formatado, usar como está
-                if (in_array($value, ['Sandbox', 'Produção'])) {
+                if (in_array($value, ['Sandbox', __('Production', 'woo-rede')])) {
                     return $value;
                 }
                 // Só formatar valores em inglês
                 $value = strtolower(trim($value));
                 return match ($value) {
                     'sandbox', 'test', 'testing' => 'Sandbox',
-                    'production', 'prod', 'live' => 'Produção',
+                    'production', 'prod', 'live' => __('Production', 'woo-rede'),
                     default => $value
                 };
                 
@@ -815,7 +820,7 @@ final class LknIntegrationRedeForWoocommerceAdmin
         
         // Handle boolean
         if (is_bool($value)) {
-            return $value ? 'Sim' : 'Não';
+            return $value ? __('Yes', 'woo-rede') : __('No', 'woo-rede');
         }
         
         // Handle arrays

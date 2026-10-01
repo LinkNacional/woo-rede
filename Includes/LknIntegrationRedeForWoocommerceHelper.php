@@ -7,6 +7,15 @@ use HelgeSverre\Toon\Toon;
 
 class LknIntegrationRedeForWoocommerceHelper
 {
+    /** Validade do cartão aprovada (data futura ou o próprio mês corrente). */
+    public const EXPIRY_VALID = 'valid';
+
+    /** Cartão vencido (mês/ano anteriores ao mês corrente). */
+    public const EXPIRY_EXPIRED = 'expired';
+
+    /** Formato inválido (não é MM/AA nem MM/AAAA, ou mês fora de 1-12). */
+    public const EXPIRY_INVALID = 'invalid';
+
     final public static function getCartTotal()
     {
         global $woocommerce;
@@ -17,6 +26,46 @@ class LknIntegrationRedeForWoocommerceHelper
             return (float) $woocommerce->cart->total;
         }
         return 0;
+    }
+
+    /**
+     * Avalia a validade do cartão de forma pura (sem WordPress e sem strtotime),
+     * para permitir testes unitários determinísticos e centralizar a regra de
+     * validade usada na validação do checkout.
+     *
+     * Aceita MM/AA e MM/AAAA, com ou sem espaços junto da barra. O ano de 2 dígitos
+     * é expandido para 4 antes da comparação, e a comparação é feita por mês/ano
+     * (o mês corrente inteiro é considerado válido). Assim "05/30" é lido como maio
+     * de 2030, nunca como 30 de maio do ano corrente.
+     *
+     * @param string $expiry Valor bruto do campo de validade (ex.: "05/30", "5 / 2030").
+     * @return string self::EXPIRY_VALID, self::EXPIRY_EXPIRED ou self::EXPIRY_INVALID.
+     */
+    final public static function evaluateCardExpiration($expiry): string
+    {
+        $expiry = trim((string) $expiry);
+
+        // Exige MM/AA ou MM/AAAA, tolerando espaços junto da barra.
+        if (! preg_match('~^(\d{1,2})\s*/\s*(\d{2}|\d{4})$~', $expiry, $matches)) {
+            return self::EXPIRY_INVALID;
+        }
+
+        $month = (int) $matches[1];
+        if ($month < 1 || $month > 12) {
+            return self::EXPIRY_INVALID;
+        }
+
+        $year = (int) $matches[2];
+        if (strlen($matches[2]) === 2) {
+            $year += 2000;
+        }
+
+        // Compara ano/mês como inteiro (ex.: 2026-10 -> 202610). Mês corrente é válido.
+        if (($year * 100 + $month) < (int) gmdate('Ym')) {
+            return self::EXPIRY_EXPIRED;
+        }
+
+        return self::EXPIRY_VALID;
     }
 
     /**
@@ -355,7 +404,7 @@ class LknIntegrationRedeForWoocommerceHelper
 
                     add_meta_box(
                         'showOrderLogs',
-                        'Logs das transações',
+                        __('Transaction logs', 'woo-rede'),
                         array($this, 'showLogsContent'),
                         $screen,
                         'advanced',
@@ -613,19 +662,19 @@ class LknIntegrationRedeForWoocommerceHelper
                         
                         if ($instance->get_option('interest_show_percent') == 'yes') {
                             /* translators: %1$d: number of installments, %2$s: installment price, %3$s: interest percentage */
-                            return html_entity_decode(sprintf('%dx de %s (%s%% de juros)', $i, wp_strip_all_tags( wc_price( $final_total / $i)), $interest));
+                            return html_entity_decode(sprintf(__('%1$dx of %2$s (%3$s%% interest)', 'woo-rede'), $i, wp_strip_all_tags( wc_price( $final_total / $i)), $interest));
                         }
                             /* translators: %1$d: number of installments, %2$s: installment price */
-                            return html_entity_decode(sprintf('%dx de %s', $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
+                            return html_entity_decode(sprintf(__('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
                     } else {
                         // Sem juros, mas ainda aplicar outros valores
                         $final_total = $base_amount + $additional_fees + $tax_amount;
                         if ($instance->get_option('interest_show_percent') == 'yes') {
                             /* translators: %1$d: number of installments, %2$s: installment price */
-                            return html_entity_decode(sprintf('%dx de %s', $i, wp_strip_all_tags( wc_price( $final_total / $i)))) . ' ' . __("interest-free", 'woo-rede');
+                            return html_entity_decode(sprintf(__('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags( wc_price( $final_total / $i)))) . ' ' . __("interest-free", 'woo-rede');
                         }
                         /* translators: %1$d: number of installments, %2$s: installment price */
-                        return html_entity_decode(sprintf('%dx de %s', $i, wp_strip_all_tags( wc_price( $final_total / $i))));
+                        return html_entity_decode(sprintf(__('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags( wc_price( $final_total / $i))));
                     }
                 } else {
                     $discount = round((float) $instance->get_option($i . 'x_discount'), 0);
@@ -637,13 +686,13 @@ class LknIntegrationRedeForWoocommerceHelper
                     if ($discount >= 1) {
                         if ($instance->get_option('interest_show_percent') == 'yes') {
                             /* translators: %1$d: number of installments, %2$s: installment price, %3$s: discount percentage */
-                            return html_entity_decode(sprintf( '%dx de %s (%s%% de desconto)', $i, wp_strip_all_tags( wc_price(($final_total / $i))), $discount));
+                            return html_entity_decode(sprintf( __('%1$dx of %2$s (%3$s%% discount)', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i))), $discount));
                         }
                         /* translators: %1$d: number of installments, %2$s: installment price */
-                        return html_entity_decode(sprintf( '%dx de %s', $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
+                        return html_entity_decode(sprintf( __('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
                     } else {
                         /* translators: %1$d: number of installments, %2$s: installment price */
-                        return html_entity_decode(sprintf( '%dx de %s', $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
+                        return html_entity_decode(sprintf( __('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags( wc_price(($final_total / $i)))));
                     }
                 }
 
@@ -1910,19 +1959,19 @@ class LknIntegrationRedeForWoocommerceHelper
     public static function getHttpStatusDescription($httpStatus)
     {
         $httpStatusDescriptions = array(
-            200 => 'Sucesso',
-            201 => 'Criado com sucesso',
-            400 => 'Requisição inválida',
-            401 => 'Não autorizado',
-            403 => 'Proibido',
-            404 => 'Não encontrado',
-            405 => 'Método não permitido',
-            422 => 'Entidade não processável',
-            429 => 'Muitas requisições',
-            500 => 'Erro interno do servidor',
-            502 => 'Gateway inválido',
-            503 => 'Serviço indisponível',
-            504 => 'Timeout do gateway'
+            200 => __('Success', 'woo-rede'),
+            201 => __('Created successfully', 'woo-rede'),
+            400 => __('Invalid request', 'woo-rede'),
+            401 => __('Unauthorized', 'woo-rede'),
+            403 => __('Forbidden', 'woo-rede'),
+            404 => __('Not found', 'woo-rede'),
+            405 => __('Method not allowed', 'woo-rede'),
+            422 => __('Unprocessable entity', 'woo-rede'),
+            429 => __('Too many requests', 'woo-rede'),
+            500 => __('Internal server error', 'woo-rede'),
+            502 => __('Invalid gateway', 'woo-rede'),
+            503 => __('Service unavailable', 'woo-rede'),
+            504 => __('Gateway timeout', 'woo-rede')
         );
 
         return isset($httpStatusDescriptions[$httpStatus]) ? $httpStatusDescriptions[$httpStatus] : 'N/A';
@@ -2026,10 +2075,10 @@ class LknIntegrationRedeForWoocommerceHelper
             if (is_array($gatewayInstance)) {
                 // É um array de configurações
                 $env = $gatewayInstance['environment'] ?? 'test';
-                $environment = ($env === 'production') ? 'Produção' : 'Sandbox';
+                $environment = ($env === 'production') ? __('Production', 'woo-rede') : 'Sandbox';
             } else {
                 // É uma instância do gateway
-                $environment = ($gatewayInstance->get_option('environment', 'test') === 'production') ? 'Produção' : 'Sandbox';
+                $environment = ($gatewayInstance->get_option('environment', 'test') === 'production') ? __('Production', 'woo-rede') : 'Sandbox';
             }
         }
 
@@ -2043,7 +2092,7 @@ class LknIntegrationRedeForWoocommerceHelper
         // Validar CVV baseado no tipo de pagamento
         $cvvSent = 'N/A';
         if (in_array($gatewayType, ['Credit', 'Debit'])) {
-            $cvvSent = !empty($cvvField) && $cvvField !== '***' ? 'Sim' : 'Não';
+            $cvvSent = !empty($cvvField) && $cvvField !== '***' ? __('Yes', 'woo-rede') : __('No', 'woo-rede');
         }
 
         // Validar Capture baseado no tipo de pagamento
@@ -2053,10 +2102,10 @@ class LknIntegrationRedeForWoocommerceHelper
         }
 
         // Verificar se é pagamento recorrente
-        $isRecurrent = 'Não';
+        $isRecurrent = __('No', 'woo-rede');
         if ($gatewayType === 'Credit' && class_exists('WC_Subscriptions_Order') && function_exists('WC_Subscriptions_Order::order_contains_subscription')) {
             if (WC_Subscriptions_Order::order_contains_subscription($order_id)) {
-                $isRecurrent = 'Sim';
+                $isRecurrent = __('Yes', 'woo-rede');
             }
         }
 
@@ -2068,9 +2117,9 @@ class LknIntegrationRedeForWoocommerceHelper
 
         $threeDSFormatted = 'N/A';
         if (is_array($responseDecoded) && isset($responseDecoded['3ds_auth'])) {
-            $threeDSFormatted = $responseDecoded['3ds_auth'] === 'success' ? 'Sucesso' : 'Falhou';
+            $threeDSFormatted = $responseDecoded['3ds_auth'] === 'success' ? __('Success', 'woo-rede') : __('Failed', 'woo-rede');
         } elseif (is_object($responseDecoded) && isset($responseDecoded->{'3ds_auth'})) {
-            $threeDSFormatted = $responseDecoded->{'3ds_auth'} === 'success' ? 'Sucesso' : 'Falhou';
+            $threeDSFormatted = $responseDecoded->{'3ds_auth'} === 'success' ? __('Success', 'woo-rede') : __('Failed', 'woo-rede');
         }
 
         // Formatar valor das parcelas - apenas valor numérico
@@ -2084,9 +2133,9 @@ class LknIntegrationRedeForWoocommerceHelper
         if ($gatewayType === 'Pix') {
             $displayType = 'PIX';
         } elseif ($gatewayType === 'Debit') {
-            $displayType = 'Débito';
+            $displayType = __('Debit', 'woo-rede');
         } elseif ($gatewayType === 'Credit') {
-            $displayType = 'Crédito';
+            $displayType = __('Credit', 'woo-rede');
         }
 
         // Criar estrutura centralizada com metadados da transação para Rede

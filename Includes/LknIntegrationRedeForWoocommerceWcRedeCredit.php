@@ -513,9 +513,9 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
 
         if ($this->get_option('debug') == 'yes') {
             $this->form_fields['show_order_logs'] =  array(
-                'title' => __('Visualizar Log no Pedido', 'woo-rede'),
+                'title' => __('View Order Log', 'woo-rede'),
                 'type' => 'checkbox',
-                'label' => sprintf('Habilita visualização do log da transação dentro do pedido.', 'woo-rede'),
+                'label' => __('Enables viewing the transaction log within the order.', 'woo-rede'),
                 'default' => 'no',
                 'description' => esc_attr__('Displays Rede transaction logs inside WooCommerce order details.', 'woo-rede'),
                 'desc_tip' => esc_attr__('Useful for quickly viewing payment log data without accessing the system log files.', 'woo-rede'),
@@ -524,7 +524,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                 )
             );
             $this->form_fields['clear_order_records'] =  array(
-                'title' => __('Limpar logs nos Pedidos', 'woo-rede'),
+                'title' => __('Clear Order Logs', 'woo-rede'),
                 'type' => 'button',
                 'id' => 'validateLicense',
                 'class' => 'woocommerce-save-button components-button is-primary',
@@ -596,7 +596,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                 $customLabel = null; // Resetar a variável a cada iteração
                 $interest = round((float) $this->get_option($i . 'x'), 2);
                 /* translators: %1$d: number of installments, %2$s: installment price */
-                $label = sprintf('%dx de %s', $i, wp_strip_all_tags(wc_price($order_total / $i)));
+                $label = sprintf(__('%1$dx of %2$s', 'woo-rede'), $i, wp_strip_all_tags(wc_price($order_total / $i)));
 
                 if (($this->get_option('installment_interest') == 'yes' || $this->get_option('installment_discount') == 'yes') && is_plugin_active('rede-for-woocommerce-pro/rede-for-woocommerce-pro.php')) {
                     $customLabel = LknIntegrationRedeForWoocommerceHelper::lknIntegrationRedeProRedeInterest($order_total, $interest, $i, 'label', $this);
@@ -734,7 +734,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
         $token = LknIntegrationRedeForWoocommerceHelper::get_rede_oauth_token_for_gateway($this->id, $order_id);
         
         if ($token === null) {
-            throw new Exception('Não foi possível obter token de autenticação OAuth2 para ' . esc_html($this->id));
+            throw new Exception(__('Could not obtain the OAuth2 authentication token for ', 'woo-rede') . esc_html($this->id));
         }
         
         return $token;
@@ -825,17 +825,17 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                 $customErrorResponse = LknIntegrationRedeForWoocommerceHelper::createCustomErrorResponse(
                     500,
                     44,
-                    'Erro na requisição: ' . $response->get_error_message()
+                    __('Request error: ', 'woo-rede') . $response->get_error_message()
                 );
                 LknIntegrationRedeForWoocommerceHelper::saveTransactionMetadata(
                     $order, $customErrorResponse, $cardData['card_number'], $creditExpiry, $cardData['card_holder'],
                     $installments, $order_total, $order_currency, '', $this->pv, $this->token,
                     $reference, $order_id, $this->auto_capture, 'Credit', $cardData['card_cvv'],
-                    $this, '', '', '', 44, 'Erro na requisição: ' . $response->get_error_message()
+                    $this, '', '', '', 44, __('Request error: ', 'woo-rede') . $response->get_error_message()
                 );
                 $order->save();
             }
-            throw new Exception('Erro na requisição: ' . esc_html($response->get_error_message()));
+            throw new Exception(__('Request error: ', 'woo-rede') . esc_html($response->get_error_message()));
         }
         
         $response_code = wp_remote_retrieve_response_code($response);
@@ -853,7 +853,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
             $abecs_enabled = LknIntegrationRedeForWoocommerceAbecsCodes::isAbecsEnabled($this->id);
             $abecs_fallback = __('Transaction error', 'woo-rede');
             // Legado (v5.4.10): usa a mensagem da Rede quando existir, senão 'Erro na transação'.
-            $legacy_message = 'Erro na transação';
+            $legacy_message = __('Transaction error', 'woo-rede');
             $return_code = $response_data['returnCode'] ?? '';
 
             if (isset($response_data['returnMessage'])) {
@@ -895,7 +895,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
             $raw_message = isset($response_data['returnMessage']) ? $response_data['returnMessage'] : '';
             $abecs_fallback = '' !== $raw_message ? $raw_message : __('Transaction declined', 'woo-rede');
             // Legado (v5.4.10): usa a mensagem da Rede quando existir, senão 'Transação recusada'.
-            $legacy_message = '' !== $raw_message ? $raw_message : 'Transação recusada';
+            $legacy_message = '' !== $raw_message ? $raw_message : __('Transaction declined', 'woo-rede');
             $error_message = LknIntegrationRedeForWoocommerceAbecsCodes::resolveForGateway($this->id, $return_code, $abecs_fallback, $legacy_message);
             if ($abecs_enabled && '' !== $return_code) {
                 $error_message .= ' (Error code: ' . $return_code . ')';
@@ -1223,7 +1223,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
         ));
 
         if (is_wp_error($response)) {
-            throw new Exception('Erro na requisição de reembolso: ' . esc_html($response->get_error_message()));
+            throw new Exception(__('Refund request error: ', 'woo-rede') . esc_html($response->get_error_message()));
         }
         
         $response_code = wp_remote_retrieve_response_code($response);
@@ -1231,7 +1231,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
         $response_data = json_decode($response_body, true);
         
         if ($response_code !== 200 && $response_code !== 201) {
-            $error_message = 'Erro no reembolso';
+            $error_message = __('Refund error', 'woo-rede');
             if (isset($response_data['message'])) {
                 $error_message = $response_data['message'];
             } elseif (isset($response_data['errors']) && is_array($response_data['errors'])) {

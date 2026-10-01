@@ -918,7 +918,7 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
 
             $calculated_tag = hash_hmac('sha256', $encrypted_message, $mac_key, true);
             if (!hash_equals($tag, $calculated_tag)) {
-                throw new Exception('Verificação MAC falhou. O Google usou uma chave diferente.');
+                throw new Exception(__('MAC verification failed. Google used a different key.', 'woo-rede'));
             }
 
             $iv = str_repeat("\x00", 16);
@@ -976,7 +976,7 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
      * @param string $log_message Mensagem personalizada para o log
      * @return array|false Array com as chaves geradas ou false se houve erro
      */
-    private function generateGooglePayKeys($log_message = 'Par de chaves ECv2 para o Google Pay gerado com sucesso.')
+    private function generateGooglePayKeys($log_message = 'ECv2 key pair for Google Pay generated successfully.')
     {
         // 1. Configurar a Curva Elíptica exigida pelo Google Pay
         $config = array(
@@ -987,7 +987,7 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
         // 2. Gerar o par de chaves
         $res = openssl_pkey_new($config);
         if (!$res) {
-            $this->log->add($this->id, 'Erro ao gerar chaves OpenSSL. Verifique se a extensão OpenSSL do PHP está ativa.');
+            $this->log->add($this->id, __('Error generating OpenSSL keys. Check that the PHP OpenSSL extension is enabled.', 'woo-rede'));
             return false;
         }
 
@@ -1039,7 +1039,7 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
 
         // Só gera se algum dos campos estiver vazio
         if (empty($private_key) || empty($public_key)) {
-            $this->generateGooglePayKeys('Par de chaves ECv2 para o Google Pay gerado automaticamente com sucesso.');
+            $this->generateGooglePayKeys(__('ECv2 key pair for Google Pay generated automatically.', 'woo-rede'));
         }
     }
 
@@ -1051,9 +1051,9 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
     public function autoGenerateNewKeys()
     {
         try {
-            return $this->generateGooglePayKeys('Novas chaves ECv2 para o Google Pay geradas manualmente com sucesso.');
+            return $this->generateGooglePayKeys(__('New ECv2 keys for Google Pay generated manually successfully.', 'woo-rede'));
         } catch (Exception $e) {
-            $this->log->add($this->id, 'Erro ao gerar novas chaves: ' . $e->getMessage());
+            $this->log->add($this->id, __('Error generating new keys: ', 'woo-rede') . $e->getMessage());
             return false;
         }
     }

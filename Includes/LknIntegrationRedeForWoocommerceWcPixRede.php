@@ -178,11 +178,11 @@ final class LknIntegrationRedeForWoocommerceWcPixRede extends WC_Payment_Gateway
                         ),
                     ),
                     'show_button' => array(
-                        'title' => esc_attr__('Botão Gerar PIX', 'woo-rede'),
+                        'title' => esc_attr__('Generate PIX Button', 'woo-rede'),
                         'type' => 'checkbox',
-                        'label' => __('Habilitar', 'woo-rede'),
+                        'label' => __('Enable', 'woo-rede'),
                         'desc_tip' => true,
-                        'description' => esc_attr__('Exibe o botão "Finalizar e Gerar PIX" no checkout.', 'woo-rede'),
+                        'description' => esc_attr__('Displays the "Finish and Generate PIX" button at checkout.', 'woo-rede'),
                         'default' => 'no',
                         'custom_attributes' => array(
                             'disabled' => 'disabled',
@@ -221,9 +221,9 @@ final class LknIntegrationRedeForWoocommerceWcPixRede extends WC_Payment_Gateway
 
                 if ($this->get_option('debug') == 'yes') {
                     $this->form_fields['show_order_logs'] =  array(
-                        'title' => __('Visualizar Log no Pedido', 'woo-rede'),
+                        'title' => __('View Order Log', 'woo-rede'),
                         'type' => 'checkbox',
-                        'label' => sprintf('Habilita visualização do log da transação dentro do pedido.', 'woo-rede'),
+                        'label' => __('Enables viewing the transaction log within the order.', 'woo-rede'),
                         'default' => 'no',
                         'desc_tip' => esc_attr__('Useful for quickly viewing payment log data without accessing the system log files.', 'woo-rede'),
                         'description' => esc_attr__('Enable this option to log payment requests and responses for troubleshooting purposes.', 'woo-rede'),
@@ -232,7 +232,7 @@ final class LknIntegrationRedeForWoocommerceWcPixRede extends WC_Payment_Gateway
                         ),
                     );
                     $this->form_fields['clear_order_records'] =  array(
-                        'title' => __('Limpar logs nos Pedidos', 'woo-rede'),
+                        'title' => __('Clear Order Logs', 'woo-rede'),
                         'type' => 'button',
                         'id' => 'validateLicense',
                         'class' => 'woocommerce-save-button components-button is-primary',
@@ -434,7 +434,7 @@ final class LknIntegrationRedeForWoocommerceWcPixRede extends WC_Payment_Gateway
                     $order, $pix, isset($pix['tid']) ? $pix['tid'] : 'N/A', $pixExpiration, $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
                     1, $order->get_total(), $order_currency, 'PIX', $this->get_option('pv'), $this->get_option('token'),
                     $pixReference, $orderId, true, 'Pix', 'N/A',
-                    $this, $pixTid, '', '', $pix['returnCode'] ?? '00', $pix['returnMessage'] ?? 'PIX gerado com sucesso'
+                    $this, $pixTid, '', '', $pix['returnCode'] ?? '00', $pix['returnMessage'] ?? __('PIX generated successfully', 'woo-rede')
                 );
 
                 if ('yes' == $this->debug) {
@@ -547,7 +547,7 @@ final class LknIntegrationRedeForWoocommerceWcPixRede extends WC_Payment_Gateway
             $total = wc_price($order->get_total());
             $timeExpiration = $order->get_meta('_wc_rede_pix_integration_time_expiration');
             $dateTime = new DateTime($timeExpiration);
-            $formattedDate = 'Vencimento: ' . $dateTime->format('d/m/Y');
+            $formattedDate = __('Due date: ', 'woo-rede') . $dateTime->format('d/m/Y');
             wc_get_template(
                 '/paymentPixQRCode.php',
                 array(

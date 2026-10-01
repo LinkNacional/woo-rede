@@ -1,3 +1,8 @@
+# 5.5.1 - 01/10/26
+* Correção: validação da validade do cartão no débito (MM/AA lida corretamente).
+* Ajuste: tela de atualização do PRO (card de sucesso/erro e remoção de notices de terceiros).
+* Ajuste: link do grupo de suporte e limpeza de metadados de notificação do PRO no uninstall.
+
 # 5.5.0 - 29/09/2026
 * Ajuste: Logs dos gateways adequados às normas ABECS.
 * Ajuste: Textos do analytics ajustados para tradução.

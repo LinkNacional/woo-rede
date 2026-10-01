@@ -30,7 +30,7 @@ if (!defined('ABSPATH')) {
                         <b>•</b><?php esc_attr_e('WP Plugin', 'woo-rede'); ?>
                     </a>
                     <a target="_blank" href=<?php echo esc_url('https://www.linknacional.com.br/wordpress/suporte/'); ?>>
-                        <b>•</b><?php esc_attr_e('Suporte WP', 'woo-rede'); ?>
+                        <b>•</b><?php esc_attr_e('WP Support', 'woo-rede'); ?>
                     </a>
                 </div>
             </div>
@@ -48,7 +48,7 @@ if (!defined('ABSPATH')) {
                     </a>
                 </div>
                 <div class="lknIntegrationRedeForWoocommerceContactLinks">
-                    <a href=<?php echo esc_url('https://chat.whatsapp.com/IjzHhDXwmzGLDnBfOibJKO'); ?> target="_blank">
+                    <a href=<?php echo esc_url('https://chat.whatsapp.com/C6S3my9Adr818hbeJphPBm'); ?> target="_blank">
                         <?php //phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage 
                         ?>
                         <img src="<?php echo esc_url($whatsapp); ?>" alt="Whatsapp Icon" class="lknIntegrationRedeForWoocommerceContactIcon">
