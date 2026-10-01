@@ -22,7 +22,7 @@ Payment Gateway for Rede Itaú for WooCommerce - PIX, Credit Card and Debit Card
 - Installments: Offer flexible installment plans to your customers.
 - Secure Transactions: Includes 3DS authentication and advanced fraud prevention.
 - Tokenization: Save card details securely for returning customers.
-- Easy Integration: Works seamlessly with WooCommerce and WordPress.
+- Easy Integration: Works seamlessly with [WooCommerce](https://www.linknacional.com.br/wordpress/woocommerce/) and [WordPress](https://www.linknacional.com.br/wordpress/).
 - Customizable: Configure payment settings to match your business needs.
 - Sandbox Mode: Test transactions in a secure environment before going live.
 
@@ -33,7 +33,7 @@ Payment Gateway for Rede Itaú for WooCommerce - PIX, Credit Card and Debit Card
 - Installment Plans: Allow customers to split payments into manageable installments.
 - 3DS Authentication: Ensure secure transactions with strong customer authentication.
 - Webhooks: Stay updated with real-time payment notifications.
-- Refunds and Captures: Manage refunds and payment captures directly from your WooCommerce dashboard.
+- Refunds and Captures: Manage refunds and payment captures directly from your [WooCommerce](https://www.linknacional.com.br/wordpress/woocommerce/) dashboard.
 - Detailed Logs: Debug and troubleshoot with comprehensive logging.
 - Google Pay: Accept quick and secure payments with Google Pay.
 - Tokenization: Save card details securely for returning customers.
@@ -43,8 +43,8 @@ Payment Gateway for Rede Itaú for WooCommerce - PIX, Credit Card and Debit Card
 [youtube https://www.youtube.com/watch?v=g8IA3QUiV8o]
 
 ** Recommended Plugins **
-* [Link Invoice Payment for WooCommerce](https://wordpress.org/plugins/invoice-payment-for-woocommerce/) - Integrate custom payment methods and offer invoice-based payments in your WooCommerce store.
-* [Shipping Calculator for Brazil](https://wordpress.org/plugins/woo-better-shipping-calculator-for-brazil/) - Provide accurate freight calculation for Brazilian addresses directly in your WooCommerce checkout.
+* [Link Invoice Payment for WooCommerce](https://wordpress.org/plugins/invoice-payment-for-woocommerce/) - Integrate custom payment methods and offer invoice-based payments in your [WooCommerce](https://www.linknacional.com.br/wordpress/woocommerce/) store.
+* [Shipping Calculator for Brazil](https://wordpress.org/plugins/woo-better-shipping-calculator-for-brazil/) - Provide accurate freight calculation for Brazilian addresses directly in your [WooCommerce](https://www.linknacional.com.br/wordpress/woocommerce/) checkout.
 
 
 == Installation ==
@@ -58,7 +58,7 @@ Payment Gateway for Rede Itaú for WooCommerce - PIX, Credit Card and Debit Card
 ### 2. Manual Installation via FTP
 1. Extract the plugin ZIP file.
 2. Upload the extracted folder to `wp-content/plugins/`.
-3. Activate the plugin in the WordPress admin dashboard under Plugins.
+3. Activate the plugin in the [WordPress](https://www.linknacional.com.br/wordpress/) admin dashboard under Plugins.
 
 ### 3. WP-CLI Installation
 1. Upload the plugin folder to `wp-content/plugins/`.
@@ -71,7 +71,7 @@ Payment Gateway for Rede Itaú for WooCommerce - PIX, Credit Card and Debit Card
 
 == Configuration ==
 
-Go to WooCommerce → Settings → Payments.  
+Go to [WooCommerce](https://www.linknacional.com.br/wordpress/woocommerce/) → Settings → Payments.  
 Select Rede or Maxipago as your payment gateway and enter the required credentials:
 
 - Rede: PV and Token
@@ -99,7 +99,7 @@ Q: What is the license of the plugin?
 A: This plugin is released under the GPLv3 license.
 
 Q: What do I need to use this plugin?  
-A: You need to have the WooCommerce plugin installed and activated.
+A: You need to have the [WooCommerce](https://www.linknacional.com.br/wordpress/woocommerce/) plugin installed and activated.
 
 Q: Does the plugin support installment payments?  
 A: Yes, you can configure installment options directly in the plugin settings.
@@ -111,7 +111,7 @@ Q: Is 3DS authentication supported?
 A: Yes, the plugin supports 3DS authentication for secure transactions.
 
 Q: Can I process refunds through the plugin?  
-A: Yes, refunds can be processed directly from the WooCommerce admin dashboard.
+A: Yes, refunds can be processed directly from the [WooCommerce](https://www.linknacional.com.br/wordpress/woocommerce/) admin dashboard.
 
 Q: Does the plugin support tokenization?  
 A: Yes, the plugin allows you to save card details securely for returning customers.
@@ -122,8 +122,8 @@ A: Credit cards, debit cards, and PIX payments.
 Q: How do I enable logging for debugging?  
 A: Enable logging in the plugin settings under the Advanced tab.
 
-Q: Is the plugin compatible with the latest WordPress version?  
-A: Yes — tested up to WordPress 6.8.
+Q: Is the plugin compatible with the latest [WordPress](https://www.linknacional.com.br/wordpress/) version?  
+A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 6.8.
 
 ---
 
@@ -338,9 +338,9 @@ A: Yes — tested up to WordPress 6.8.
 
 == Support ==
 
-For any issues or questions, visit our support page or open a ticket on the WordPress plugin repository.
+For any issues or questions, visit our support page or open a ticket on the [WordPress](https://www.linknacional.com.br/wordpress/) plugin repository.
 
 ---
 
-Try Integration Rede Itaú for WooCommerce — Payment PIX, Credit Card and Debit Today!  
-Enhance your WooCommerce store with a reliable, secure, and feature-rich payment gateway. Start accepting payments with credit cards, debit cards, and PIX today!
+Try Integration Rede Itaú for [WooCommerce](https://www.linknacional.com.br/wordpress/woocommerce/) — Payment PIX, Credit Card and Debit Today!  
+Enhance your [WooCommerce](https://www.linknacional.com.br/wordpress/woocommerce/) store with a reliable, secure, and feature-rich payment gateway. Start accepting payments with credit cards, debit cards, and PIX today!
