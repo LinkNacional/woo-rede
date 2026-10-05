@@ -35,6 +35,8 @@ $HELPER  = 'Lknwoo\\IntegrationRedeForWoocommerce\\Includes\\LknIntegrationRedeF
 $ABSTRACT = 'Lknwoo\\IntegrationRedeForWoocommerce\\Includes\\LknIntegrationRedeForWoocommerceWcRedeAbstract';
 $CREDIT  = 'Lknwoo\\IntegrationRedeForWoocommerce\\Includes\\LknIntegrationRedeForWoocommerceWcRedeCredit';
 $DEBIT   = 'Lknwoo\\IntegrationRedeForWoocommerce\\Includes\\LknIntegrationRedeForWoocommerceWcRedeDebit';
+$MAX_CREDIT = 'Lknwoo\\IntegrationRedeForWoocommerce\\Includes\\LknIntegrationRedeForWoocommerceWcMaxipagoCredit';
+$MAX_DEBIT  = 'Lknwoo\\IntegrationRedeForWoocommerce\\Includes\\LknIntegrationRedeForWoocommerceWcMaxipagoDebit';
 
 $MSG_FUTURE = 'Card expiration date must be future.';
 $MSG_FORMAT = 'Expiration date must contain 2 or 4 digits';
@@ -125,6 +127,20 @@ check("mês inválido (13/xx) => formato",         evalGatewayExpiry($CREDIT, '1
 check("formato inválido ('1/2') => formato",     evalGatewayExpiry($CREDIT, '1/2'), $MSG_FORMAT);
 check("formato inválido ('05-45') => formato",   evalGatewayExpiry($CREDIT, '05-45'), $MSG_FORMAT);
 
+echo "\n=== Gateway Maxipago crédito (maxipago_credit) — mensagens lançadas ===\n";
+check("futuro 2 dígitos ($future2) => aceita",   evalGatewayExpiry($MAX_CREDIT, $future2), 'OK');
+check("mês corrente ($current) => aceita",        evalGatewayExpiry($MAX_CREDIT, $current), 'OK');
+check("mês anterior ($prevExpiry) => vencido",    evalGatewayExpiry($MAX_CREDIT, $prevExpiry), $MSG_FUTURE);
+check("passado 2 dígitos ($past2) => vencido",   evalGatewayExpiry($MAX_CREDIT, $past2), $MSG_FUTURE);
+check("formato inválido ('1/2') => formato",     evalGatewayExpiry($MAX_CREDIT, '1/2'), $MSG_FORMAT);
+
+echo "\n=== Gateway Maxipago débito (maxipago_debit) — mensagens lançadas ===\n";
+check("futuro 2 dígitos ($future2) => aceita",   evalGatewayExpiry($MAX_DEBIT, $future2), 'OK');
+check("mês corrente ($current) => aceita",        evalGatewayExpiry($MAX_DEBIT, $current), 'OK');
+check("mês anterior ($prevExpiry) => vencido",    evalGatewayExpiry($MAX_DEBIT, $prevExpiry), $MSG_FUTURE);
+check("passado 2 dígitos ($past2) => vencido",   evalGatewayExpiry($MAX_DEBIT, $past2), $MSG_FUTURE);
+check("formato inválido ('1/2') => formato",     evalGatewayExpiry($MAX_DEBIT, '1/2'), $MSG_FORMAT);
+
 // Casos do relatório (01/10/2026). Só rodam enquanto ainda forem futuros, para
 // o teste não envelhecer: 05/30 (mai/2030), 12/35 (dez/2035) e 12/30 (dez/2030).
 if ((int) gmdate('Ym') <= 203012) {
@@ -143,11 +159,23 @@ echo "\n=== Escopo: crédito e débito usam o override próprio ===\n";
 $abstractMethod = new ReflectionMethod($ABSTRACT, 'validate_expiration_date');
 $debitMethod    = new ReflectionMethod($DEBIT, 'validate_expiration_date');
 $creditMethod   = new ReflectionMethod($CREDIT, 'validate_expiration_date');
+$maxCreditMethod = new ReflectionMethod($MAX_CREDIT, 'validate_expiration_date');
+$maxDebitMethod  = new ReflectionMethod($MAX_DEBIT, 'validate_expiration_date');
 
 check(
     'Credit USA o override próprio',
     $creditMethod->getDeclaringClass()->getName(),
     $CREDIT
+);
+check(
+    'Maxipago Credit USA o override próprio',
+    $maxCreditMethod->getDeclaringClass()->getName(),
+    $MAX_CREDIT
+);
+check(
+    'Maxipago Debit USA o override próprio',
+    $maxDebitMethod->getDeclaringClass()->getName(),
+    $MAX_DEBIT
 );
 check(
     'Debit USA o override próprio',
