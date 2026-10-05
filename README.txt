@@ -132,6 +132,7 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ### 5.5.2 - 2026-10-05
 * Fix: infinite redirect loop (ERR_TOO_MANY_REDIRECTS) when another LKN plugin also opens its onboarding screen in the same request.
 * Fix: the close button (✕) of the PRO update screen now permanently dismisses the follow-up notice.
+* Fix: the "Update PRO plugin" button no longer interferes with another LKN gateway when both are active (JS global and click handler isolated per plugin).
 
 ### 5.5.1 - 2026-10-01
 * Fix: debit card expiration date (MM/YY) is now validated correctly, avoiding false "expired" errors for future dates.
