@@ -8,8 +8,8 @@
  * lia "05/30" como 30 de maio do ano corrente (vencido) em vez de maio/2030.
  *
  * Aqui a lógica real de `validate_expiration_date()` dos gateways é exercitada
- * via reflection, com stubs mínimos no lugar do WordPress. Também confirma que o
- * fluxo de crédito NÃO foi alterado (continua usando o método legado do abstract).
+ * via reflection, com stubs mínimos no lugar do WordPress. Também confirma que
+ * o crédito e o débito usam o mesmo método correto (não o legado do abstract).
  *
  * Rodar:
  *   php tests/php/rede-card-expiry.test.php
@@ -113,17 +113,17 @@ check("formato 'abc' => INVALID",                call_user_func([$HELPER, 'evalu
 check("formato '1230' => INVALID",               call_user_func([$HELPER, 'evaluateCardExpiration'], '1230'), 'invalid');
 check("formato '12/' => INVALID",                call_user_func([$HELPER, 'evaluateCardExpiration'], '12/'), 'invalid');
 
-echo "\n=== Gateway débito (rede_debit) — mensagens lançadas ===\n";
-check("futuro 2 dígitos ($future2) => aceita",   evalGatewayExpiry($DEBIT, $future2), 'OK');
-check("futuro 4 dígitos ($future4) => aceita",   evalGatewayExpiry($DEBIT, $future4), 'OK');
-check("mês corrente ($current) => aceita",        evalGatewayExpiry($DEBIT, $current), 'OK');
-check("mês anterior ($prevExpiry) => vencido",    evalGatewayExpiry($DEBIT, $prevExpiry), $MSG_FUTURE);
-check("com espaços ('$futureMon / $futureYr') => aceita", evalGatewayExpiry($DEBIT, "$futureMon / $futureYr"), 'OK');
-check("passado 2 dígitos ($past2) => vencido",   evalGatewayExpiry($DEBIT, $past2), $MSG_FUTURE);
-check("passado 4 dígitos ($past4) => vencido",   evalGatewayExpiry($DEBIT, $past4), $MSG_FUTURE);
-check("mês inválido (13/xx) => formato",         evalGatewayExpiry($DEBIT, '13/' . substr($future2, 3, 2)), $MSG_FORMAT);
-check("formato inválido ('1/2') => formato",     evalGatewayExpiry($DEBIT, '1/2'), $MSG_FORMAT);
-check("formato inválido ('05-45') => formato",   evalGatewayExpiry($DEBIT, '05-45'), $MSG_FORMAT);
+echo "\n=== Gateway crédito (rede_credit) — mensagens lançadas ===\n";
+check("futuro 2 dígitos ($future2) => aceita",   evalGatewayExpiry($CREDIT, $future2), 'OK');
+check("futuro 4 dígitos ($future4) => aceita",   evalGatewayExpiry($CREDIT, $future4), 'OK');
+check("mês corrente ($current) => aceita",        evalGatewayExpiry($CREDIT, $current), 'OK');
+check("mês anterior ($prevExpiry) => vencido",    evalGatewayExpiry($CREDIT, $prevExpiry), $MSG_FUTURE);
+check("com espaços ('$futureMon / $futureYr') => aceita", evalGatewayExpiry($CREDIT, "$futureMon / $futureYr"), 'OK');
+check("passado 2 dígitos ($past2) => vencido",   evalGatewayExpiry($CREDIT, $past2), $MSG_FUTURE);
+check("passado 4 dígitos ($past4) => vencido",   evalGatewayExpiry($CREDIT, $past4), $MSG_FUTURE);
+check("mês inválido (13/xx) => formato",         evalGatewayExpiry($CREDIT, '13/' . substr($future2, 3, 2)), $MSG_FORMAT);
+check("formato inválido ('1/2') => formato",     evalGatewayExpiry($CREDIT, '1/2'), $MSG_FORMAT);
+check("formato inválido ('05-45') => formato",   evalGatewayExpiry($CREDIT, '05-45'), $MSG_FORMAT);
 
 // Casos do relatório (01/10/2026). Só rodam enquanto ainda forem futuros, para
 // o teste não envelhecer: 05/30 (mai/2030), 12/35 (dez/2035) e 12/30 (dez/2030).
@@ -133,17 +133,21 @@ if ((int) gmdate('Ym') <= 203012) {
     check("débito aceita 12/30 (dez/2030)", evalGatewayExpiry($DEBIT, '12/30'), 'OK');
     check("débito aceita 12/35 (dez/2035)", evalGatewayExpiry($DEBIT, '12/35'), 'OK');
     check("débito aceita 05/2030 (4 dígitos)", evalGatewayExpiry($DEBIT, '05/2030'), 'OK');
+    check("crédito aceita 05/30 (mai/2030)", evalGatewayExpiry($CREDIT, '05/30'), 'OK');
+    check("crédito aceita 12/30 (dez/2030)", evalGatewayExpiry($CREDIT, '12/30'), 'OK');
+    check("crédito aceita 12/35 (dez/2035)", evalGatewayExpiry($CREDIT, '12/35'), 'OK');
+    check("crédito aceita 05/2030 (4 dígitos)", evalGatewayExpiry($CREDIT, '05/2030'), 'OK');
 }
 
-echo "\n=== Escopo: crédito permanece no método legado do abstract ===\n";
+echo "\n=== Escopo: crédito e débito usam o override próprio ===\n";
 $abstractMethod = new ReflectionMethod($ABSTRACT, 'validate_expiration_date');
 $debitMethod    = new ReflectionMethod($DEBIT, 'validate_expiration_date');
 $creditMethod   = new ReflectionMethod($CREDIT, 'validate_expiration_date');
 
 check(
-    'Credit NÃO sobrepõe (declarado no abstract)',
+    'Credit USA o override próprio',
     $creditMethod->getDeclaringClass()->getName(),
-    $ABSTRACT
+    $CREDIT
 );
 check(
     'Debit USA o override próprio',

@@ -133,6 +133,7 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 * Fix: infinite redirect loop (ERR_TOO_MANY_REDIRECTS) when another LKN plugin also opens its onboarding screen in the same request.
 * Fix: the close button (✕) of the PRO update screen now permanently dismisses the follow-up notice.
 * Fix: the "Update PRO plugin" button no longer interferes with another LKN gateway when both are active (JS global and click handler isolated per plugin).
+* Fix: the Credit card gateway (Rede Crédito) no longer rejects cards with a valid future expiration date (MM/YY was parsed as day/month by the legacy strtotime check; now uses the same month/year rule already applied to Debit).
 
 ### 5.5.1 - 2026-10-01
 * Fix: debit card expiration date (MM/YY) is now validated correctly, avoiding false "expired" errors for future dates.
@@ -318,7 +319,7 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 == Upgrade Notice ==
 
 ### 5.5.2 - 2026-10-05
-* Fix: prevents a redirect loop between LKN onboarding screens and makes the update screen close button dismiss the notice.
+* Fix: prevents a redirect loop between LKN onboarding screens, makes the update screen close button dismiss the notice, and fixes the Credit card gateway rejecting cards with a valid future expiration date.
 
 ### 5.5.1 - 2026-10-01
 * Fix: debit card expiration date (MM/YY) is now validated correctly.
