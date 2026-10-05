@@ -44,6 +44,28 @@ final class LknIntegrationRedeForWoocommerceWcMaxipagoCredit extends LknIntegrat
     }
 
     /**
+     * Validate the card expiration date.
+     *
+     * Usa a mesma lógica da Rede (Helper::evaluateCardExpiration) em vez do
+     * fluxo legado baseado em strtotime do abstract. O formatter do checkout
+     * envia sempre "MM/AA" sem espaços; a normalização legada só expandia o ano
+     * quando encontrava "/ " e o strtotime lia "05/30" como 30 de maio do ano
+     * corrente (vencido) em vez de maio/2030 — recusando cartões válidos.
+     *
+     * @param string $expiry
+     * @throws Exception
+     */
+    protected function validate_expiration_date($expiry)
+    {
+        switch (LknIntegrationRedeForWoocommerceHelper::evaluateCardExpiration($expiry)) {
+            case LknIntegrationRedeForWoocommerceHelper::EXPIRY_INVALID:
+                throw new Exception(esc_attr__('Expiration date must contain 2 or 4 digits', 'woo-rede'));
+            case LknIntegrationRedeForWoocommerceHelper::EXPIRY_EXPIRED:
+                throw new Exception(esc_attr__('Card expiration date must be future.', 'woo-rede'));
+        }
+    }
+
+    /**
      * Fields validation.
      *
      * @return bool
