@@ -140,6 +140,14 @@
             return;
         }
 
+        // Isola por plugin: nesta página podem coexistir os avisos de mais de um
+        // gateway LKN, todos com o mesmo seletor de botão. Sem isto, clicar no
+        // botão de um dispara o handler do outro (o primeiro registrado vence).
+        var owner = btn.closest('[data-lkn-pro-screen]');
+        if (owner && owner.getAttribute('data-lkn-pro-screen') !== cfg.screen) {
+            return;
+        }
+
         event.preventDefault();
         start(btn);
     });
@@ -158,6 +166,11 @@
 
         var notice = dismiss.closest('[data-dismissible]');
         if (!notice) {
+            return;
+        }
+
+        // Isola por plugin (ver comentário no handler do botão de update).
+        if (notice.getAttribute('data-lkn-pro-screen') !== cfg.screen) {
             return;
         }
 
