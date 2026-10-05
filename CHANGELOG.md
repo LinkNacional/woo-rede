@@ -1,3 +1,7 @@
+# 5.5.2 - 05/10/26
+* Correção: loop infinito de redirecionamento (ERR_TOO_MANY_REDIRECTS) quando outro plugin LKN também abre sua tela de onboarding na mesma requisição.
+* Correção: o botão de fechar (✕) da tela de atualização do PRO agora dispensa o aviso definitivamente.
+
 # 5.5.1 - 01/10/26
 * Correção: validação da validade do cartão no débito (MM/AA lida corretamente).
 * Ajuste: tela de atualização do PRO (card de sucesso/erro e remoção de notices de terceiros).

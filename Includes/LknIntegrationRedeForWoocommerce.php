@@ -265,7 +265,13 @@ final class LknIntegrationRedeForWoocommerce
         // atualiza o PRO pelo endpoint de update (json + zip).
         $pro_update_notice = new LknIntegrationRedeForWoocommerceProUpdateNotice();
         $this->loader->add_action('admin_menu', $pro_update_notice, 'register_screen');
+        // Compartilha o slug da tela de onboarding com os demais plugins LKN,
+        // para que nenhum redirecione a partir de uma tela de onboarding.
+        $this->loader->add_filter('lkn_admin_onboarding_screens', $pro_update_notice, 'register_onboarding_screen');
         $this->loader->add_action('admin_head', $pro_update_notice, 'remove_admin_notices', 0);
+        // Trata o ✕ da tela de atualização (dismiss permanente) — precisa rodar
+        // no admin_init, antes do admin-header já enviado pela página.
+        $this->loader->add_action('admin_init', $pro_update_notice, 'maybe_handle_dismiss');
         $this->loader->add_action('admin_init', $pro_update_notice, 'maybe_redirect');
         $this->loader->add_action('admin_enqueue_scripts', $pro_update_notice, 'enqueue_assets');
         $this->loader->add_action('admin_notices', $pro_update_notice, 'maybe_render_notice');
