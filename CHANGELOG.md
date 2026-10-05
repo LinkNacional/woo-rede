@@ -1,7 +1,7 @@
 # 5.5.2 - 05/10/26
 * Correção: loop infinito de redirecionamento (ERR_TOO_MANY_REDIRECTS) quando outro plugin LKN também abre sua tela de onboarding na mesma requisição.
 * Correção: o botão de fechar (✕) da tela de atualização do PRO agora dispensa o aviso definitivamente.
-* Correção: o botão "Atualizar plugin PRO" não envia mais a requisição de atualização de outro gateway LKN quando ambos estão ativos (nome global de JS compartilhado).
+* Correção: o botão "Atualizar plugin PRO" não interfere mais em outro gateway LKN quando ambos estão ativos (global de JS e handler de clique isolados por plugin).
 
 # 5.5.1 - 01/10/26
 * Correção: validação da validade do cartão no débito (MM/AA lida corretamente).
