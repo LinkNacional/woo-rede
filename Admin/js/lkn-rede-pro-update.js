@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var cfg = window.LknProUpdate || {};
+    var cfg = window.LknRedeProUpdate || {};
 
     // Insere o card junto das demais notices do admin (antes do .wp-header-end),
     // fora de qualquer card/wrap de conteúdo — padrão do woo-better.

@@ -483,7 +483,7 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
             delete_transient(self::SUCCESS_TRANSIENT);
         }
 
-        wp_localize_script('lkn-rede-pro-update', 'LknProUpdate', $this->script_data($show_on_load, $error_message));
+        wp_localize_script('lkn-rede-pro-update', 'LknRedeProUpdate', $this->script_data($show_on_load, $error_message));
     }
 
     /**
