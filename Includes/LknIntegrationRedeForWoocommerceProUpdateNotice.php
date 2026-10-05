@@ -27,6 +27,14 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
     /** Slug da página oculta da tela de atualização. */
     private const SCREEN_SLUG = 'lkn-rede-pro-update';
 
+    /**
+     * Filtro compartilhado entre os plugins da família LKN que mapeia as telas
+     * de onboarding/migração (telas cheias ocultas). Cada plugin registra o
+     * próprio slug; qualquer um pula o redirect quando já está numa dessas
+     * telas — evita loop de redirect entre dois plugins desse mesmo padrão.
+     */
+    private const ONBOARDING_SCREENS_FILTER = 'lkn_admin_onboarding_screens';
+
     /** Caminho relativo do arquivo principal do PRO. */
     private const PRO_BASENAME = 'rede-for-woocommerce-pro/rede-for-woocommerce-pro.php';
 
@@ -79,15 +87,51 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
     }
 
     /**
+     * Registra o slug desta tela na lista compartilhada de telas de onboarding
+     * da família LKN. Outros plugins leem essa lista para não redirecionar a
+     * partir de uma tela de onboarding (evita loop de redirect).
+     *
+     * @param mixed $screens Slugs já registrados por outros plugins LKN.
+     * @return array
+     */
+    public function register_onboarding_screen($screens): array
+    {
+        $screens = is_array($screens) ? $screens : array();
+        $screens[] = self::SCREEN_SLUG;
+
+        return array_values(array_unique($screens));
+    }
+
+    /**
+     * A requisição atual já está numa tela de onboarding da família LKN —
+     * própria ou de outro plugin? Enquanto estiver, ninguém redireciona.
+     *
+     * @return bool
+     */
+    private function is_on_lkn_onboarding_screen(): bool
+    {
+        $page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';
+
+        if ('' === $page) {
+            return false;
+        }
+
+        $screens = apply_filters(self::ONBOARDING_SCREENS_FILTER, array());
+        $screens = is_array($screens) ? $screens : array();
+        $screens[] = self::SCREEN_SLUG;
+
+        return in_array($page, $screens, true);
+    }
+
+    /**
      * Remove as notificações de terceiros na tela cheia de atualização, para que
      * os avisos de outros plugins não apareçam dentro do card principal.
      * Mesmo padrão do woo-better-shipping-calculator-for-brazil.
      */
     public function remove_admin_notices(): void
     {
-        $page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';
-
-        if (self::SCREEN_SLUG !== $page) {
+        // Mantém qualquer tela de onboarding LKN limpa (nossa ou de outro plugin).
+        if (! $this->is_on_lkn_onboarding_screen()) {
             return;
         }
 
@@ -129,13 +173,52 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
             return;
         }
 
-        $page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';
-
-        if (self::SCREEN_SLUG === $page) {
+        // Não redireciona se já estamos numa tela de onboarding LKN — a nossa
+        // ou a de outro plugin. Sem isso, dois plugins que redirecionam para
+        // suas telas cheias entram em loop (A→B→A→B…): o redirect ocorre antes
+        // de qualquer tela renderizar e marcar a option "shown".
+        if ($this->is_on_lkn_onboarding_screen()) {
             return;
         }
 
         wp_safe_redirect(admin_url('admin.php?page=' . self::SCREEN_SLUG));
+        exit;
+    }
+
+    /**
+     * Trata o clique no ✕ da tela cheia: dispensa definitivamente o aviso
+     * final do PRO (não volta a aparecer) e devolve o usuário ao painel.
+     *
+     * Roda no `admin_init` (antes de qualquer saída): o callback da página
+     * admin só executa depois do `admin-header.php`, então um redirect ali
+     * falharia com "headers already sent".
+     */
+    public function maybe_handle_dismiss(): void
+    {
+        if (! is_admin() || wp_doing_ajax()) {
+            return;
+        }
+
+        if (! isset($_GET['lkn-rede-pro-update-dismiss'])) {
+            return;
+        }
+
+        if (! current_user_can('update_plugins')) {
+            return;
+        }
+
+        $nonce = isset($_GET['_wpnonce']) ? sanitize_text_field(wp_unslash($_GET['_wpnonce'])) : '';
+
+        if (! wp_verify_nonce($nonce, self::NONCE_DISMISS)) {
+            return;
+        }
+
+        // Marca como exibido E dispensado: o ✕ fecha a tela e o aviso final,
+        // sem depender de a tela ter renderizado antes (ex.: URL re-disparada).
+        update_option(self::OPTION_SHOWN, 'yes');
+        update_option(self::OPTION_DISMISSED, 'yes');
+
+        wp_safe_redirect(admin_url());
         exit;
     }
 
@@ -157,13 +240,18 @@ final class LknIntegrationRedeForWoocommerceProUpdateNotice
         // A tela carregou: marca como exibida para não abrir novamente.
         update_option(self::OPTION_SHOWN, 'yes');
 
+        $dismiss_url = wp_nonce_url(
+            admin_url('admin.php?page=' . self::SCREEN_SLUG . '&lkn-rede-pro-update-dismiss=1'),
+            self::NONCE_DISMISS
+        );
+
         $free_name = __('Integration Rede Itaú for WooCommerce', 'woo-rede');
         $pro_name = __('Integration Rede Itaú for WooCommerce PRO', 'woo-rede');
         $min_version = $this->min_pro_version();
         ?>
         <div class="wrap lkn-pro-update-screen">
             <div class="lkn-pro-update-screen__card">
-                <a href="<?php echo esc_url(admin_url()); ?>" class="lkn-pro-update-screen__close" aria-label="<?php esc_attr_e('Close and do not show again', 'woo-rede'); ?>">
+                <a href="<?php echo esc_url($dismiss_url); ?>" class="lkn-pro-update-screen__close" aria-label="<?php esc_attr_e('Close and do not show again', 'woo-rede'); ?>">
                     <span aria-hidden="true">&times;</span>
                 </a>
 
