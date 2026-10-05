@@ -5,7 +5,7 @@ Donate link: https://www.linknacional.com/wordpress/plugins/
 Tags: rede, pix, cartao credito, itau, pagamento  
 Requires at least: 6.0
 Tested up to: 7.1  
-Stable tag: 5.5.1
+Stable tag: 5.5.2
 Requires PHP: 8.2
 License: GPL-3.0+  
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -128,6 +128,10 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Changelog ==
+
+### 5.5.2 - 2026-10-05
+* Fix: infinite redirect loop (ERR_TOO_MANY_REDIRECTS) when another LKN plugin also opens its onboarding screen in the same request.
+* Fix: the close button (✕) of the PRO update screen now permanently dismisses the follow-up notice.
 
 ### 5.5.1 - 2026-10-01
 * Fix: debit card expiration date (MM/YY) is now validated correctly, avoiding false "expired" errors for future dates.
@@ -311,6 +315,9 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Upgrade Notice ==
+
+### 5.5.2 - 2026-10-05
+* Fix: prevents a redirect loop between LKN onboarding screens and makes the update screen close button dismiss the notice.
 
 ### 5.5.1 - 2026-10-01
 * Fix: debit card expiration date (MM/YY) is now validated correctly.
