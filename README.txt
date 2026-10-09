@@ -5,7 +5,7 @@ Donate link: https://www.linknacional.com/wordpress/plugins/
 Tags: rede, pix, cartao credito, itau, pagamento  
 Requires at least: 6.0
 Tested up to: 7.1  
-Stable tag: 5.5.2
+Stable tag: 5.5.3
 Requires PHP: 8.2
 License: GPL-3.0+  
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -128,6 +128,10 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Changelog ==
+
+### 5.5.3 - 2026-10-09
+* Security: the maxiPago debit webhook now validates the transaction server-to-server against the maxiPago Reports API before changing an order status (it previously trusted the unsigned notification body).
+* Security: the 3D Secure failure webhook no longer skips its authenticity check when the `tid` parameter is missing; the request is rejected unless the transaction is validated server-to-server against the Rede API.
 
 ### 5.5.2 - 2026-10-05
 * Fix: infinite redirect loop (ERR_TOO_MANY_REDIRECTS) when another LKN plugin also opens its onboarding screen in the same request.
@@ -317,6 +321,9 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Upgrade Notice ==
+
+### 5.5.3 - 2026-10-09
+* Security fix: authenticates the maxiPago debit and 3D Secure webhooks server-to-server, preventing forged requests from changing order statuses.
 
 ### 5.5.2 - 2026-10-05
 * Fix: prevents a redirect loop between LKN onboarding screens, makes the update screen close button dismiss the notice, and fixes the card gateways (Rede/Maxipago Credit and Debit) rejecting cards with a valid future expiration date.

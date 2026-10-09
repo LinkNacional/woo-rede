@@ -1,3 +1,7 @@
+# 5.5.3 - 09/10/26
+* Segurança: o webhook de débito maxiPago agora valida a transação server-to-server na Reports API do maxiPago antes de alterar o status do pedido (antes confiava no corpo não assinado da notificação).
+* Segurança: o webhook de falha do 3D Secure não ignora mais a checagem de autenticidade quando o parâmetro `tid` está ausente; a requisição é rejeitada a menos que a transação seja validada server-to-server na API da Rede.
+
 # 5.5.2 - 05/10/26
 * Correção: loop infinito de redirecionamento (ERR_TOO_MANY_REDIRECTS) quando outro plugin LKN também abre sua tela de onboarding na mesma requisição.
 * Correção: o botão de fechar (✕) da tela de atualização do PRO agora dispensa o aviso definitivamente.
