@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Integration Rede Itaú for WooCommerce — Payment PIX, "
 "Credit Card and Debit\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woo-rede\n"
-"POT-Creation-Date: 2026-10-01T16:46:30+00:00\n"
+"POT-Creation-Date: 2026-10-09T13:12:01+00:00\n"
 "PO-Revision-Date: 2020-08-17 03:33+0000\n"
 "Last-Translator: \n"
 "Language-Team: Português do Brasil\n"
@@ -89,12 +89,12 @@ msgid "Generate New Keys"
 msgstr "Gerar Novas Chaves"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:238
-#: Includes/LknIntegrationRedeForWoocommerce.php:344
+#: Includes/LknIntegrationRedeForWoocommerce.php:350
 msgid "New keys generated successfully!"
 msgstr "Novas chaves geradas com sucesso!"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:239
-#: Includes/LknIntegrationRedeForWoocommerce.php:347
+#: Includes/LknIntegrationRedeForWoocommerce.php:353
 msgid "Error generating new keys."
 msgstr "Erro ao gerar novas chaves."
 
@@ -118,7 +118,7 @@ msgid "You do not have permission to export orders."
 msgstr "Você não tem permissão para exportar pedidos."
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:331
-#: Includes/LknIntegrationRedeForWoocommerce.php:1851
+#: Includes/LknIntegrationRedeForWoocommerce.php:1857
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeAbstract.php:95
 msgid "Order ID"
 msgstr "ID do pedido"
@@ -167,28 +167,28 @@ msgid "Card Brand"
 msgstr "Bandeira"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:347
-#: Includes/LknIntegrationRedeForWoocommerce.php:1838
+#: Includes/LknIntegrationRedeForWoocommerce.php:1844
 msgid "Expiry"
 msgstr "Validade"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:348
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1057
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:816
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:230
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1079
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:838
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:252
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:744
 msgid "Cardholder"
 msgstr "Titular do cartão"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:353
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1053
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:813
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:226
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1075
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:835
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:248
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:739
 msgid "Authorization Code"
 msgstr "Código de autorização"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:354
-#: Includes/LknIntegrationRedeForWoocommerce.php:1845
+#: Includes/LknIntegrationRedeForWoocommerce.php:1851
 msgid "Capture"
 msgstr "Captura"
 
@@ -201,14 +201,14 @@ msgid "3DS Authentication"
 msgstr "Autenticação 3DS"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:357
-#: Includes/LknIntegrationRedeForWoocommerce.php:1835
+#: Includes/LknIntegrationRedeForWoocommerce.php:1841
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:1077
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:1028
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1056
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1078
 #: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCreditBlocks.php:77
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeAbstract.php:129
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeAbstract.php:137
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:229
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:251
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeCreditBlocks.php:81
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:743
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1218
@@ -234,35 +234,35 @@ msgid "Shipping Amount"
 msgstr "Valor Frete"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:364
-#: Includes/LknIntegrationRedeForWoocommerce.php:1843
+#: Includes/LknIntegrationRedeForWoocommerce.php:1849
 msgid "Interest/Discount"
 msgstr "Juros/Desconto"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:365
-#: Includes/LknIntegrationRedeForWoocommerce.php:1844
+#: Includes/LknIntegrationRedeForWoocommerce.php:1850
 msgid "Currency"
 msgstr "Moeda"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:368
-#: Includes/LknIntegrationRedeForWoocommerce.php:1849
+#: Includes/LknIntegrationRedeForWoocommerce.php:1855
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:139
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:1067
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:184
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1049
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:196
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:809
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:206
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1071
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:218
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:831
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:125
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:218
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:329
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:240
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:351
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:731
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:987
 msgid "Environment"
 msgstr "Ambiente"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:370
-#: Includes/LknIntegrationRedeForWoocommerce.php:1852
+#: Includes/LknIntegrationRedeForWoocommerce.php:1858
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:1070
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:221
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:243
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:734
 msgid "Reference"
 msgstr "Referência"
@@ -272,21 +272,21 @@ msgid "Request Date/Time"
 msgstr "Data/Hora Requisição"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:374
-#: Includes/LknIntegrationRedeForWoocommerce.php:1856
+#: Includes/LknIntegrationRedeForWoocommerce.php:1862
 msgid "HTTP Status"
 msgstr "Status HTTP"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:375
-#: Includes/LknIntegrationRedeForWoocommerce.php:1855
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:219
+#: Includes/LknIntegrationRedeForWoocommerce.php:1861
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:241
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:732
 msgid "Return Code"
 msgstr "Código de retorno"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:376
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1050
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:810
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:220
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1072
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:832
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:242
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:733
 msgid "Return Message"
 msgstr "Mensagem de retorno"
@@ -368,7 +368,7 @@ msgstr "Não"
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:1962
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:2120
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:2122
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:422
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:512
 msgid "Success"
 msgstr "Sucesso"
 
@@ -378,93 +378,93 @@ msgstr "Falha"
 
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:586
 #: Admin/LknIntegrationRedeForWoocommerceAdmin.php:593
-#: Includes/LknIntegrationRedeForWoocommerce.php:2217
+#: Includes/LknIntegrationRedeForWoocommerce.php:2223
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:150
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:2078
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:2081
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:195
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:207
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:217
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:229
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:136
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:337
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:359
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:998
 msgid "Production"
 msgstr "Produção"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:328
-#: Includes/LknIntegrationRedeForWoocommerce.php:360
+#: Includes/LknIntegrationRedeForWoocommerce.php:334
+#: Includes/LknIntegrationRedeForWoocommerce.php:366
 msgid "Invalid nonce."
 msgstr "Nonce inválido."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:333
-#: Includes/LknIntegrationRedeForWoocommerce.php:365
+#: Includes/LknIntegrationRedeForWoocommerce.php:339
+#: Includes/LknIntegrationRedeForWoocommerce.php:371
 msgid "Insufficient permissions."
 msgstr "Permissões insuficientes."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:350
+#: Includes/LknIntegrationRedeForWoocommerce.php:356
 msgid "Internal error: "
 msgstr "Erro interno: "
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:374
+#: Includes/LknIntegrationRedeForWoocommerce.php:380
 msgid "Notice dismissed successfully."
 msgstr "Aviso dispensado com sucesso."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:377
+#: Includes/LknIntegrationRedeForWoocommerce.php:383
 msgid "Error updating option."
 msgstr "Erro ao atualizar a opção."
 
 #. translators: %1$d: number of installments, %2$s: installment price
 #. translators: %1$d is the number of installments, %2$s is the formatted price per installment
-#: Includes/LknIntegrationRedeForWoocommerce.php:459
-#: Includes/LknIntegrationRedeForWoocommerce.php:470
-#: Includes/LknIntegrationRedeForWoocommerce.php:583
-#: Includes/LknIntegrationRedeForWoocommerce.php:597
-#: Includes/LknIntegrationRedeForWoocommerce.php:718
-#: Includes/LknIntegrationRedeForWoocommerce.php:732
-#: Includes/LknIntegrationRedeForWoocommerce.php:970
-#: Includes/LknIntegrationRedeForWoocommerce.php:996
-#: Includes/LknIntegrationRedeForWoocommerce.php:1551
+#: Includes/LknIntegrationRedeForWoocommerce.php:465
+#: Includes/LknIntegrationRedeForWoocommerce.php:476
+#: Includes/LknIntegrationRedeForWoocommerce.php:589
+#: Includes/LknIntegrationRedeForWoocommerce.php:603
+#: Includes/LknIntegrationRedeForWoocommerce.php:724
+#: Includes/LknIntegrationRedeForWoocommerce.php:738
+#: Includes/LknIntegrationRedeForWoocommerce.php:976
+#: Includes/LknIntegrationRedeForWoocommerce.php:1002
+#: Includes/LknIntegrationRedeForWoocommerce.php:1557
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:668
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:674
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:677
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:692
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:695
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:404
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:426
 #: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCreditBlocks.php:103
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:599
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:621
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeCreditBlocks.php:106
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:2344
 #, php-format
 msgid "%1$dx of %2$s"
 msgstr "%1$dx de %2$s"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:797
-#: Includes/LknIntegrationRedeForWoocommerce.php:825
+#: Includes/LknIntegrationRedeForWoocommerce.php:803
+#: Includes/LknIntegrationRedeForWoocommerce.php:831
 msgid "Unsupported payment method"
 msgstr "Método de pagamento não suportado"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:803
-#: Includes/LknIntegrationRedeForWoocommerce.php:1636
-#: Includes/LknIntegrationRedeForWoocommerce.php:1963
+#: Includes/LknIntegrationRedeForWoocommerce.php:809
+#: Includes/LknIntegrationRedeForWoocommerce.php:1642
+#: Includes/LknIntegrationRedeForWoocommerce.php:1969
 msgid "Invalid nonce"
 msgstr "Nonce inválido"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:808
+#: Includes/LknIntegrationRedeForWoocommerce.php:814
 msgid "Invalid parameters"
 msgstr "Parâmetros inválidos"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:839
+#: Includes/LknIntegrationRedeForWoocommerce.php:845
 msgid "Session updated successfully"
 msgstr "Sessão atualizada com sucesso"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:852
+#: Includes/LknIntegrationRedeForWoocommerce.php:858
 msgid "WooCommerce session not available"
 msgstr "Sessão do WooCommerce não disponível"
 
 #. translators: %1$d: number of installments, %2$s: installment price
-#: Includes/LknIntegrationRedeForWoocommerce.php:907
-#: Includes/LknIntegrationRedeForWoocommerce.php:912
-#: Includes/LknIntegrationRedeForWoocommerce.php:952
-#: Includes/LknIntegrationRedeForWoocommerce.php:986
+#: Includes/LknIntegrationRedeForWoocommerce.php:913
+#: Includes/LknIntegrationRedeForWoocommerce.php:918
+#: Includes/LknIntegrationRedeForWoocommerce.php:958
+#: Includes/LknIntegrationRedeForWoocommerce.php:992
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:674
 #: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCreditBlocks.php:79
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeCreditBlocks.php:82
@@ -472,27 +472,27 @@ msgid "interest-free"
 msgstr "sem juros"
 
 #. translators: %s: discount percentage, e.g. 5
-#: Includes/LknIntegrationRedeForWoocommerce.php:977
+#: Includes/LknIntegrationRedeForWoocommerce.php:983
 #, php-format
 msgid "(%s%% discount)"
 msgstr "(%s%% de desconto)"
 
 #. translators: %s: interest percentage, e.g. 5
-#: Includes/LknIntegrationRedeForWoocommerce.php:1003
+#: Includes/LknIntegrationRedeForWoocommerce.php:1009
 #, php-format
 msgid "(%s%% interest)"
 msgstr "(%s%% de juros)"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1062
+#: Includes/LknIntegrationRedeForWoocommerce.php:1068
 msgid "⚠️ Plugin Update Required - Rede Integration for WooCommerce Pro"
 msgstr ""
 "⚠️ Atualização do Plugin Necessária - Integração Rede para WooCommerce Pro"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1065
+#: Includes/LknIntegrationRedeForWoocommerce.php:1071
 msgid "Important:"
 msgstr "Importante:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1066
+#: Includes/LknIntegrationRedeForWoocommerce.php:1072
 msgid ""
 "Rede's authentication protocol will be changed to OAuth 2.0 on 01/05/2026. "
 "All customers using e.Rede must update the plugin. This measure will "
@@ -506,12 +506,12 @@ msgstr ""
 "direcionados às suas transações. Após o prazo, as transações só poderão ser "
 "realizadas usando o plugin atualizado."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1069
+#: Includes/LknIntegrationRedeForWoocommerce.php:1075
 msgid "Action Required (For PRO Users):"
 msgstr "Ação Necessária (Para Usuários PRO):"
 
 #. translators: %1$s is the current PRO version, %2$s is the required version
-#: Includes/LknIntegrationRedeForWoocommerce.php:1073
+#: Includes/LknIntegrationRedeForWoocommerce.php:1079
 #, php-format
 msgid ""
 "Your Rede Plugin PRO version %1$s needs to be updated to version %2$s or "
@@ -520,23 +520,23 @@ msgstr ""
 "Sua versão %1$s do Plugin Rede PRO precisa ser atualizada para a versão %2$s "
 "ou superior."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1081
+#: Includes/LknIntegrationRedeForWoocommerce.php:1087
 msgid "Check what changes"
 msgstr "Veja o que mudou"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1092
+#: Includes/LknIntegrationRedeForWoocommerce.php:1098
 msgid "Update Now"
 msgstr "Atualizar Agora"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1102
+#: Includes/LknIntegrationRedeForWoocommerce.php:1108
 msgid "Rede Pix FREE"
 msgstr "Rede Pix FREE"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1122
+#: Includes/LknIntegrationRedeForWoocommerce.php:1128
 msgid "Check PIX Status"
 msgstr "Verificar Status do PIX"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1137
+#: Includes/LknIntegrationRedeForWoocommerce.php:1143
 msgid ""
 "PIX Verification: This action applies only to orders using the PIX payment "
 "method."
@@ -544,176 +544,176 @@ msgstr ""
 "Verificação PIX: Esta ação se aplica apenas a pedidos que usam o método de "
 "pagamento PIX."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1150
+#: Includes/LknIntegrationRedeForWoocommerce.php:1156
 msgid ""
 "PIX Verification: Transaction identifier not found in the order metadata."
 msgstr ""
 "Verificação PIX: Identificador da transação não encontrado nos metadados do "
 "pedido."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1165
+#: Includes/LknIntegrationRedeForWoocommerce.php:1171
 msgid "Error obtaining the authentication token."
 msgstr "Erro ao obter o token de autenticação."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1183
+#: Includes/LknIntegrationRedeForWoocommerce.php:1189
 msgid "Error communicating with the API: "
 msgstr "Erro de comunicação com a API: "
 
 #. translators: %s is the order total amount
-#: Includes/LknIntegrationRedeForWoocommerce.php:1201
-#: Includes/LknIntegrationRedeForWoocommerce.php:1206
+#: Includes/LknIntegrationRedeForWoocommerce.php:1207
+#: Includes/LknIntegrationRedeForWoocommerce.php:1212
 #, php-format
 msgid "Manual PIX Verification: Payment of %s confirmed by Rede."
 msgstr "Verificação PIX Manual: Pagamento de %s confirmado pela Rede."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1209
+#: Includes/LknIntegrationRedeForWoocommerce.php:1215
 msgid ""
 "Manual PIX Verification: Payment not confirmed by Rede. Transaction status: "
 msgstr ""
 "Verificação PIX Manual: Pagamento não confirmado pela Rede. Status da "
 "transação: "
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1213
+#: Includes/LknIntegrationRedeForWoocommerce.php:1219
 msgid "Manual PIX Verification: Failed to query payment from Rede. Details: "
 msgstr ""
 "Verificação PIX Manual: Falha ao consultar o pagamento na Rede. Detalhes: "
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1242
-#: Includes/LknIntegrationRedeForWoocommerce.php:1385
+#: Includes/LknIntegrationRedeForWoocommerce.php:1248
+#: Includes/LknIntegrationRedeForWoocommerce.php:1391
 msgid "Settings"
 msgstr "Configuração"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1254
+#: Includes/LknIntegrationRedeForWoocommerce.php:1260
 msgid "Be pro"
 msgstr "Seja pro"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1532
+#: Includes/LknIntegrationRedeForWoocommerce.php:1538
 msgid "Rede Credit Card"
 msgstr "Rede Cartão de Crédito"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1534
+#: Includes/LknIntegrationRedeForWoocommerce.php:1540
 msgid "Rede Debit/Credit Card"
 msgstr "Rede Cartão de Débito/Crédito"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1536
+#: Includes/LknIntegrationRedeForWoocommerce.php:1542
 msgid "Maxipago Credit Card"
 msgstr "Maxipago Cartão de Crédito"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1541
+#: Includes/LknIntegrationRedeForWoocommerce.php:1547
 #: Public/LknIntegrationRedeForWoocommercePublic.php:94
 #: Public/LknIntegrationRedeForWoocommercePublic.php:103
 msgid "Payment"
 msgstr "Pagamento"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1542
+#: Includes/LknIntegrationRedeForWoocommerce.php:1548
 #: Public/LknIntegrationRedeForWoocommercePublic.php:98
 msgid "Cash payment"
 msgstr "Pagamento em dinheiro"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1544
+#: Includes/LknIntegrationRedeForWoocommerce.php:1550
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:1433
 #: Public/LknIntegrationRedeForWoocommercePublic.php:95
 msgid "Installment"
 msgstr "Parcela"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1643
+#: Includes/LknIntegrationRedeForWoocommerce.php:1649
 msgid "Card number is required"
 msgstr "Número do cartão é obrigatório"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1708
+#: Includes/LknIntegrationRedeForWoocommerce.php:1714
 msgid "Card brand not found"
 msgstr "Bandeira do cartão não encontrada"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1722
+#: Includes/LknIntegrationRedeForWoocommerce.php:1728
 msgid "Changelog"
 msgstr "Registro de alterações"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1745
-#: Includes/LknIntegrationRedeForWoocommerce.php:1926
+#: Includes/LknIntegrationRedeForWoocommerce.php:1751
+#: Includes/LknIntegrationRedeForWoocommerce.php:1932
 msgid "Rede Transactions"
 msgstr "Transações Rede"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1832
+#: Includes/LknIntegrationRedeForWoocommerce.php:1838
 msgid "Card/PIX"
 msgstr "Cartão/PIX"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1833
+#: Includes/LknIntegrationRedeForWoocommerce.php:1839
 msgid "CVV Sent"
 msgstr "CVV Enviado"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1834
+#: Includes/LknIntegrationRedeForWoocommerce.php:1840
 msgid "Type"
 msgstr "Tipo"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1836
+#: Includes/LknIntegrationRedeForWoocommerce.php:1842
 msgid "Installment Value"
 msgstr "Valor da Parcela"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1837
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:236
+#: Includes/LknIntegrationRedeForWoocommerce.php:1843
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:258
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:751
 msgid "Brand"
 msgstr "Bandeira"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1839
+#: Includes/LknIntegrationRedeForWoocommerce.php:1845
 msgid "Date/Time"
 msgstr "Data/Hora"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1840
+#: Includes/LknIntegrationRedeForWoocommerce.php:1846
 #: Includes/templates/pix/paymentPixQRCode.php:33
 msgid "Total"
 msgstr "Total"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1841
+#: Includes/LknIntegrationRedeForWoocommerce.php:1847
 msgid "Subtotal"
 msgstr "Subtotal"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1842
+#: Includes/LknIntegrationRedeForWoocommerce.php:1848
 msgid "Shipping"
 msgstr "Frete"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1846
+#: Includes/LknIntegrationRedeForWoocommerce.php:1852
 msgid "Recurrent"
 msgstr "Recorrente"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1847
+#: Includes/LknIntegrationRedeForWoocommerce.php:1853
 msgid "3DS Auth"
 msgstr "Autenticação 3DS"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1848
+#: Includes/LknIntegrationRedeForWoocommerce.php:1854
 msgid "TID/PaymentId"
 msgstr "TID/PaymentId"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1850
+#: Includes/LknIntegrationRedeForWoocommerce.php:1856
 msgid "Gateway"
 msgstr "Gateway"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1853
+#: Includes/LknIntegrationRedeForWoocommerce.php:1859
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:154
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:105
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:344
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:366
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1002
 msgid "PV"
 msgstr "PV"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1854
+#: Includes/LknIntegrationRedeForWoocommerce.php:1860
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:165
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:115
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:354
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:376
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1012
 msgid "Token"
 msgstr "Token"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1857
+#: Includes/LknIntegrationRedeForWoocommerce.php:1863
 msgid "Holder"
 msgstr "Portador"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1858
-#: Includes/LknIntegrationRedeForWoocommerce.php:1903
+#: Includes/LknIntegrationRedeForWoocommerce.php:1864
+#: Includes/LknIntegrationRedeForWoocommerce.php:1909
 msgid "Support"
 msgstr "Suporte"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1861
+#: Includes/LknIntegrationRedeForWoocommerce.php:1867
 msgid ""
 "#support Hello! I need support with my Rede payment gateway. I am having "
 "problems with the transaction and here are the data for verification:"
@@ -721,356 +721,356 @@ msgstr ""
 "#support Olá! Preciso de suporte com meu gateway de pagamento Rede. Estou "
 "tendo problemas com a transação e aqui estão os dados para verificação:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1862
+#: Includes/LknIntegrationRedeForWoocommerce.php:1868
 msgid "Order:"
 msgstr "Pedido:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1863
+#: Includes/LknIntegrationRedeForWoocommerce.php:1869
 msgid "Date/Time:"
 msgstr "Data/Hora:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1864
+#: Includes/LknIntegrationRedeForWoocommerce.php:1870
 msgid "Environment:"
 msgstr "Ambiente:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1865
+#: Includes/LknIntegrationRedeForWoocommerce.php:1871
 msgid "Plugin:"
 msgstr "Plugin:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1866
+#: Includes/LknIntegrationRedeForWoocommerce.php:1872
 msgid "Release"
 msgstr "Versão"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1867
+#: Includes/LknIntegrationRedeForWoocommerce.php:1873
 msgid "Dependent plugin:"
 msgstr "Plugin dependente:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1868
+#: Includes/LknIntegrationRedeForWoocommerce.php:1874
 msgid "Site:"
 msgstr "Site:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1869
+#: Includes/LknIntegrationRedeForWoocommerce.php:1875
 msgid "Gateway:"
 msgstr "Gateway:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1870
+#: Includes/LknIntegrationRedeForWoocommerce.php:1876
 msgid "Reference:"
 msgstr "Referência:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1871
+#: Includes/LknIntegrationRedeForWoocommerce.php:1877
 msgid "Card/PIX:"
 msgstr "Cartão/PIX:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1872
+#: Includes/LknIntegrationRedeForWoocommerce.php:1878
 msgid "CVV Sent:"
 msgstr "CVV Enviado:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1873
+#: Includes/LknIntegrationRedeForWoocommerce.php:1879
 msgid "Card Type:"
 msgstr "Tipo de Cartão:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1874
+#: Includes/LknIntegrationRedeForWoocommerce.php:1880
 msgid "Brand:"
 msgstr "Bandeira:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1875
+#: Includes/LknIntegrationRedeForWoocommerce.php:1881
 msgid "Expiry:"
 msgstr "Validade:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1876
+#: Includes/LknIntegrationRedeForWoocommerce.php:1882
 msgid "Holder:"
 msgstr "Portador:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1877
+#: Includes/LknIntegrationRedeForWoocommerce.php:1883
 msgid "Installments:"
 msgstr "Parcelas:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1878
+#: Includes/LknIntegrationRedeForWoocommerce.php:1884
 msgid "Installment Value:"
 msgstr "Valor da Parcela:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1879
+#: Includes/LknIntegrationRedeForWoocommerce.php:1885
 msgid "Capture:"
 msgstr "Captura:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1880
+#: Includes/LknIntegrationRedeForWoocommerce.php:1886
 msgid "Recurrent:"
 msgstr "Recorrente:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1881
+#: Includes/LknIntegrationRedeForWoocommerce.php:1887
 msgid "3DS Auth:"
 msgstr "Autenticação 3DS:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1882
+#: Includes/LknIntegrationRedeForWoocommerce.php:1888
 msgid "TID/PaymentId:"
 msgstr "TID/PaymentId:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1883
+#: Includes/LknIntegrationRedeForWoocommerce.php:1889
 msgid "Total:"
 msgstr "Total:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1884
+#: Includes/LknIntegrationRedeForWoocommerce.php:1890
 msgid "Subtotal:"
 msgstr "Subtotal:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1885
+#: Includes/LknIntegrationRedeForWoocommerce.php:1891
 msgid "Shipping:"
 msgstr "Frete:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1886
+#: Includes/LknIntegrationRedeForWoocommerce.php:1892
 msgid "Interest/Discount:"
 msgstr "Juros/Desconto:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1887
+#: Includes/LknIntegrationRedeForWoocommerce.php:1893
 msgid "Currency:"
 msgstr "Moeda:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1888
+#: Includes/LknIntegrationRedeForWoocommerce.php:1894
 msgid "PV:"
 msgstr "PV:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1889
+#: Includes/LknIntegrationRedeForWoocommerce.php:1895
 msgid "Token:"
 msgstr "Token:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1890
+#: Includes/LknIntegrationRedeForWoocommerce.php:1896
 msgid "Return Code:"
 msgstr "Código de Retorno:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1891
+#: Includes/LknIntegrationRedeForWoocommerce.php:1897
 msgid "HTTP Status:"
 msgstr "Status HTTP:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1892
+#: Includes/LknIntegrationRedeForWoocommerce.php:1898
 msgid "Awaiting your reply, thank you!"
 msgstr "Aguardando sua resposta, obrigado!"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1895
+#: Includes/LknIntegrationRedeForWoocommerce.php:1901
 msgid "Failed to decode TOON response"
 msgstr "Falha ao decodificar a resposta TOON"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1896
+#: Includes/LknIntegrationRedeForWoocommerce.php:1902
 msgid "Unrecognized response format"
 msgstr "Formato de resposta não reconhecido"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1897
+#: Includes/LknIntegrationRedeForWoocommerce.php:1903
 msgid "Error loading data"
 msgstr "Erro ao carregar os dados"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1898
+#: Includes/LknIntegrationRedeForWoocommerce.php:1904
 msgid "Connection error while loading data"
 msgstr "Erro de conexão ao carregar os dados"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1901
+#: Includes/LknIntegrationRedeForWoocommerce.php:1907
 msgid "No data to export"
 msgstr "Nenhum dado para exportar"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1902
+#: Includes/LknIntegrationRedeForWoocommerce.php:1908
 msgid "Open WhatsApp for support"
 msgstr "Abrir WhatsApp para suporte"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1904
+#: Includes/LknIntegrationRedeForWoocommerce.php:1910
 msgid "Edit order in WooCommerce"
 msgstr "Editar pedido no WooCommerce"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1905
+#: Includes/LknIntegrationRedeForWoocommerce.php:1911
 msgid "Search transactions..."
 msgstr "Pesquisar transações..."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1906
+#: Includes/LknIntegrationRedeForWoocommerce.php:1912
 msgid "Previous"
 msgstr "Anterior"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1907
+#: Includes/LknIntegrationRedeForWoocommerce.php:1913
 msgid "Next"
 msgstr "Próximo"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1908
+#: Includes/LknIntegrationRedeForWoocommerce.php:1914
 msgid "Page"
 msgstr "Página"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1909
+#: Includes/LknIntegrationRedeForWoocommerce.php:1915
 msgid "of"
 msgstr "de"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1910
+#: Includes/LknIntegrationRedeForWoocommerce.php:1916
 msgid "Showing"
 msgstr "Mostrando"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1911
+#: Includes/LknIntegrationRedeForWoocommerce.php:1917
 msgid "to"
 msgstr "a"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1912
+#: Includes/LknIntegrationRedeForWoocommerce.php:1918
 msgid "records"
 msgstr "registros"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1913
+#: Includes/LknIntegrationRedeForWoocommerce.php:1919
 #: Public/LknIntegrationRedeForWoocommercePublic.php:96
 msgid "Loading..."
 msgstr "Carregando..."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1914
+#: Includes/LknIntegrationRedeForWoocommerce.php:1920
 msgid "No transactions found"
 msgstr "Nenhuma transação encontrada"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1915
+#: Includes/LknIntegrationRedeForWoocommerce.php:1921
 msgid "An error occurred while loading data"
 msgstr "Ocorreu um erro ao carregar os dados"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1916
+#: Includes/LknIntegrationRedeForWoocommerce.php:1922
 msgid "Click to upgrade to Rede Analytics PRO"
 msgstr "Clique para atualizar para o Rede Analytics PRO"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1917
+#: Includes/LknIntegrationRedeForWoocommerce.php:1923
 msgid "Column Configuration"
 msgstr "Configuração de Colunas"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1918
+#: Includes/LknIntegrationRedeForWoocommerce.php:1924
 msgid "Restore Default"
 msgstr "Restaurar Padrão"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1919
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:423
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:429
+#: Includes/LknIntegrationRedeForWoocommerce.php:1925
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:513
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:519
 msgid "Close"
 msgstr "Fechar"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1920
+#: Includes/LknIntegrationRedeForWoocommerce.php:1926
 msgid "Move up"
 msgstr "Mover para cima"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1921
+#: Includes/LknIntegrationRedeForWoocommerce.php:1927
 msgid "Move down"
 msgstr "Mover para baixo"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1922
+#: Includes/LknIntegrationRedeForWoocommerce.php:1928
 msgid "💡 Tips:"
 msgstr "💡 Dicas:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1923
+#: Includes/LknIntegrationRedeForWoocommerce.php:1929
 msgid "Check/uncheck boxes to show/hide columns"
 msgstr "Marque/desmarque as caixas para mostrar/ocultar colunas"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1924
+#: Includes/LknIntegrationRedeForWoocommerce.php:1930
 msgid "Use ↑↓ or drag cards to reorder columns"
 msgstr "Use ↑↓ ou arraste os cartões para reordenar as colunas"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1925
+#: Includes/LknIntegrationRedeForWoocommerce.php:1931
 msgid "Settings are saved automatically"
 msgstr "As configurações são salvas automaticamente"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1927
+#: Includes/LknIntegrationRedeForWoocommerce.php:1933
 msgid "Configure column order and visibility"
 msgstr "Configurar ordem e visibilidade das colunas"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1928
+#: Includes/LknIntegrationRedeForWoocommerce.php:1934
 msgid "Configure Columns"
 msgstr "Configurar colunas"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1929
+#: Includes/LknIntegrationRedeForWoocommerce.php:1935
 msgid "Export data in CSV format"
 msgstr "Exportar dados em formato CSV"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1930
+#: Includes/LknIntegrationRedeForWoocommerce.php:1936
 msgid "Export CSV"
 msgstr "Exportar CSV"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1931
+#: Includes/LknIntegrationRedeForWoocommerce.php:1937
 msgid "Export data in Excel format"
 msgstr "Exportar dados em formato Excel"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1932
+#: Includes/LknIntegrationRedeForWoocommerce.php:1938
 msgid "Export XLS"
 msgstr "Exportar XLS"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1933
+#: Includes/LknIntegrationRedeForWoocommerce.php:1939
 msgid "Recent transactions:"
 msgstr "Transações recentes:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1934
+#: Includes/LknIntegrationRedeForWoocommerce.php:1940
 msgid "Load up to:"
 msgstr "Carregar até:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1935
+#: Includes/LknIntegrationRedeForWoocommerce.php:1941
 msgid "Query Dates:"
 msgstr "Consultar datas:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1936
+#: Includes/LknIntegrationRedeForWoocommerce.php:1942
 msgid "Start Date:"
 msgstr "Data inicial:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1937
+#: Includes/LknIntegrationRedeForWoocommerce.php:1943
 msgid "End Date:"
 msgstr "Data final:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1938
+#: Includes/LknIntegrationRedeForWoocommerce.php:1944
 msgid "Filter"
 msgstr "Filtrar"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1939
+#: Includes/LknIntegrationRedeForWoocommerce.php:1945
 msgid "Today"
 msgstr "Hoje"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1940
+#: Includes/LknIntegrationRedeForWoocommerce.php:1946
 msgid "Last 7 days"
 msgstr "Últimos 7 dias"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1941
+#: Includes/LknIntegrationRedeForWoocommerce.php:1947
 msgid "Last 30 days"
 msgstr "Últimos 30 dias"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1942
+#: Includes/LknIntegrationRedeForWoocommerce.php:1948
 msgid "Custom"
 msgstr "Personalizado"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1943
+#: Includes/LknIntegrationRedeForWoocommerce.php:1949
 msgid "Reset Default"
 msgstr "Redefinir padrão"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1944
+#: Includes/LknIntegrationRedeForWoocommerce.php:1950
 msgid "Items per page:"
 msgstr "Itens por página:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1945
+#: Includes/LknIntegrationRedeForWoocommerce.php:1951
 msgid "Loading transactions..."
 msgstr "Carregando transações..."
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1946
+#: Includes/LknIntegrationRedeForWoocommerce.php:1952
 msgid "Error:"
 msgstr "Erro:"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1947
+#: Includes/LknIntegrationRedeForWoocommerce.php:1953
 msgid "Try again"
 msgstr "Tentar novamente"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1948
+#: Includes/LknIntegrationRedeForWoocommerce.php:1954
 msgid "of total"
 msgstr "de total"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1949
+#: Includes/LknIntegrationRedeForWoocommerce.php:1955
 msgid "transactions"
 msgstr "transações"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1950
+#: Includes/LknIntegrationRedeForWoocommerce.php:1956
 msgid "Load more transactions"
 msgstr "Carregar mais transações"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:1969
+#: Includes/LknIntegrationRedeForWoocommerce.php:1975
 msgid "Insufficient permissions"
 msgstr "Permissões insuficientes"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:2061
+#: Includes/LknIntegrationRedeForWoocommerce.php:2067
 msgid "No Rede transactions found"
 msgstr "Nenhuma transação Rede encontrada"
 
 #. translators: %1$d is the page number, %2$d is the transactions found, %3$d is the total count
-#: Includes/LknIntegrationRedeForWoocommerce.php:2119
+#: Includes/LknIntegrationRedeForWoocommerce.php:2125
 #, php-format
 msgid "Page %1$d - %2$d Rede transactions found out of %3$d total"
 msgstr "Página %1$d - %2$d transações Rede encontradas de %3$d no total"
 
-#: Includes/LknIntegrationRedeForWoocommerce.php:2143
+#: Includes/LknIntegrationRedeForWoocommerce.php:2149
 msgid "Error fetching orders: "
 msgstr "Erro ao buscar pedidos: "
 
@@ -2324,11 +2324,11 @@ msgid "View logs"
 msgstr "Ver logs"
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:104
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:143
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:158
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:165
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:180
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:63
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:288
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:325
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:310
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:347
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:952
 msgid "General"
 msgstr "Geral"
@@ -2361,10 +2361,10 @@ msgstr ""
 "usando a API da Rede."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:119
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:158
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:173
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:180
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:195
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:78
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:304
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:326
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:967
 msgid "Title"
 msgstr "Título"
@@ -2375,10 +2375,10 @@ msgid "Pay with Google Pay"
 msgstr "Pague com Google Pay"
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:122
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:161
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:176
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:183
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:198
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:81
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:307
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:329
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:971
 msgid ""
 "Enter the title that will be shown to customers during the checkout process."
@@ -2387,12 +2387,12 @@ msgstr ""
 "finalização."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:123
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:160
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:162
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:175
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:177
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:182
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:184
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:197
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:199
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:82
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:308
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:330
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:970
 msgid "This controls the title which the user sees during checkout."
 msgstr "Isto controla o título que o usuário vê durante a finalização."
@@ -2408,10 +2408,10 @@ msgstr ""
 "\"Pague com Google Pay\"."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:129
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:168
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:212
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:190
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:234
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:88
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:315
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:337
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:977
 msgid "Description"
 msgstr "Descrição"
@@ -2422,10 +2422,10 @@ msgid "Pay securely with Google Pay"
 msgstr "Pague com segurança com Google Pay"
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:132
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:171
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:215
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:193
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:237
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:92
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:318
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:340
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:980
 msgid ""
 "This description appears below the payment method title at checkout. Use it "
@@ -2436,10 +2436,10 @@ msgstr ""
 "processamento do pagamento."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:133
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:172
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:216
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:194
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:238
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:93
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:319
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:341
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:981
 msgid "Payment method description that the customer will see on your checkout."
 msgstr ""
@@ -2455,26 +2455,26 @@ msgstr ""
 "Rede.\""
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:141
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:198
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:220
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:127
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:332
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:354
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:989
 msgid "Choose between production or development mode for Rede API."
 msgstr ""
 "Escolha entre o modo de produção ou de desenvolvimento para a API da Rede."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:142
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:187
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:199
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:209
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:221
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:128
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:331
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:353
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:990
 msgid "Choose the environment"
 msgstr "Escolha o ambiente"
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:144
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:189
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:201
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:211
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:223
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:130
 msgid ""
 "Select 'Tests' to test transactions in sandbox mode. Use 'Production' for "
@@ -2484,19 +2484,19 @@ msgstr ""
 "para transações reais."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:147
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:192
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:204
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:214
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:226
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:133
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:334
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:356
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:995
 msgid "test"
 msgstr "teste"
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:149
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:194
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:206
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:216
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:228
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:135
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:336
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:358
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:997
 msgid "Tests"
 msgstr "Testes"
@@ -2509,8 +2509,8 @@ msgstr "Seu número de PV da Rede."
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:168
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:108
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:118
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:346
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:356
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:368
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:378
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1005
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1015
 msgid "Rede credentials."
@@ -2679,21 +2679,21 @@ msgstr ""
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:260
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:192
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:463
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:485
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1203
 msgid "ABECS standard messages"
 msgstr "Mensagens padrão ABECS"
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:262
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:194
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:465
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:487
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1205
 msgid "Enable ABECS-standard return messages"
 msgstr "Habilitar mensagens de retorno no padrão ABECS"
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:264
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:196
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:467
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:489
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1207
 msgid ""
 "Use the official e.Rede (ABECS) return messages instead of the default "
@@ -2704,14 +2704,14 @@ msgstr ""
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:265
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:197
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:468
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:490
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1208
 msgid "Default: enabled when the PRO license is active."
 msgstr "Padrão: habilitado quando a licença PRO está ativa."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:268
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:200
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:471
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:493
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1211
 msgid ""
 "Use the official e.Rede (ABECS) return messages. Disable to keep the "
@@ -2755,7 +2755,7 @@ msgstr ""
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:293
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:165
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:446
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:468
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1047
 msgid "Payment Complete Status"
 msgstr "Status de pagamento concluído"
@@ -2814,10 +2814,10 @@ msgstr ""
 "confirmação imediata do pagamento."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:323
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:269
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:253
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:291
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:275
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:206
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:478
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:500
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1358
 msgid "Developer"
 msgstr "Desenvolvedor"
@@ -2849,17 +2849,17 @@ msgstr ""
 "solucionar quaisquer problemas de pagamento."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:354
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:310
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:294
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:499
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:332
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:316
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:521
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1398
 msgid "WhatsApp Support"
 msgstr "Suporte via WhatsApp"
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:357
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:313
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:297
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:502
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:335
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:319
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:524
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1401
 msgid ""
 "Enable Debug Mode and click Save Changes to get quick support via WhatsApp."
@@ -2868,9 +2868,9 @@ msgstr ""
 "rápido via WhatsApp."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:363
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:319
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:303
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:508
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:341
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:325
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:530
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1407
 msgid "Send the settings for this payment method to WordPress Support."
 msgstr ""
@@ -2878,7 +2878,7 @@ msgstr ""
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:371
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:245
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:540
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:562
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1414
 msgid "Transactions"
 msgstr "Transações"
@@ -2915,19 +2915,19 @@ msgid "Order not found."
 msgstr "Pedido não encontrado."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:514
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:524
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:469
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:546
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:491
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:283
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:960
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:982
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1791
 msgid "Duplicate order attempt."
 msgstr "Tentativa de pedido duplicado."
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:518
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:528
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:473
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:550
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:495
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:287
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:964
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:986
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1795
 msgid ""
 "This order has already been paid. It is not possible to process the payment "
@@ -2942,9 +2942,9 @@ msgstr "Os dados do token do Google Pay são obrigatórios."
 #. translators: %s: The original order currency code (e.g., USD, EUR) that was converted to BRL.
 #. translators: %s is the original order currency code (e.g., USD, EUR, etc.)
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:556
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:549
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:494
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1070
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:571
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:516
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1092
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1929
 #, php-format
 msgid "Order currency %s converted to BRL."
@@ -3024,10 +3024,10 @@ msgid "Return message"
 msgstr "Mensagem de retorno"
 
 #: Includes/LknIntegrationRedeForWoocommerceGooglePay.php:1071
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1051
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:811
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1073
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:833
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeAbstract.php:99
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:222
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:244
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:735
 msgid "Transaction ID"
 msgstr "ID da transação"
@@ -3258,19 +3258,19 @@ msgid ""
 msgstr "Escolha o status do pedido após o pagamento ser concluído com sucesso."
 
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:1390
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:453
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:475
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1054
 msgid "Processing"
 msgstr "Processando"
 
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:1391
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:454
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:476
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1055
 msgid "Completed"
 msgstr "Concluído"
 
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:1392
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:455
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:477
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1056
 msgid "On Hold"
 msgstr "Em espera"
@@ -3491,14 +3491,14 @@ msgstr ""
 "desconto."
 
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:1556
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:246
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:420
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:268
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:442
 msgid "Max installments"
 msgstr "Máximo de parcelas"
 
 #: Includes/LknIntegrationRedeForWoocommerceHelper.php:1560
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:264
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:439
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:286
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:461
 msgid "Set the maximum number of installments allowed in credit transactions."
 msgstr ""
 "Defina o número máximo de parcelas permitidas nas transações de crédito."
@@ -3559,9 +3559,9 @@ msgstr "Falhou"
 
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateEmail.php:71
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateEmail.php:148
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:160
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:245
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:408
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:248
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:333
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:497
 msgid "Integration Rede Itaú for WooCommerce"
 msgstr "Integration Rede Itaú for WooCommerce"
 
@@ -3570,8 +3570,8 @@ msgid "Notice: important PRO plugin update"
 msgstr "Aviso: atualização importante do plugin PRO"
 
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateEmail.php:149
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:161
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:246
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:249
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:334
 msgid "Integration Rede Itaú for WooCommerce PRO"
 msgstr "Integration Rede Itaú for WooCommerce PRO"
 
@@ -3636,25 +3636,25 @@ msgstr ""
 msgid "Sincerely, the Link Nacional team"
 msgstr "Atenciosamente, a equipe Link Nacional"
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:73
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:74
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:81
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:82
 msgid "PRO plugin update"
 msgstr "Atualização do plugin PRO"
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:148
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:231
 msgid "You do not have permission to access this page."
 msgstr "Você não tem permissão para acessar esta página."
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:166
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:254
 msgid "Close and do not show again"
 msgstr "Fechar e não mostrar novamente"
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:173
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:261
 msgid "Important PRO plugin update"
 msgstr "Atualização importante do plugin PRO"
 
 #. translators: %1$s: FREE plugin name, %2$s: PRO plugin name, %3$s: minimum PRO version
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:180
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:268
 #, php-format
 msgid ""
 "The plugin %1$s requires version %3$s or higher of %2$s. Your installed "
@@ -3663,7 +3663,7 @@ msgstr ""
 "O plugin %1$s requer a versão %3$s ou superior do %2$s. Sua versão instalada "
 "está desatualizada."
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:190
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:278
 msgid ""
 "Update the PRO plugin to avoid failures on the settings screen and at "
 "checkout. Your data will not be changed."
@@ -3671,33 +3671,33 @@ msgstr ""
 "Atualize o plugin PRO para evitar falhas na tela de configurações e na "
 "finalização da compra. Seus dados não serão alterados."
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:193
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:281
 msgid "More secure transactions"
 msgstr "Transações mais seguras"
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:194
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:282
 msgid "Critical fixes and improvements"
 msgstr "Correções e melhorias críticas"
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:195
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:283
 msgid "New payment features"
 msgstr "Novos recursos de pagamento"
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:200
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:288
 msgid "Not now"
 msgstr "Agora não"
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:203
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:272
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:291
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:361
 msgid "Update PRO plugin"
 msgstr "Atualizar plugin PRO"
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:258
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:347
 msgid "Update"
 msgstr "Atualizar"
 
 #. translators: %1$s: PRO plugin name, %2$s: minimum PRO version
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:264
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:353
 #, php-format
 msgid ""
 "An important update for the %1$s plugin is available (version %2$s or "
@@ -3706,37 +3706,37 @@ msgstr ""
 "Uma atualização importante para o plugin %1$s está disponível (versão %2$s "
 "ou superior). Atualize-o para evitar falhas na configuração e na finalização."
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:275
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:364
 msgid "Dismiss this notice."
 msgstr "Dispensar este aviso."
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:293
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:382
 msgid "You do not have permission to update plugins."
 msgstr "Você não tem permissão para atualizar plugins."
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:325
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:414
 msgid "No update available at the moment. Update from the Plugins screen."
 msgstr ""
 "Nenhuma atualização disponível no momento. Atualize a partir da tela de "
 "Plugins."
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:333
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:422
 msgid "Updated successfully. Reloading…"
 msgstr "Atualizado com sucesso. Recarregando…"
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:344
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:433
 msgid "Insufficient permission."
 msgstr "Permissão insuficiente."
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:416
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:506
 msgid "Updated!"
 msgstr "Atualizado!"
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:424
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:514
 msgid "The PRO plugin was updated successfully."
 msgstr "O plugin PRO foi atualizado com sucesso."
 
-#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:428
+#: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:518
 msgid "Error"
 msgstr "Erro"
 
@@ -3750,60 +3750,64 @@ msgstr "Você não tem permissão para limpar os logs de pedidos."
 msgid "Logs cleared from %d orders."
 msgstr "Logs limpos de %d pedidos."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:345
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:632
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:332
+msgid "Payment confirmed via maxiPago Reports API validation."
+msgstr "Pagamento confirmado via validação da Reports API do maxiPago."
+
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:490
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:777
 msgid "PIX webhook rejected: Rede API validation failed"
 msgstr "Webhook PIX rejeitado: falha na validação da API da Rede"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:355
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:648
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:500
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:793
 msgid "PIX payment confirmed via webhook - FREE version"
 msgstr "Pagamento PIX confirmado via webhook - versão FREE"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:609
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:754
 msgid "PIX payment confirmed via webhook - PRO version"
 msgstr "Pagamento PIX confirmado via webhook - versão PRO"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:702
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:783
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:841
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:847
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:928
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:986
 msgid "Order not found"
 msgstr "Pedido não encontrado"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:769
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:914
 msgid "Missing required parameters (reference or tid)"
 msgstr "Parâmetros obrigatórios ausentes (reference ou tid)"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:777
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:835
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:922
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:980
 msgid "Invalid reference format"
 msgstr "Formato de referência inválido"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:788
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:933
 msgid "Security validation failed for 3DS success webhook"
 msgstr "Falha na validação de segurança do webhook de sucesso do 3DS"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:803
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:948
 msgid "Error processing 3DS success: "
 msgstr "Erro ao processar o sucesso do 3DS: "
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:827
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:972
 msgid "Missing reference parameter"
 msgstr "Parâmetro de referência ausente"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:846
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:991
 msgid "Security validation failed for 3DS failure webhook"
 msgstr "Falha na validação de segurança do webhook de falha do 3DS"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:959
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:1104
 msgid "3D Secure authentication failed"
 msgstr "Falha na autenticação 3D Secure"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:1006
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:1151
 msgid "Payment authorized, awaiting manual capture."
 msgstr "Pagamento autorizado, aguardando captura manual."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:1449
+#: Includes/LknIntegrationRedeForWoocommerceWcEndpoint.php:1600
 msgid "3D Secure authentication completed with challenge"
 msgstr "Autenticação 3D Secure concluída com desafio"
 
@@ -3815,86 +3819,102 @@ msgstr "Pague com a Maxipago Crédito"
 msgid "Enables and configures payments with Maxipago Credit"
 msgstr "Ativa e configura pagamentos com Maxipago Crédito"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:54
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:52
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:62
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:60
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeAbstract.php:387
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:95
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:98
+msgid "Expiration date must contain 2 or 4 digits"
+msgstr "A data de validade deve conter 2 ou 4 dígitos"
+
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:64
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:62
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeAbstract.php:397
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:97
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:100
+msgid "Card expiration date must be future."
+msgstr "A data de validade do cartão deve ser futura."
+
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:76
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:74
 msgid "CPF is a required field"
 msgstr "CPF é um campo obrigatório"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:60
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:58
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:87
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:82
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:80
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:109
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:112
 msgid "Card number is a required field"
 msgstr "Número do cartão é um campo obrigatório"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:66
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:64
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:93
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:88
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:86
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:115
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:118
 msgid "Card expiration is a required field"
 msgstr "Validade do cartão é um campo obrigatório"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:72
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:70
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:99
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:94
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:92
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:121
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:124
 msgid "Card security code is a required field"
 msgstr "Código de segurança do cartão é um campo obrigatório"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:78
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:76
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:105
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:100
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:98
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:127
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:130
 msgid "Card security code must be a numeric value"
 msgstr "O código de segurança do cartão deve ser um valor numérico"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:83
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:81
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:110
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:105
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:103
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:132
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:135
 msgid "Card security code must be at least 3 digits long"
 msgstr "O código de segurança do cartão deve ter pelo menos 3 dígitos"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:88
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:86
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:115
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:110
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:108
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:137
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:142
 msgid "Cardholder name is a required field"
 msgstr "Nome do titular do cartão é um campo obrigatório"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:103
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:104
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:125
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:126
 #: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCreditBlocks.php:78
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:101
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:102
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:123
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:124
 #: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebitBlocks.php:63
 msgid "District"
 msgstr "Bairro"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:147
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:162
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:292
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:169
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:184
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:314
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:956
 msgid "Enable/Disable"
 msgstr "Habilitar/Desabilitar"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:149
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:164
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:171
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:186
 msgid "Enables payment with Maxipago"
 msgstr "Permite pagamento com Maxipago"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:151
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:296
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:173
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:318
 msgid "Check this box and save to enable credit card settings."
 msgstr ""
 "Marque esta caixa e salve para habilitar as configurações de cartão de "
 "crédito."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:152
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:174
 msgid "Enable or disable the credit card payment method."
 msgstr "Habilite ou desabilite o método de pagamento com cartão de crédito."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:154
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:176
 msgid ""
 "Enable this option to allow customers to pay with credit cards using "
 "Maxipago API."
@@ -3902,8 +3922,8 @@ msgstr ""
 "Habilite esta opção para permitir que os clientes paguem com cartões de "
 "crédito usando a API da Maxipago."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:164
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:174
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:186
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:196
 msgid ""
 "Provide a brief message that informs the customer how the payment will be "
 "processed. For example: “Your payment will be securely processed by "
@@ -3913,76 +3933,76 @@ msgstr ""
 "processado. Por exemplo: “Seu pagamento será processado com segurança pela "
 "Maxipago.”"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:170
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:317
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:192
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:339
 #: Includes/templates/creditCard/maxipagoPaymentCreditForm.php:51
 #: Includes/templates/creditCard/redePaymentCreditForm.php:21
 msgid "Pay for your purchase with a credit card through "
 msgstr "Pague sua compra com cartão de crédito através de "
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:178
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:190
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:200
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:212
 msgid "Seller Company Name"
 msgstr "Nome da empresa vendedora"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:180
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:192
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:202
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:214
 msgid "Name that appears on the cardholder's statement."
 msgstr "Nome que aparece na fatura do titular do cartão."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:186
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:208
 msgid "Choose between production or development mode for Maxipago API."
 msgstr ""
 "Escolha entre o modo de produção ou de desenvolvimento para a API da "
 "Maxipago."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:199
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:222
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:221
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:244
 msgid "Merchant ID"
 msgstr "Merchant ID"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:201
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:224
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:223
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:246
 msgid "Your Maxipago Merchant ID."
 msgstr "Seu Merchant ID do Maxipago."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:202
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:212
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:225
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:235
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:224
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:234
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:247
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:257
 msgid "Maxipago credentials."
 msgstr "Credenciais da Maxipago."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:204
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:227
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:226
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:249
 msgid "Your Merchant ID should be provided here."
 msgstr "Seu Merchant ID deve ser fornecido aqui."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:209
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:232
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:231
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:254
 msgid "Merchant Key"
 msgstr "Merchant Key"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:211
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:234
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:233
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:256
 msgid "Your Maxipago Merchant Key."
 msgstr "Sua Merchant Key do Maxipago."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:214
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:237
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:236
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:259
 msgid "Your Merchant Key should be provided here."
 msgstr "Sua Merchant Key deve ser fornecida aqui."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:219
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:242
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:391
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:241
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:264
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:413
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1064
 msgid "Load on checkout"
 msgstr "Carregar no checkout"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:221
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:244
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:394
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:243
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:266
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:416
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1066
 msgid ""
 "Disable to load the plugin during checkout. Enable to prevent infinite "
@@ -3991,8 +4011,8 @@ msgstr ""
 "Desabilite para carregar o plugin durante a finalização. Habilite para "
 "evitar erros de carregamento infinito."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:222
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:245
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:244
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:267
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1067
 msgid ""
 "Select the position where the PIX layout will be displayed on the checkout "
@@ -4001,9 +4021,9 @@ msgstr ""
 "Selecione a posição em que o layout do PIX será exibido na página de "
 "finalização."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:224
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:247
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:398
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:246
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:269
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:420
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1069
 msgid ""
 "This feature controls the plugin's loading on the checkout page. It's "
@@ -4014,15 +4034,15 @@ msgstr ""
 "é habilitado por padrão para evitar erros de carregamento infinito e só deve "
 "ser desabilitado se você estiver enfrentando problemas com o gateway."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:226
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:249
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:395
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:248
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:271
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:417
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1071
 msgid "Load plugin on checkout. Default (enabled)"
 msgstr "Carregar plugin no checkout. Padrão (ativado)"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:230
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:403
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:252
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:425
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebitBlocks.php:163
 #: Includes/templates/admin/lkn-rede-fields-preview.php:89
 #: Includes/templates/debitCard/redePaymentDebitCompactForm.php:71
@@ -4034,13 +4054,13 @@ msgstr "Carregar plugin no checkout. Padrão (ativado)"
 msgid "Credit Card"
 msgstr "Cartão de Crédito"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:234
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:408
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:256
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:430
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1222
 msgid "Value of the smallest installment"
 msgstr "Valor da menor parcela"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:237
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:259
 msgid ""
 "Set the minimum allowed amount for each installment in credit transactions. "
 "Accepted minimum value by MaxiPago: 5."
@@ -4048,56 +4068,56 @@ msgstr ""
 "Defina o valor mínimo permitido para cada parcela em transações de crédito. "
 "Valor mínimo aceito pela MaxiPago: 5."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:238
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:260
 msgid "Set the minimum installment value for credit card payments."
 msgstr ""
 "Defina o valor mínimo da parcela para pagamentos com cartão de crédito."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:242
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:416
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:264
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:438
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1230
 msgid "Enter the minimum value each installment must have."
 msgstr "Insira o valor mínimo que cada parcela deve ter."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:274
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:258
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:296
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:280
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:210
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:483
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:505
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1363
 msgid "Debug"
 msgstr "Depurar"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:276
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:260
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:298
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:282
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:212
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:485
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:507
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1365
 msgid "Enable debug logs."
 msgstr "Ativar logs de depuração."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:276
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:260
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:298
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:282
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:212
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:485
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:507
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1365
 msgid "See logs"
 msgstr "Ver logs"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:278
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:262
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:300
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:284
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:214
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:488
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:510
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1367
 msgid "Enable transaction logging."
 msgstr "Habilitar a geração de registros das transações."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:279
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:293
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:263
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:277
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:301
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:315
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:285
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:299
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:215
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:229
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:487
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:509
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1368
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1381
 msgid ""
@@ -4107,34 +4127,34 @@ msgstr ""
 "Habilite esta opção para registrar solicitações e respostas de pagamento "
 "para fins de solução de problemas."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:281
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:265
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:303
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:287
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:217
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:490
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:512
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1370
 msgid "When enabled, all Rede transactions will be logged."
 msgstr "Quando habilitado, todas as transações da Rede serão registradas."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:288
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:272
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:310
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:294
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:224
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:516
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:538
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1376
 msgid "View Order Log"
 msgstr "Ver log do pedido"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:290
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:274
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:312
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:296
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:226
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:518
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:540
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1378
 msgid "Enables viewing the transaction log within the order."
 msgstr "Permite visualizar o log da transação dentro do pedido."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:292
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:276
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:314
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:298
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:228
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:521
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:543
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1380
 msgid ""
 "Useful for quickly viewing payment log data without accessing the system log "
@@ -4143,10 +4163,10 @@ msgstr ""
 "Útil para visualizar rapidamente os dados de log de pagamento sem acessar os "
 "arquivos de log do sistema."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:295
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:279
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:317
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:301
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:231
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:523
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:545
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1383
 msgid ""
 "Enable this to show the transaction details for Rede payments directly in "
@@ -4155,18 +4175,18 @@ msgstr ""
 "Habilite isto para mostrar os detalhes da transação de pagamentos da Rede "
 "diretamente no painel administrativo de cada pedido."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:299
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:283
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:321
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:305
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:235
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:527
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:549
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1387
 msgid "Clear Order Logs"
 msgstr "Limpar logs do pedido"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:303
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:287
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:325
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:309
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:239
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:532
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:554
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1391
 msgid ""
 "Use only if you no longer need the Rede transaction logs for past orders."
@@ -4174,89 +4194,89 @@ msgstr ""
 "Use somente se você não precisar mais dos logs de transação da Rede de "
 "pedidos anteriores."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:304
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:288
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:326
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:310
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:240
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:531
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:553
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1392
 msgid "Click this button to delete all Rede log data stored in orders."
 msgstr ""
 "Clique neste botão para excluir todos os dados de log da Rede armazenados "
 "nos pedidos."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:616
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1014
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:638
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1036
 msgid "Please enter a valid credit card number"
 msgstr "Por favor, insira um número de cartão de crédito válido"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:621
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:561
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1033
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:643
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:583
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1055
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1909
 msgid "One or more invalid fields"
 msgstr "Um ou mais campos inválidos"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:626
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1052
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:648
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1074
 msgid "Invalid number of installments"
 msgstr "Número de parcelas inválido"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:630
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:565
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:652
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:587
 msgid "Please enter a valid cpf number"
 msgstr "Por favor, insira um número de cpf válido"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:825
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:710
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:847
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:732
 msgid "Merchant ID or Merchant Key is invalid!"
 msgstr "Merchant ID ou Merchant Key estão inválidos!"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:938
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1306
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:960
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1328
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:2283
 msgid "Refunded:"
 msgstr "Reembolsado:"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:942
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:964
 msgid "Unknown error."
 msgstr "Erro desconhecido."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:968
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1258
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:990
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1280
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:2235
 msgid "Total refund already processed, check the order notes block."
 msgstr "Reembolso total já processado, verifique o bloco de notas do pedido."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1052
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:812
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:225
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1074
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:834
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:247
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:738
 msgid "Nsu"
 msgstr "Nsu"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1054
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:814
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:227
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1076
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:836
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:249
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:740
 msgid "Bin"
 msgstr "Bin"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1055
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:815
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:228
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1077
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:837
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:250
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:741
 msgid "Last 4"
 msgstr "4 últimos dígitos"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1058
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:817
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:231
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1080
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:839
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:253
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:745
 msgid "Card Expiration"
 msgstr "Validade do cartão"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1059
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:818
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php:1081
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:840
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:531
 msgid "Reference Number"
 msgstr "Número de Referência"
@@ -4276,31 +4296,31 @@ msgstr "Pague com a Maxipago Débito"
 msgid "Enables and configures payments with Maxipago Debit"
 msgstr "Ativa e configura pagamentos com Maxipago Débito"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:150
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:172
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:55
 msgid "Request received!"
 msgstr "Solicitação recebida!"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:151
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:173
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:56
 msgid "No requests received!"
 msgstr "Nenhuma solicitação recebida!"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:152
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:174
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:57
 msgid "How to Configure"
 msgstr "Como Configurar"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:166
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:188
 msgid "Check this box and save to enable debit card settings"
 msgstr ""
 "Marque esta caixa e salve para habilitar as configurações de cartão de débito"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:167
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:189
 msgid "Enable or disable the debit card payment method."
 msgstr "Habilite ou desabilite o método de pagamento com cartão de débito."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:169
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:191
 msgid ""
 "Enable this option to allow customers to pay with debit cards using maxipago "
 "API."
@@ -4308,7 +4328,7 @@ msgstr ""
 "Habilite esta opção para permitir que os clientes paguem com cartões de "
 "débito usando a API da maxipago."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:179
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:201
 msgid ""
 "This text will appear as the payment method title during checkout. Choose "
 "something your customers will easily understand, like “Pay with debit card”."
@@ -4317,12 +4337,12 @@ msgstr ""
 "finalização. Escolha algo que seus clientes entendam facilmente, como “Pagar "
 "com cartão de débito”."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:184
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:206
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:99
 msgid "Endpoint"
 msgstr "Endpoint"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:186
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:208
 msgid ""
 "Return URL to automatically update the status of orders paid via debit on "
 "the Maxipago."
@@ -4330,13 +4350,13 @@ msgstr ""
 "URL de retorno para atualização automática do status dos pedidos pagos via "
 "débito no Maxipago"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:214
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:236
 msgid "Pay for your purchase with a debit card through "
 msgstr "Pague sua compra com cartão de débito através de "
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:218
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:240
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:95
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:321
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:343
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:983
 msgid ""
 "Provide a brief message that informs the customer how the payment will be "
@@ -4346,15 +4366,15 @@ msgstr ""
 "processado. Por exemplo: “Seu pagamento será processado com segurança pela "
 "Rede.”"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:556
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php:578
 msgid "Please enter a valid debit card number"
 msgstr "Por favor, insira um número de cartão de débito válido"
 
 #: Includes/LknIntegrationRedeForWoocommerceWcPixHelper.php:65
 #: Includes/LknIntegrationRedeForWoocommerceWcPixHelper.php:75
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:828
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:834
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:838
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:850
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:856
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:860
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:389
 msgid "Request error: "
 msgstr "Erro na requisição: "
@@ -4413,25 +4433,25 @@ msgstr ""
 "débito na Rede."
 
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:107
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:347
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:369
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1004
 msgid "Your Rede PV (affiliation number)."
 msgstr "Seu PV (número de filiação) da Rede."
 
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:110
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:350
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:372
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1007
 msgid "Your Rede PV (affiliation number) should be provided here."
 msgstr "Seu PV da Rede (número de filiação) deve ser fornecido aqui."
 
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:117
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:357
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:379
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1014
 msgid "Your Rede Token."
 msgstr "Seu Token da Rede."
 
 #: Includes/LknIntegrationRedeForWoocommerceWcPixRede.php:120
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:360
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:382
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1017
 msgid "Your Rede Token should be placed here."
 msgstr "Seu Token da Rede deve ser colocado aqui."
@@ -4601,18 +4621,8 @@ msgstr "Digite o código de segurança do cartão"
 msgid "Security code must contain only numbers"
 msgstr "O código de segurança deve conter apenas números"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeAbstract.php:387
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:98
-msgid "Expiration date must contain 2 or 4 digits"
-msgstr "A data de validade deve conter 2 ou 4 dígitos"
-
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeAbstract.php:397
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:100
-msgid "Card expiration date must be future."
-msgstr "A data de validade do cartão deve ser futura."
-
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:17
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:306
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:328
 msgid "Pay with the Rede Credit"
 msgstr "Pague com a Rede Crédito"
 
@@ -4620,22 +4630,22 @@ msgstr "Pague com a Rede Crédito"
 msgid "Enables and configures payments with Rede Credit"
 msgstr "Ativa e configura pagamentos com Rede Crédito"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:223
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:245
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:736
 msgid "Refund ID"
 msgstr "ID do reembolso"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:224
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:246
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:737
 msgid "Cancellation ID"
 msgstr "ID de cancelamento"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:294
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:316
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:958
 msgid "Enables payment with Rede"
 msgstr "Permite pagamento com Rede"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:300
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:322
 msgid ""
 "Enable this option to allow customers to pay with credit cards using Rede "
 "API."
@@ -4643,7 +4653,7 @@ msgstr ""
 "Habilite esta opção para permitir que os clientes paguem com cartões de "
 "crédito usando a API da Rede."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:310
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:332
 msgid ""
 "This text will appear as the payment method title during checkout. Choose "
 "something your customers will easily understand, like “Pay with credit card "
@@ -4653,7 +4663,7 @@ msgstr ""
 "finalização. Escolha algo que seus clientes entendam facilmente, como “Pagar "
 "com cartão de crédito (Rede)”."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:340
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:362
 msgid ""
 "Select \"Tests\" to test transactions in sandbox mode. Use \"Production\" "
 "for real transactions."
@@ -4661,16 +4671,16 @@ msgstr ""
 "Selecione \"Testes\" para testar transações no modo sandbox. Use "
 "\"Produção\" para transações reais."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:365
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:377
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:387
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:399
 msgid "Payment Description"
 msgstr "Descrição do Pagamento"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:367
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:389
 msgid "Enable sending the payment description to Rede."
 msgstr "Habilite o envio da descrição do pagamento para a Rede."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:368
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:390
 msgid ""
 "Send payment description to the Rede. If errors occur, disable this option "
 "to ensure correct transaction processing."
@@ -4678,43 +4688,43 @@ msgstr ""
 "Envie a descrição do pagamento para a Rede. Se ocorrerem erros, desabilite "
 "esta opção para garantir o processamento correto da transação."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:369
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:391
 msgid "I have enabled the payment description feature in the"
 msgstr "Habilitei o recurso de descrição de pagamento no"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:369
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:391
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1026
 msgid "Rede Dashboard"
 msgstr "Painel da Rede"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:369
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:391
 msgid "Default (Disabled)"
 msgstr "Padrão (Desativado)"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:372
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:394
 msgid "Send payment description to Rede. Disable if it causes errors."
 msgstr "Enviar descrição do pagamento para a Rede. Desabilite se causar erros."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:379
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:401
 msgid "Description to be sent to Rede."
 msgstr "Descrição a ser enviada para a Rede."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:380
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:402
 msgid ""
 "Set the description to be sent to Rede along with the payment transaction."
 msgstr ""
 "Defina a descrição que será enviada para a Rede junto com a transação de "
 "pagamento."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:385
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:407
 msgid "Payment description sent to Rede."
 msgstr "Descrição do pagamento enviada para a Rede."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:393
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:415
 msgid "Disable to load the plugin during checkout."
 msgstr "Desabilite para carregar o plugin durante a finalização."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:411
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:433
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1225
 msgid ""
 "Set the minimum installment value for credit card payments. Accepted minimum "
@@ -4723,29 +4733,29 @@ msgstr ""
 "Defina o valor mínimo da parcela para pagamentos com cartão de crédito. "
 "Valor mínimo aceito pela REDE: 5."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:412
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:434
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1226
 msgid ""
 "Set the minimum allowed amount for each installment in credit transactions."
 msgstr ""
 "Defina o valor mínimo permitido para cada parcela nas transações de crédito."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:438
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:460
 msgid "Define the maximum number of credit installments."
 msgstr "Defina o número máximo de parcelas de crédito."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:441
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:534
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:463
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:556
 msgid "Choose the maximum number of installments per order."
 msgstr "Escolha o número máximo de parcelas por pedido."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:449
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:471
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1050
 msgid "Choose what status to set orders after successful payment."
 msgstr ""
 "Escolha qual status definir para os pedidos após o pagamento bem-sucedido."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:450
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:472
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1051
 msgid ""
 "Select the order status that will be applied when payment is successfully "
@@ -4754,7 +4764,7 @@ msgstr ""
 "Selecione o status do pedido que será aplicado quando o pagamento for "
 "processado com sucesso."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:458
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:480
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1059
 msgid ""
 "Choose the status that approved payments should have. \"Processing\" is "
@@ -4763,66 +4773,66 @@ msgstr ""
 "Escolha o status que os pagamentos aprovados devem ter. \"Processando\" é "
 "recomendado para a maioria dos casos."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:520
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:542
 msgid "Displays Rede transaction logs inside WooCommerce order details."
 msgstr ""
 "Exibe os logs de transação da Rede dentro dos detalhes do pedido do "
 "WooCommerce."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:737
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:759
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:228
 msgid "Could not obtain the OAuth2 authentication token for "
 msgstr "Não foi possível obter token de autenticação OAuth2 para "
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:854
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:856
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:876
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:878
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:442
 msgid "Transaction error"
 msgstr "Erro na transação"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:896
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:898
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:918
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:920
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:487
 msgid "Transaction declined"
 msgstr "Transação recusada"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1004
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1010
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1026
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1032
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1882
 msgid "CardNumber: Required parameter missing"
 msgstr "CardNumber: parâmetro obrigatório ausente"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1023
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1029
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1045
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1051
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1898
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:1905
 msgid "CardNumber: Invalid parameter format"
 msgstr "CardNumber: formato de parâmetro inválido"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1042
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1064
 msgid "Invalid installments number"
 msgstr "Número de parcelas inválido"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1048
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1070
 msgid "Invalid installments"
 msgstr "Parcelas inválidas"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1226
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1248
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:2203
 msgid "Refund request error: "
 msgstr "Erro na requisição de reembolso: "
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1234
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1256
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:2211
 msgid "Refund error"
 msgstr "Erro no reembolso"
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1264
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1286
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:2241
 msgid "Order or transaction invalid for refund."
 msgstr "Pedido ou transação inválido para reembolso."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1285
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1307
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:2262
 msgid ""
 "Partial refunds are not allowed. You must refund the total order amount."
@@ -4830,7 +4840,7 @@ msgstr ""
 "Reembolsos parciais não são permitidos. Você deve reembolsar o valor total "
 "do pedido."
 
-#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1309
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php:1331
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php:2286
 msgid "Invalid refund amount."
 msgstr "Valor de reembolso inválido."

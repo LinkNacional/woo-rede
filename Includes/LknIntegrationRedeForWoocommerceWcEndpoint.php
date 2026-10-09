@@ -263,17 +263,30 @@ final class LknIntegrationRedeForWoocommerceWcEndpoint
     {
         add_option('LknIntegrationRedeForWoocommerceMaxipagoDebitEndpointStatus', true);
         update_option('LknIntegrationRedeForWoocommerceMaxipagoDebitEndpointStatus', true);
-        $requestBody = $request->get_body();
 
+        $requestBody = $request->get_body();
         parse_str($requestBody, $parsedBody);
+
+        // O maxiPago espera sempre HTTP 200 para não desativar o webhook.
+        if (empty($parsedBody['xml'])) {
+            return new WP_REST_Response('', 200);
+        }
+
         $xmlString = urldecode($parsedBody['xml']);
         $xmlObject = simplexml_load_string($xmlString, "SimpleXMLElement", LIBXML_NOCDATA);
+
+        if (false === $xmlObject || ! isset($xmlObject->{'transaction-event'})) {
+            return new WP_REST_Response('', 200);
+        }
+
         $notification = $xmlObject->{'transaction-event'};
 
         // Converte o valor de orderID para string
         $referenceNumber = (string) $notification->referenceNumber;
-        $transactionStatus = (string) $notification->transactionStatus;
-        $maxipagoPixOptions = get_option('woocommerce_maxipago_debit_settings');
+
+        if ('' === $referenceNumber) {
+            return new WP_REST_Response('', 200);
+        }
 
         $args = array(
             'limit' => -1,
@@ -281,26 +294,158 @@ final class LknIntegrationRedeForWoocommerceWcEndpoint
             'meta_key' => '_wc_maxipago_transaction_reference_num',
             'meta_value' => $referenceNumber,
         );
-        $order = wc_get_orders($args)[0];
+        $orders = wc_get_orders($args);
+        $order = ! empty($orders) ? $orders[0] : null;
 
-        switch ($transactionStatus) {
-            case '3':
-                $paymentCompleteStatus = $maxipagoPixOptions['payment_complete_status'];
-                if ("" == $paymentCompleteStatus) {
-                    $paymentCompleteStatus = 'processing';
-                }
-                $order->set_date_paid(current_time('timestamp', true));
-                $order->update_status($paymentCompleteStatus);
-                break;
-            case '9':
-                $order->update_status('cancelled');
-                break;
-            default:
-                $order->update_status('cancelled');
-                break;
+        // Sem pedido correspondente (ou de outro gateway): nada a atualizar.
+        if (! $order || 'maxipago_debit' !== $order->get_payment_method()) {
+            return new WP_REST_Response('', 200);
+        }
+
+        // SEGURANÇA: o maxiPago NÃO assina a notificação (sem secret/signature),
+        // então o corpo não é confiável. Confirma server-to-server o status real
+        // da transação na Reports API antes de alterar o pedido, prevenindo
+        // webhook forgery (um atacante não pode mais marcar/cancelar pedidos
+        // arbitrários com um POST forjado).
+        if (! $this->verify_maxipago_debit_with_reports_api($order)) {
+            if (function_exists('wc_get_logger')) {
+                $logger = wc_get_logger();
+                $logger->warning('maxiPago debit webhook rejected: transaction not confirmed by maxiPago Reports API', array(
+                    'source' => 'rede_security',
+                    'order_id' => $order->get_id(),
+                ));
+            }
+
+            return new WP_REST_Response('', 200);
+        }
+
+        // Só confirma o pagamento quando a API confirma a aprovação E o pedido
+        // ainda está pendente. Nunca cancela/regride um pedido a partir do webhook.
+        if ('pending' === $order->get_status()) {
+            $maxipagoDebitOptions = get_option('woocommerce_maxipago_debit_settings');
+            $paymentCompleteStatus = $maxipagoDebitOptions['payment_complete_status'] ?? '';
+            if ('' === $paymentCompleteStatus) {
+                $paymentCompleteStatus = 'processing';
+            }
+
+            $order->set_date_paid(current_time('timestamp', true));
+            $order->update_status($paymentCompleteStatus, __('Payment confirmed via maxiPago Reports API validation.', 'woo-rede'));
+            $order->save();
         }
 
         return new WP_REST_Response('', 200);
+    }
+
+    /**
+     * Confirma, server-to-server, se a transação maxiPago débito realmente foi
+     * aprovada/capturada, consultando a Reports API (transactionDetailReport).
+     *
+     * O maxiPago não assina as notificações, então esta consulta é a única forma
+     * confiável de autenticar o webhook antes de alterar o status do pedido.
+     *
+     * @param \WC_Order $order O pedido do WooCommerce
+     * @return bool True se a maxiPago Reports API confirmar aprovação/captura
+     */
+    private function verify_maxipago_debit_with_reports_api($order)
+    {
+        try {
+            $maxipagoOrderId = $order->get_meta('_wc_maxipago_transaction_id');
+
+            if (empty($maxipagoOrderId)) {
+                return false;
+            }
+
+            $maxipagoDebitOptions = get_option('woocommerce_maxipago_debit_settings');
+            $merchantId = sanitize_text_field($maxipagoDebitOptions['merchant_id'] ?? '');
+            $merchantKey = sanitize_text_field($maxipagoDebitOptions['merchant_key'] ?? '');
+            $environment = $maxipagoDebitOptions['environment'] ?? 'test';
+
+            if ('' === $merchantId || '' === $merchantKey) {
+                return false;
+            }
+
+            if ('production' === $environment) {
+                $apiUrl = 'https://api.maxipago.net/ReportsAPI/servlet/ReportsAPI';
+            } else {
+                $apiUrl = 'https://testapi.maxipago.net/ReportsAPI/servlet/ReportsAPI';
+            }
+
+            $xmlData = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+                    <rapi-request>
+                        <verification>
+                            <merchantId>$merchantId</merchantId>
+                            <merchantKey>$merchantKey</merchantKey>
+                        </verification>
+                        <command>transactionDetailReport</command>
+                        <request>
+                            <filterOptions>
+                                <orderId>$maxipagoOrderId</orderId>
+                            </filterOptions>
+                        </request>
+                    </rapi-request>";
+
+            $response = wp_remote_post($apiUrl, array(
+                'body' => $xmlData,
+                'headers' => array(
+                    'Content-Type' => 'application/xml',
+                ),
+                'timeout' => 15,
+                'sslverify' => true,
+            ));
+
+            if (is_wp_error($response)) {
+                return false;
+            }
+
+            $response_body = wp_remote_retrieve_body($response);
+
+            if (empty($response_body)) {
+                return false;
+            }
+
+            $xml = simplexml_load_string($response_body);
+
+            if (false === $xml) {
+                return false;
+            }
+
+            $data = json_decode(wp_json_encode($xml), true);
+            $records = $data['result']['records']['record'] ?? null;
+
+            if (empty($records)) {
+                return false;
+            }
+
+            // A API retorna 1 registro (assoc) ou vários (lista).
+            if (isset($records['transactionStatus'])) {
+                $records = array($records);
+            }
+
+            $approved_statuses = array('captured', 'approved', 'authorized', 'accepted', 'paid', 'settled');
+            $approved_states = array('3', '6'); // 3 = Captured, 6 = Authorized
+
+            foreach ($records as $record) {
+                if (! is_array($record)) {
+                    continue;
+                }
+
+                $status = strtolower((string) ($record['transactionStatus'] ?? ''));
+                $state = (string) ($record['transactionState'] ?? '');
+
+                if (in_array($status, $approved_statuses, true) || in_array($state, $approved_states, true)) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (\Exception $e) {
+            if (function_exists('wc_get_logger')) {
+                $logger = wc_get_logger();
+                $logger->error('maxiPago debit webhook validation error: ' . $e->getMessage(), array('source' => 'rede_security'));
+            }
+
+            return false;
+        }
     }
 
     /**
@@ -1115,10 +1260,16 @@ final class LknIntegrationRedeForWoocommerceWcEndpoint
     {
         try {
             $tid = sanitize_text_field($webhook_data['tid'] ?? '');
+
+            // SEGURANÇA: o webhook 3DS vem de fora (retorno da Rede no navegador
+            // do cliente), então NÃO se pode exigir login. A autenticação é feita
+            // validando o TID server-to-server na API da Rede. Sem TID não há como
+            // autenticar a chamada — rejeita (antes, um TID vazio fazia com que a
+            // checagem fosse simplesmente ignorada, permitindo webhook forgery).
             if($tid === '') {
-                return true;
+                return false;
             }
-            
+
             return $this->verify_transaction_with_rede_api($order, $tid, $webhook_data, $validation_type);
             
         } catch (Exception $e) {
