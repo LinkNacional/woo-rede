@@ -34,7 +34,7 @@ window.jQuery(function ($) {
       }
       const selectedPaymentMethod = $form.find('input[name="payment_method"]:checked')
       const inputDebitNumber = $form.find('#maxipago_debit_card_number')
-      if (selectedPaymentMethod && selectedPaymentMethod.val() !== 'maxipago_debit' && !inputDebitNumber) {
+      if (selectedPaymentMethod.length && selectedPaymentMethod.val() !== 'maxipago_debit' && inputDebitNumber.length === 0) {
         return
       }
 
@@ -48,38 +48,42 @@ window.jQuery(function ($) {
       // maybe delete old card data
       $form.data('card', null)
 
-      // init animated card
-      $form.card({
-        container: '#maxipagoDebitCardAnimation',
+      // init animated card. A lib jquery.card pode estar carregada por outro
+      // gateway (ex.: Cielo) com o container ausente; só inicializa quando o
+      // container deste formulário existe no DOM (evita o erro de getAttribute).
+      if (typeof $form.card === 'function' && document.querySelector('#maxipagoDebitCardAnimation')) {
+        $form.card({
+          container: '#maxipagoDebitCardAnimation',
 
-        /**
-           * Selectors
-           */
-        formSelectors: inputSelectors,
+          /**
+             * Selectors
+             */
+          formSelectors: inputSelectors,
 
-        /**
-           * Placeholders
-           */
-        placeholders: {
-          number: '•••• •••• •••• ••••',
-          name: 'NOME',
-          expiry: 'MM/ANO',
-          cvc: 'CVC'
-        },
+          /**
+             * Placeholders
+             */
+          placeholders: {
+            number: '•••• •••• •••• ••••',
+            name: 'NOME',
+            expiry: 'MM/ANO',
+            cvc: 'CVC'
+          },
 
-        /**
-           * Translation Brazilian Portuguese
-           */
-        messages: {
-          validDate: 'VALIDADE',
-          monthYear: ''
-        },
+          /**
+             * Translation Brazilian Portuguese
+             */
+          messages: {
+            validDate: 'VALIDADE',
+            monthYear: ''
+          },
 
-        /**
-           * Debug
-           */
-        debug: !!window.wooMaxipago.debug
-      })
+          /**
+             * Debug
+             */
+          debug: !!window.wooMaxipago.debug
+        })
+      }
 
       // Workaround to maintain the card data rendered after checkout updates
       Object.values(inputSelectors).reverse().forEach(function (selector) {

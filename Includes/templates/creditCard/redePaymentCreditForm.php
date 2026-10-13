@@ -13,6 +13,9 @@ $integration_rede_for_woocommerce_selectSpanStyle = '';
 $integration_rede_for_woocommerce_selectStyle = '';
 $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_credit_settings');
 
+// Cartão animado: controlado pela opção "Show animated card" (default ligado).
+$lkn_show_card_animation = isset($show_card_animation) ? $show_card_animation : 'yes';
+
 ?>
 <fieldset
     id="rede-credit-payment-form"
@@ -38,9 +41,11 @@ $integration_rede_for_woocommerce_option = get_option('woocommerce_rede_credit_s
         </svg>
     </div>
     <div class="rede-credit-fields-wrapper">
+        <?php if ('yes' === $lkn_show_card_animation) : ?>
         <div
             id="rede-card-animation"
             class="card-wrapper card-animation"></div>
+        <?php endif; ?>
         <div class="wc-payment-rede-form-fields">
             <div class="form-row form-row">
                 <label

@@ -87,8 +87,8 @@ window.jQuery(function ($) {
         $form = $('#order_review')
       }
       const selectedPaymentMethod = $form.find('input[name="payment_method"]:checked')
-      const inputDebitNumber = $form.find('#rede-card-number')
-      if (selectedPaymentMethod && selectedPaymentMethod.val() !== 'rede_debit' && !inputDebitNumber) {
+      const inputDebitNumber = $form.find('#rede-debit-card-number')
+      if (selectedPaymentMethod.length && selectedPaymentMethod.val() !== 'rede_debit' && inputDebitNumber.length === 0) {
         return
       }
       const inputSelectors = {
@@ -101,9 +101,11 @@ window.jQuery(function ($) {
       // maybe delete old card data
       $form.data('card', null)
 
-      // init animated card (apenas quando a lib jquery.card está carregada —
-      // ou seja, quando a opção "Show animated card" está habilitada).
-      if (typeof $form.card === 'function') {
+      // init animated card. A lib jquery.card pode estar carregada por outro
+      // gateway (ex.: Cielo) mesmo com a animação deste desligada, então não basta
+      // checar a função: é preciso que o container exista no DOM, senão a lib
+      // estoura "Cannot read properties of undefined (reading 'getAttribute')".
+      if (typeof $form.card === 'function' && document.querySelector('#rede-debit-card-animation')) {
         $form.card({
           container: '#rede-debit-card-animation',
 

@@ -7,6 +7,9 @@ const labelRedeCredit = window.wp.htmlEntities.decodeEntities(settingsRedeCredit
 const nonceRedeCredit = settingsRedeCredit.nonceRedeCredit;
 const translationsRedeCredit = settingsRedeCredit.translations;
 const minInstallmentsRede = settingsRedeCredit.minInstallmentsRede.replace(',', '.');
+// Opção do gateway: cartão animado (grátis). Default ligado.
+const showCardAnimation = (settingsRedeCredit.showCardAnimation || 'yes') !== 'no';
+
 // Formatação padronizada dos campos de cartão (espelhada em Public/js/rede-card-fields.js).
 const lknOnlyDigits = value => String(value == null ? '' : value).replace(/\D/g, '');
 const lknFormatCardExpiry = value => {
@@ -284,7 +287,7 @@ const ContentRedeCredit = props => {
 
   return (
     <React.Fragment>
-      <Cards
+      {showCardAnimation && (<Cards
         number={creditObject.rede_credit_number}
         name={creditObject.rede_credit_holder_name}
         expiry={creditObject.rede_credit_expiry.replace(/\s+/g, '')}
@@ -297,7 +300,7 @@ const ContentRedeCredit = props => {
         }}
         locale={{ valid: 'VÁLIDO ATÉ' }}
         focused={focus}
-      />
+      />)}
       <wcComponents.TextInput
         id="rede_credit_holder_name"
         label={translationsRedeCredit.nameOnCard}
