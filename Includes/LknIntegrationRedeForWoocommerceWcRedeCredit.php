@@ -421,6 +421,23 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
                 )
             ),
 
+            'card' => array(
+                'title' => esc_attr__('Card', 'woo-rede'),
+                'type' => 'title',
+            ),
+
+            'show_card_animation' => array(
+                'title'       => esc_attr__('Show animated card', 'woo-rede'),
+                'type'        => 'checkbox',
+                'label'       => esc_attr__('Show animated card during checkout', 'woo-rede'),
+                'description' => esc_attr__('Displays a card with visual animations during the order payment checkout.', 'woo-rede'),
+                'desc_tip'    => esc_attr__('Enable to improve the visual experience at checkout.', 'woo-rede'),
+                'default'     => 'yes',
+                'custom_attributes' => array(
+                    'data-title-description' => esc_attr__('Displays a card with visual animations during the order payment checkout.', 'woo-rede'),
+                ),
+            ),
+
             'credit_options' => array(
                 'title' => esc_attr__('Credit Card', 'woo-rede'),
                 'type' => 'title',
@@ -667,7 +684,11 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
             return '1.0.0.' . (file_exists($path) ? filemtime($path) : '0');
         };
 
-        wp_enqueue_style('card-style', $plugin_url . 'Public/css/card.css', array(), $rede_css_ver('card.css'), 'all');
+        // CSS do cartão animado só é necessário quando a animação está ligada.
+        $lkn_show_card_animation = ('yes' === $this->get_option('show_card_animation', 'yes'));
+        if ($lkn_show_card_animation) {
+            wp_enqueue_style('card-style', $plugin_url . 'Public/css/card.css', array(), $rede_css_ver('card.css'), 'all');
+        }
         wp_enqueue_style('select-style', $plugin_url . 'Public/css/lknIntegrationRedeForWoocommerceSelectStyle.css', array(), $rede_css_ver('lknIntegrationRedeForWoocommerceSelectStyle.css'), 'all');
 
         // Enfileira CSS específico para débito apenas se não estiver enfileirado
@@ -684,7 +705,10 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
             'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce'   => wp_create_nonce('rede_payment_fields_nonce'),
         ));
-        wp_enqueue_script('woo-rede-animated-card-jquery', $plugin_url . 'Public/js/jquery.card.js', array('jquery', 'woo-rede-js'), '2.5.0', true);
+        // O cartão animado (jquery.card.js) só é carregado quando habilitado.
+        if ($lkn_show_card_animation) {
+            wp_enqueue_script('woo-rede-animated-card-jquery', $plugin_url . 'Public/js/jquery.card.js', array('jquery', 'woo-rede-js'), '2.5.0', true);
+        }
 
 
         apply_filters('integration_rede_for_woocommerce_set_custom_css', get_option('woocommerce_rede_credit_settings')['custom_css_short_code'] ?? false);
@@ -1368,6 +1392,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
             array(
                 'installments' => $this->getInstallments($order_total),
                 'installments_number' => $installments_number,
+                'show_card_animation' => $this->get_option('show_card_animation', 'yes'),
             ),
             'woocommerce/rede/',
             LknIntegrationRedeForWoocommerceWcRede::getTemplatesPath()
