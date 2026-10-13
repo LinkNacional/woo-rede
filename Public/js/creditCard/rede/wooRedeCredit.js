@@ -49,7 +49,7 @@ window.jQuery(function ($) {
       }
       const selectedPaymentMethod = $form.find('input[name="payment_method"]:checked')
       const inputCreditNumber = $form.find('#rede-card-number')
-      if (selectedPaymentMethod && selectedPaymentMethod.val() !== 'rede_credit' && !inputCreditNumber) {
+      if (selectedPaymentMethod.length && selectedPaymentMethod.val() !== 'rede_credit' && inputCreditNumber.length === 0) {
         return
       }
       const inputSelectors = {
@@ -62,42 +62,46 @@ window.jQuery(function ($) {
       // maybe delete old card data
       $form.data('card', null)
 
-      // init animated card
-      $form.card({
-        container: '#rede-card-animation',
+      // init animated card. A lib jquery.card pode estar carregada por outro
+      // gateway (ex.: Cielo) com o container ausente; só inicializa quando o
+      // container deste formulário existe no DOM (evita o erro de getAttribute).
+      if (typeof $form.card === 'function' && document.querySelector('#rede-card-animation')) {
+        $form.card({
+          container: '#rede-card-animation',
 
-        // A máscara/validação dos campos é responsabilidade do rede-card-fields.js
-        // (padronizado: MM/AA, só dígitos, inputmode). Aqui só a animação do cartão.
-        formatting: false,
+          // A máscara/validação dos campos é responsabilidade do rede-card-fields.js
+          // (padronizado: MM/AA, só dígitos, inputmode). Aqui só a animação do cartão.
+          formatting: false,
 
-        /**
-           * Selectors
-           */
-        formSelectors: inputSelectors,
+          /**
+             * Selectors
+             */
+          formSelectors: inputSelectors,
 
-        /**
-           * Placeholders
-           */
-        placeholders: {
-          number: '•••• •••• •••• ••••',
-          name: 'NOME',
-          expiry: 'MM/ANO',
-          cvc: 'CVC'
-        },
+          /**
+             * Placeholders
+             */
+          placeholders: {
+            number: '•••• •••• •••• ••••',
+            name: 'NOME',
+            expiry: 'MM/ANO',
+            cvc: 'CVC'
+          },
 
-        /**
-           * Translation Brazilian Portuguese
-           */
-        messages: {
-          validDate: 'VALIDADE',
-          monthYear: ''
-        },
+          /**
+             * Translation Brazilian Portuguese
+             */
+          messages: {
+            validDate: 'VALIDADE',
+            monthYear: ''
+          },
 
-        /**
-           * Debug
-           */
-        debug: Boolean(wooRedeVars.debug)
-      })
+          /**
+             * Debug
+             */
+          debug: Boolean(wooRedeVars.debug)
+        })
+      }
 
       // Workaround to maintain the card data rendered after checkout updates
       Object.values(inputSelectors).reverse().forEach(function (selector) {
