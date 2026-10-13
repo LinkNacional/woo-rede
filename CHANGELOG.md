@@ -1,4 +1,5 @@
 # 5.5.4 - 13/10/26
+* Novo: opção "Show animated card" no gateway de Crédito da Rede, permitindo ligar/desligar o cartão animado no checkout (antes era sempre exibido).
 * Correção: o cartão animado do checkout não gera mais erro no console quando a biblioteca `jquery.card` é carregada por outro gateway (ex.: Cielo) com a animação do Rede desligada.
 
 # 5.5.3 - 09/10/26

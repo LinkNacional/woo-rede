@@ -130,6 +130,7 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 == Changelog ==
 
 ### 5.5.4 - 2026-10-13
+* New: "Show animated card" option in the Rede Credit gateway, allowing the animated card to be toggled on/off at checkout (previously it was always displayed).
 * Fix: the checkout animated card no longer throws a console error when the `jquery.card` library is loaded by another gateway (e.g. Cielo) while the Rede animation is disabled.
 
 ### 5.5.3 - 2026-10-09
@@ -326,7 +327,7 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 == Upgrade Notice ==
 
 ### 5.5.4 - 2026-10-13
-* Fix: prevents a console error in the checkout animated card when the `jquery.card` library is loaded by another gateway with the Rede animation disabled.
+* New: "Show animated card" option in the Rede Credit gateway (previously always displayed) and a fix that prevents a console error when the `jquery.card` library is loaded by another gateway with the Rede animation disabled.
 
 ### 5.5.3 - 2026-10-09
 * Security fix: authenticates the maxiPago debit and 3D Secure webhooks server-to-server, preventing forged requests from changing order statuses.
