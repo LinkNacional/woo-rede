@@ -476,7 +476,9 @@ final class LknIntegrationRedeForWoocommerceWcMaxipagoDebit extends LknIntegrati
 
     public function process_payment($orderId)
     {
-        if (isset($_POST['maxipago_debit_nonce']) && ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['maxipago_debit_nonce'])), 'maxipago_debit_nonce')) {
+        if (isset($_POST['maxipago_debit_nonce']) && ! LknIntegrationRedeForWoocommerceHelper::verifyPaymentNonce(sanitize_text_field(wp_unslash($_POST['maxipago_debit_nonce'])), 'maxipago_debit_nonce')) {
+            wc_add_notice(esc_html__('Your payment session has expired. Please review the order and try again.', 'woo-rede'), 'error');
+
             return array(
                 'result' => 'fail',
                 'redirect' => '',
