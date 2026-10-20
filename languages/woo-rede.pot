@@ -5105,3 +5105,10 @@ msgstr ""
 #: Public/LknIntegrationRedeForWoocommercePublic.php:104
 msgid "Loading price..."
 msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoCredit.php
+#: Includes/LknIntegrationRedeForWoocommerceWcMaxipagoDebit.php
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeCredit.php
+#: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php
+msgid "Your payment session has expired. Please review the order and try again."
+msgstr ""

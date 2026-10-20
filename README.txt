@@ -5,7 +5,7 @@ Donate link: https://www.linknacional.com/wordpress/plugins/
 Tags: rede, pix, cartao credito, itau, pagamento  
 Requires at least: 6.0
 Tested up to: 7.1  
-Stable tag: 5.5.4
+Stable tag: 5.5.5
 Requires PHP: 8.2
 License: GPL-3.0+  
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -128,6 +128,10 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Changelog ==
+
+### 5.5.5 - 2026-10-20
+* Fix: the payment was not sent to Rede when the customer created an account during checkout (guest checkout disabled). WooCommerce logs the customer in mid-request, which invalidated the gateway form nonce, so the gateway aborted silently — the order stayed pending and the page only reloaded. The nonce is now accepted in both contexts, and a genuinely expired session shows a message to the customer.
+* Fix: same nonce failure in the Rede Debit and maxiPago Credit/Debit gateways.
 
 ### 5.5.4 - 2026-10-13
 * New: "Show animated card" option in the Rede Credit gateway, allowing the animated card to be toggled on/off at checkout (previously it was always displayed).
@@ -325,6 +329,9 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Upgrade Notice ==
+
+### 5.5.5 - 2026-10-20
+* Fix: payments are no longer lost when the customer creates an account while placing the order (guest checkout disabled) — the card form nonce is now accepted after the mid-checkout login, in the Rede Credit/Debit and maxiPago Credit/Debit gateways.
 
 ### 5.5.4 - 2026-10-13
 * New: "Show animated card" option in the Rede Credit gateway (previously always displayed) and a fix that prevents a console error when the `jquery.card` library is loaded by another gateway with the Rede animation disabled.

@@ -990,7 +990,9 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
     public function process_payment($order_id)
     {
 
-        if (isset($_POST['rede_card_nonce']) && ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['rede_card_nonce'])), 'redeCardNonce')) {
+        if (isset($_POST['rede_card_nonce']) && ! LknIntegrationRedeForWoocommerceHelper::verifyPaymentNonce(sanitize_text_field(wp_unslash($_POST['rede_card_nonce'])), 'redeCardNonce')) {
+            wc_add_notice(esc_html__('Your payment session has expired. Please review the order and try again.', 'woo-rede'), 'error');
+
             return array(
                 'result' => 'fail',
                 'redirect' => '',

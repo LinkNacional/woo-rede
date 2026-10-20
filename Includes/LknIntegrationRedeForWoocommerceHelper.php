@@ -383,6 +383,52 @@ class LknIntegrationRedeForWoocommerceHelper
         return $start . $censored . $end;
     }
 
+    /**
+     * Verifica o nonce do formulário de um gateway de pagamento.
+     *
+     * O nonce é gerado na renderização do checkout. Quando a loja exige conta
+     * (checkout de convidado desabilitado), o WooCommerce cria o cliente e faz
+     * login no MEIO do mesmo request de finalização
+     * (WC_Checkout::process_customer()), depois de validar o nonce do próprio
+     * checkout e antes de chamar process_payment(). Como o hash do
+     * wp_verify_nonce() depende do usuário e do token de sessão atuais, o nonce
+     * legítimo — criado quando o cliente ainda era visitante — passa a falhar: o
+     * gateway aborta sem enviar a transação, o pedido fica pendente e o checkout
+     * só recarrega a página.
+     *
+     * Aceitamos os dois contextos: o atual (wp_verify_nonce) e o de visitante
+     * (uid 0, sem token de sessão), que é como o nonce foi criado.
+     *
+     * @param string $nonce  Nonce enviado pelo formulário.
+     * @param string $action Action usada em wp_create_nonce().
+     * @return bool
+     */
+    final public static function verifyPaymentNonce($nonce, $action): bool
+    {
+        if (! is_string($nonce) || '' === $nonce) {
+            return false;
+        }
+
+        if (wp_verify_nonce($nonce, $action)) {
+            return true;
+        }
+
+        // Mesmo cálculo do wp_verify_nonce(), no contexto "visitante": uid do
+        // filtro nonce_user_logged_out e sem token de sessão.
+        $logged_out_uid = apply_filters('nonce_user_logged_out', 0, $action);
+        $tick = wp_nonce_tick($action);
+
+        foreach (array($tick, $tick - 1) as $tick_value) {
+            $expected = substr(wp_hash($tick_value . '|' . $action . '|' . $logged_out_uid . '|', 'nonce'), -12, 10);
+
+            if (hash_equals($expected, $nonce)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function showOrderLogs(): void
     {
         $id = isset($_GET['id']) ? sanitize_text_field(wp_unslash($_GET['id'])) : '';

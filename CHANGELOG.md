@@ -1,3 +1,7 @@
+# 5.5.5 - 20/10/26
+* Correção: pagamento não era enviado à Rede quando o cliente criava a conta durante a finalização da compra (checkout de convidado desabilitado). O WooCommerce faz login no meio do request e invalidava o nonce do formulário do gateway, que abortava em silêncio — o pedido ficava pendente e a página apenas recarregava. Agora o nonce é aceito nos dois contextos e, em caso de sessão realmente expirada, o cliente recebe um aviso.
+* Correção: mesma falha de nonce nos gateways de débito da Rede e de crédito/débito do maxiPago.
+
 # 5.5.4 - 13/10/26
 * Novo: opção "Show animated card" no gateway de Crédito da Rede, permitindo ligar/desligar o cartão animado no checkout (antes era sempre exibido).
 * Correção: o cartão animado do checkout não gera mais erro no console quando a biblioteca `jquery.card` é carregada por outro gateway (ex.: Cielo) com a animação do Rede desligada.
