@@ -2268,9 +2268,11 @@ final class LknIntegrationRedeForWoocommerce
                             $updated_transaction_data = wp_json_encode($decoded_data);
                         }
 
-                        // Atualizar metadado do pedido (order já carregado)
-                        $order->update_meta_data('lkn_rede_transaction_data', $updated_transaction_data);
-                        $order->save();
+                        // Só sobrescreve o metadado se a recodificação gerou string válida
+                        if (is_string($updated_transaction_data) && '' !== $updated_transaction_data) {
+                            $order->update_meta_data('lkn_rede_transaction_data', $updated_transaction_data);
+                            $order->save();
+                        }
                     }
 
                 } catch (Exception $e) {
@@ -2335,6 +2337,16 @@ final class LknIntegrationRedeForWoocommerce
 
         // Codificar em TOON
         $toon_response = LknIntegrationRedeForWoocommerceHelper::encodeToonData($response);
+
+        // TOON indisponível (ex.: PHP < 8.1): responde erro explícito em vez de corpo vazio
+        if (!is_string($toon_response) || '' === $toon_response) {
+            wp_send_json_error(
+                array(
+                    'message' => __('Unable to encode response in TOON format.', 'woo-rede'),
+                ),
+                500
+            );
+        }
 
         // Definir headers apropriados
         if (!headers_sent()) {

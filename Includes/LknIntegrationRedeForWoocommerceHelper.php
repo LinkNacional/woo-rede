@@ -1934,9 +1934,14 @@ class LknIntegrationRedeForWoocommerceHelper
      */
     public static function encodeToonData($data)
     {
+        if (PHP_VERSION_ID < 80100 || !class_exists(Toon::class)) {
+            return false;
+        }
+
         try {
             return Toon::encode($data);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
+            error_log('woo-rede: encodeToonData falhou: ' . $e->getMessage());
             return false;
         }
     }
@@ -1949,9 +1954,14 @@ class LknIntegrationRedeForWoocommerceHelper
      */
     public static function decodeToonData($toonString)
     {
+        if (PHP_VERSION_ID < 80100 || !class_exists(Toon::class)) {
+            return false;
+        }
+
         try {
             return Toon::decode($toonString);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
+            error_log('woo-rede: decodeToonData falhou: ' . $e->getMessage());
             return false;
         }
     }
@@ -2234,13 +2244,18 @@ class LknIntegrationRedeForWoocommerceHelper
         // Tentar codificar com TOON
         $toonEncoded = self::encodeToonData($transactionMetadata);
 
-        if ($toonEncoded !== false) {
+        if (is_string($toonEncoded) && '' !== $toonEncoded) {
             // Salvar dados como TOON
             $order->add_meta_data('lkn_rede_transaction_data', $toonEncoded, true);
             $order->add_meta_data('lkn_rede_data_format', 'toon', true);
         } else {
             // Fallback para JSON se TOON falhar
             $jsonEncoded = wp_json_encode($transactionMetadata);
+
+            if (!is_string($jsonEncoded) || '' === $jsonEncoded) {
+                return;
+            }
+
             $order->add_meta_data('lkn_rede_transaction_data', $jsonEncoded, true);
             $order->add_meta_data('lkn_rede_data_format', 'json', true);
         }
