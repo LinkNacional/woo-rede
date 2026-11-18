@@ -41,3 +41,6 @@ delete_option('woocommerce_maxipago_debit_settings');
 delete_option('lkn_rede_pro_update_screen_shown');
 delete_option('lkn_rede_pro_update_notice_dismissed');
 delete_option('lkn_rede_pro_update_email_sent');
+
+// Aviso de descontinuação da maxiPago (dispensa definitiva do lojista).
+delete_option('lkn_rede_maxipago_deprecation_notice_dismissed');

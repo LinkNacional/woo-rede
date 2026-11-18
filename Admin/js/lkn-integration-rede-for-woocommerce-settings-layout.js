@@ -318,6 +318,21 @@
                 if (fieldId) {
                     const fieldConfig = document.getElementById(fieldId);
                     if (fieldConfig) {
+                        // Bloco de MCC (programas de monitoramento das bandeiras) do
+                        // campo PV: entra logo abaixo da descrição do campo
+                        // ("Credenciais da Rede."), sem criar linha/aba nova.
+                        if (fieldConfig.hasAttribute('data-rede-mcc-info')) {
+                            const mccTemplate = document.getElementById('lkn-rede-mcc-info');
+                            if (mccTemplate && !divBody.querySelector('.lkn-rede-mcc')) {
+                                const mccBlock = mccTemplate.content.firstElementChild.cloneNode(true);
+                                const mccDescription = divBody.querySelector('p.description');
+                                if (mccDescription) {
+                                    mccDescription.insertAdjacentElement('afterend', mccBlock);
+                                } else {
+                                    divBody.appendChild(mccBlock);
+                                }
+                            }
+                        }
                         const elementoPai = fieldConfig.getAttribute('merge-top') ? fieldConfig.getAttribute('merge-top') : false;
                         let input = document.getElementById(elementoPai) ?? false;
                         if (elementoPai && input) {

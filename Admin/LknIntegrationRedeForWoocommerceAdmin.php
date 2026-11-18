@@ -64,7 +64,13 @@ final class LknIntegrationRedeForWoocommerceAdmin
      */
     public function enqueue_styles(): void
     {
-        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/lkn-integration-rede-for-woocommerce-admin.css', array(), $this->version, 'all');
+        // Cache-bust por filemtime: o CSS do admin muda sem bump de versão
+        // (ex.: ajustes do bloco de MCC), e o ?ver fixo faria o navegador
+        // continuar usando a folha antiga. Mesmo padrão do layout JS.
+        $admin_css_path = plugin_dir_path(__FILE__) . 'css/lkn-integration-rede-for-woocommerce-admin.css';
+        $admin_css_ver  = $this->version . '.' . (file_exists($admin_css_path) ? filemtime($admin_css_path) : '0');
+
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/lkn-integration-rede-for-woocommerce-admin.css', array(), $admin_css_ver, 'all');
     }
 
     /**

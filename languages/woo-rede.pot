@@ -5112,3 +5112,83 @@ msgstr ""
 #: Includes/LknIntegrationRedeForWoocommerceWcRedeDebit.php
 msgid "Your payment session has expired. Please review the order and try again."
 msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice.php:118
+msgid "You do not have permission to dismiss this notice."
+msgstr ""
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:27
+msgid "Deprecated"
+msgstr ""
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:30
+msgid "Rede discontinued the MaxiPago payment platform on October 15, 2026. Only the Rede gateways (credit, debit, PIX and Google Pay) will keep receiving support and updates."
+msgstr ""
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:33
+msgid "All MaxiPago gateways (credit, debit and PIX) will be removed on November 23, 2026."
+msgstr ""
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:34
+msgid "Migrate your store to the Rede gateways before that date so your checkout keeps working."
+msgstr ""
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:37
+msgid "Configure the Rede gateways"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Some business activities, identified by the MCC code, must be registered with the card brand monitoring programs. Without this registration Rede may decline the transaction — that is not a failure of this plugin."
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Which MCCs require registration?"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "MCC"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Activity"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Brands"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "To register, contact Rede and request enrollment in the monitoring program of each brand."
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Pharmaceuticals and pharmacies — wholesale"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Pharmacies — retail"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Tobacco stores"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Government lotteries"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Skill games"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Cyberlockers"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Financial trading platforms"
+msgstr ""
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Person-to-person transactions — P2P"
+msgstr ""

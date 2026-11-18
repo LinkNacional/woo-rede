@@ -5,7 +5,7 @@ Donate link: https://www.linknacional.com/wordpress/plugins/
 Tags: rede, pix, cartao credito, itau, pagamento  
 Requires at least: 6.0
 Tested up to: 7.1  
-Stable tag: 5.5.5
+Stable tag: 5.5.6
 Requires PHP: 8.2
 License: GPL-3.0+  
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -128,6 +128,10 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Changelog ==
+
+### 5.5.6 - 2026-11-18
+* New: admin notice about the MaxiPago shutdown. Rede discontinued the MaxiPago platform on 2026-10-15 and only the Rede gateways (credit, debit, PIX and Google Pay) keep receiving support and updates, so the plugin's maxiPago gateways will be removed on 2026-11-23. The warning is shown once, only for stores with maxiPago credentials saved, and can be dismissed.
+* New: informational block about the card brand monitoring programs (MCC) below the PV field description, in the credit, debit, PIX and Google Pay gateways. Activities such as pharmacies, tobacco stores, lotteries, skill games, cyberlockers, financial trading platforms and P2P transactions require registration with Visa, Mastercard and/or Amex; without it Rede declines the transaction and the problem is not in the plugin.
 
 ### 5.5.5 - 2026-10-20
 * Fix: the payment was not sent to Rede when the customer created an account during checkout (guest checkout disabled). WooCommerce logs the customer in mid-request, which invalidated the gateway form nonce, so the gateway aborted silently — the order stayed pending and the page only reloaded. The nonce is now accepted in both contexts, and a genuinely expired session shows a message to the customer.
@@ -329,6 +333,9 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Upgrade Notice ==
+
+### 5.5.6 - 2026-11-18
+* MaxiPago was discontinued by Rede on 2026-10-15 and its gateways will be removed from the plugin on 2026-11-23 — migrate your store to the Rede gateways. The dashboard now shows a warning about it.
 
 ### 5.5.5 - 2026-10-20
 * Fix: payments are no longer lost when the customer creates an account while placing the order (guest checkout disabled) — the card form nonce is now accepted after the mid-checkout login, in the Rede Credit/Debit and maxiPago Credit/Debit gateways.

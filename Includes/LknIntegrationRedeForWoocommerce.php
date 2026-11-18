@@ -260,6 +260,21 @@ final class LknIntegrationRedeForWoocommerce
         // Aviso crítico para atualização do plugin PRO
         $this->loader->add_action('admin_notices', $this, 'lkn_pro_update_critical_notice');
 
+        // Aviso de descontinuação da maxiPago: a plataforma foi encerrada pela
+        // Rede em 15/10/2026 e os gateways maxiPago saem do plugin em
+        // 23/11/2026. Um único aviso, dispensável, só para lojas com
+        // credenciais maxiPago salvas.
+        $maxipago_deprecation = new LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice();
+        $this->loader->add_action('admin_enqueue_scripts', $maxipago_deprecation, 'enqueue_assets');
+        $this->loader->add_action('admin_notices', $maxipago_deprecation, 'maybe_render_notice');
+        $this->loader->add_action('wp_ajax_' . LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice::AJAX_DISMISS, $maxipago_deprecation, 'dismiss_notice');
+
+        // Bloco de MCC (programas de monitoramento das bandeiras) junto do campo PV.
+        // O bloco é impresso como <template> e o layout JS o clona para dentro do
+        // corpo do campo, abaixo da descrição "Credenciais da Rede.".
+        $mcc_info = new LknIntegrationRedeForWoocommerceMccInfo();
+        $this->loader->add_action('admin_footer', $mcc_info, 'maybe_render_template');
+
         // Aviso + tela de atualização do PRO (padrão woo-better/shipping-simulator).
         // Aparece quando o PRO está INSTALADO (ativo ou não) e desatualizado, e
         // atualiza o PRO pelo endpoint de update (json + zip).
@@ -2268,9 +2283,11 @@ final class LknIntegrationRedeForWoocommerce
                             $updated_transaction_data = wp_json_encode($decoded_data);
                         }
 
-                        // Atualizar metadado do pedido (order já carregado)
-                        $order->update_meta_data('lkn_rede_transaction_data', $updated_transaction_data);
-                        $order->save();
+                        // Só sobrescreve o metadado se a recodificação gerou string válida
+                        if (is_string($updated_transaction_data) && '' !== $updated_transaction_data) {
+                            $order->update_meta_data('lkn_rede_transaction_data', $updated_transaction_data);
+                            $order->save();
+                        }
                     }
 
                 } catch (Exception $e) {
@@ -2335,6 +2352,16 @@ final class LknIntegrationRedeForWoocommerce
 
         // Codificar em TOON
         $toon_response = LknIntegrationRedeForWoocommerceHelper::encodeToonData($response);
+
+        // TOON indisponível (ex.: PHP < 8.1): responde erro explícito em vez de corpo vazio
+        if (!is_string($toon_response) || '' === $toon_response) {
+            wp_send_json_error(
+                array(
+                    'message' => __('Unable to encode response in TOON format.', 'woo-rede'),
+                ),
+                500
+            );
+        }
 
         // Definir headers apropriados
         if (!headers_sent()) {

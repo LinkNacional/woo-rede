@@ -349,6 +349,114 @@ textarea:disabled {
     margin-top: 8px;
 }
 
+/* Bloco de MCC (programas de monitoramento das bandeiras) do campo PV.
+   Fica dentro do .lkn-rede-field-body, abaixo da descrição do campo. */
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc {
+    width: 100%;
+    max-width: 720px;
+    margin: 10px 0 4px;
+    padding: 10px 12px;
+    border-left: 3px solid #dba617;
+    background: #fcf9e8;
+    border-radius: 3px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #2c3338;
+    box-sizing: border-box;
+}
+
+.lkn-rede-mcc__intro,
+.lkn-rede-mcc__footer {
+    margin: 0 0 8px;
+}
+
+.lkn-rede-mcc__footer {
+    margin: 8px 0 0;
+    color: #50575e;
+}
+
+.lkn-rede-mcc__details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #2271b1;
+}
+
+/* A tabela de MCC fica ANINHADA dentro do form-table que o layout move para
+   #lknIntegrationRedeForWoocommerceSettingsLayoutDiv, então ela também casa com
+   as regras genéricas do layout (linhas ~274-311): `#...LayoutDiv table`
+   (table-layout: fixed), `#...LayoutDiv tr th` (th de 200px) e
+   `.form-table tbody tr td` / `#...LayoutDiv tr td` (td de 100%, fundo branco
+   e padding de 10px 30px). Sem reafirmar com especificidade maior, o cabeçalho
+   fica com colunas de 200px e o corpo estica — tabela torta e desalinhada.
+   Por isso o seletor longo abaixo: mesmo id + 2 classes vence aquelas regras. */
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table {
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    margin: 8px 0 0;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table th,
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table td {
+    width: auto !important;
+    background: transparent;
+    border: 1px solid #dcdcde !important;
+    padding: 4px 8px !important;
+    text-align: left;
+    vertical-align: top;
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: 400;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;
+    box-sizing: border-box;
+}
+
+/* O layout força `.form-table tr { display: table }` (regra acima): como a
+   tabela de MCC é ANINHADA no form-table, cada <tr> dela também vira uma tabela
+   — as células param de ficar lado a lado e a "linha" estica na largura toda.
+   Reafirmamos a estrutura de tabela para os descendentes do bloco. */
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table thead {
+    display: table-header-group !important;
+}
+
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table tbody {
+    display: table-row-group !important;
+}
+
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table tr {
+    display: table-row !important;
+    float: none !important;
+}
+
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table th,
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table td {
+    display: table-cell !important;
+    float: none !important;
+}
+
+/* Larguras vêm do thead (table-layout: fixed): MCC curto, Bandeiras médio e a
+   atividade ocupa o resto. Assim cabeçalho e corpo dividem as mesmas colunas. */
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table th:first-child,
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table td:first-child {
+    width: 90px !important;
+}
+
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table th:last-child,
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table td:last-child {
+    width: 150px !important;
+}
+
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table th {
+    background: #f6f7f7;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 .pro-version-info {
     color: red;
     font-weight: bold;
