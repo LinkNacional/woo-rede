@@ -130,7 +130,7 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 == Changelog ==
 
 ### 5.5.6 - 2026-11-18
-* New: admin notice about the MaxiPago shutdown. Rede discontinued the MaxiPago platform on 2026-10-15 and only the Rede gateways (credit, debit and PIX) keep receiving support and updates, so the plugin's maxiPago gateways will be removed on 2026-11-23. The warning is shown once, only for stores with maxiPago credentials saved, and can be dismissed.
+* New: admin notice about the MaxiPago shutdown. Rede discontinued the MaxiPago platform on 2026-10-15 and only the Rede gateways (credit, debit, PIX and Google Pay) keep receiving support and updates, so the plugin's maxiPago gateways will be removed on 2026-11-23. The warning is shown once, only for stores with maxiPago credentials saved, and can be dismissed.
 
 ### 5.5.5 - 2026-10-20
 * Fix: the payment was not sent to Rede when the customer created an account during checkout (guest checkout disabled). WooCommerce logs the customer in mid-request, which invalidated the gateway form nonce, so the gateway aborted silently — the order stayed pending and the page only reloaded. The nonce is now accepted in both contexts, and a genuinely expired session shows a message to the customer.

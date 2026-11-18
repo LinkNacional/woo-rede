@@ -10,7 +10,7 @@ if (! defined('ABSPATH')) {
  * Aviso de descontinuação dos gateways maxiPago.
  *
  * A Rede encerrou a plataforma maxiPago em 15/10/2026 e só os gateways Rede
- * (crédito, débito e PIX) seguem com suporte. Os gateways maxiPago do plugin
+ * (crédito, débito, PIX e Google Pay) seguem com suporte. Os gateways maxiPago do plugin
  * serão removidos em 23/11/2026 — este aviso existe para ninguém ser pego de
  * surpresa: aparece ANTES da remoção, é dispensável e é UM só, mesmo com
  * crédito e débito maxiPago habilitados ao mesmo tempo.
@@ -84,7 +84,7 @@ final class LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice
         $nonce        = wp_create_nonce(self::NONCE_DISMISS);
         $plugin_name  = __('Integration Rede Itaú for WooCommerce', 'woo-rede');
         $icon_url     = INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR_URL . 'Includes/assets/WordpressAssets/icon-256x256.gif';
-        $settings_url = admin_url('admin.php?page=wc-settings&tab=checkout&section=rede_credit');
+        $settings_url = admin_url('admin.php?page=wc-settings&tab=checkout');
 
         require INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR . 'Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php';
     }

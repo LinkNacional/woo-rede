@@ -5749,8 +5749,8 @@ msgid "Deprecated"
 msgstr "Descontinuado"
 
 #: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:30
-msgid "Rede discontinued the MaxiPago payment platform on October 15, 2026. Only the Rede gateways (credit, debit and PIX) will keep receiving support and updates."
-msgstr "A Rede descontinuou a plataforma de pagamentos maxiPago em 15/10/2026. Somente os gateways da Rede (crédito, débito e PIX) continuarão recebendo suporte e atualizações."
+msgid "Rede discontinued the MaxiPago payment platform on October 15, 2026. Only the Rede gateways (credit, debit, PIX and Google Pay) will keep receiving support and updates."
+msgstr "A Rede descontinuou a plataforma de pagamentos maxiPago em 15/10/2026. Somente os gateways da Rede (crédito, débito, PIX e Google Pay) continuarão recebendo suporte e atualizações."
 
 #: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:33
 msgid "All MaxiPago gateways (credit, debit and PIX) will be removed on November 23, 2026."

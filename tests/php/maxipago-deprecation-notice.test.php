@@ -172,9 +172,9 @@ $html = renderNotice($notice) . renderNotice($notice);
 
 check('credito + debito maxiPago => UMA vez', 1 === substr_count($html, 'lkn-rede-notice--deprecation'));
 check('usa o padrao de aviso do woo-better (gif + nome + selo)', false !== strpos($html, 'Includes/assets/WordpressAssets/icon-256x256.gif') && false !== strpos($html, 'lkn-rede-notice__badge') && false !== strpos($html, 'Integration Rede Itaú for WooCommerce'));
-check('avisa que so os gateways Rede continuam', false !== strpos($html, 'October 15, 2026') && false !== strpos($html, 'Only the Rede gateways (credit, debit and PIX)'));
+check('avisa que so os gateways Rede continuam (credito, debito, PIX e Google Pay)', false !== strpos($html, 'October 15, 2026') && false !== strpos($html, 'Only the Rede gateways (credit, debit, PIX and Google Pay)'));
 check('informa a data de remocao (23/11/2026)', false !== strpos($html, 'November 23, 2026'));
-check('leva para as configuracoes dos gateways Rede', false !== strpos($html, 'page=wc-settings&amp;tab=checkout&amp;section=rede_credit'));
+check('leva para a tela de configuracoes de pagamento (sem section)', false !== strpos($html, 'page=wc-settings&amp;tab=checkout') && false === strpos($html, 'section='));
 check('dismiss com data-action e nonce', false !== strpos($html, 'data-dismissible="lkn-rede-maxipago-deprecation"') && false !== strpos($html, 'data-action="lkn_rede_dismiss_maxipago_deprecation"') && false !== strpos($html, 'data-nonce="nonce-'));
 
 echo "\n=== Assets e dispensa (AJAX) ===\n";

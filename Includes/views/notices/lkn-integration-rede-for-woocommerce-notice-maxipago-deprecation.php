@@ -27,7 +27,7 @@ if (! defined('ABSPATH')) {
             <span class="lkn-rede-notice__badge"><?php esc_html_e('Deprecated', 'woo-rede'); ?></span>
         </p>
         <p>
-            <?php esc_html_e('Rede discontinued the MaxiPago payment platform on October 15, 2026. Only the Rede gateways (credit, debit and PIX) will keep receiving support and updates.', 'woo-rede'); ?>
+            <?php esc_html_e('Rede discontinued the MaxiPago payment platform on October 15, 2026. Only the Rede gateways (credit, debit, PIX and Google Pay) will keep receiving support and updates.', 'woo-rede'); ?>
         </p>
         <p>
             <strong><?php esc_html_e('All MaxiPago gateways (credit, debit and PIX) will be removed on November 23, 2026.', 'woo-rede'); ?></strong>
