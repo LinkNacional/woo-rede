@@ -5740,6 +5740,30 @@ msgstr "Carregando preço..."
 msgid "Your payment session has expired. Please review the order and try again."
 msgstr "Sua sessão de pagamento expirou. Revise o pedido e tente novamente."
 
+#: Includes/LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice.php:118
+msgid "You do not have permission to dismiss this notice."
+msgstr "Você não tem permissão para dispensar este aviso."
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:27
+msgid "Deprecated"
+msgstr "Descontinuado"
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:30
+msgid "Rede discontinued the MaxiPago payment platform on October 15, 2026. Only the Rede gateways (credit, debit and PIX) will keep receiving support and updates."
+msgstr "A Rede descontinuou a plataforma de pagamentos maxiPago em 15/10/2026. Somente os gateways da Rede (crédito, débito e PIX) continuarão recebendo suporte e atualizações."
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:33
+msgid "All MaxiPago gateways (credit, debit and PIX) will be removed on November 23, 2026."
+msgstr "Todos os gateways maxiPago (crédito, débito e PIX) serão removidos em 23/11/2026."
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:34
+msgid "Migrate your store to the Rede gateways before that date so your checkout keeps working."
+msgstr "Migre sua loja para os gateways da Rede antes dessa data para o checkout não parar de funcionar."
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php:37
+msgid "Configure the Rede gateways"
+msgstr "Configurar os gateways da Rede"
+
 #, php-format
 #~ msgid "%dx of %s"
 #~ msgstr "%dx de %s"

@@ -1,3 +1,6 @@
+# 5.5.6 - 18/11/26
+* Novo: aviso no painel sobre a descontinuação da maxiPago. A plataforma foi encerrada pela Rede em 15/10/2026 e apenas os gateways da Rede (crédito, débito e PIX) continuam com suporte; os gateways maxiPago do plugin serão removidos em 23/11/2026. O aviso aparece uma única vez, só para lojas com credenciais maxiPago salvas, e pode ser dispensado.
+
 # 5.5.5 - 20/10/26
 * Correção: pagamento não era enviado à Rede quando o cliente criava a conta durante a finalização da compra (checkout de convidado desabilitado). O WooCommerce faz login no meio do request e invalidava o nonce do formulário do gateway, que abortava em silêncio — o pedido ficava pendente e a página apenas recarregava. Agora o nonce é aceito nos dois contextos e, em caso de sessão realmente expirada, o cliente recebe um aviso.
 * Correção: mesma falha de nonce nos gateways de débito da Rede e de crédito/débito do maxiPago.

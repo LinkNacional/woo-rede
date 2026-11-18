@@ -260,6 +260,15 @@ final class LknIntegrationRedeForWoocommerce
         // Aviso crítico para atualização do plugin PRO
         $this->loader->add_action('admin_notices', $this, 'lkn_pro_update_critical_notice');
 
+        // Aviso de descontinuação da maxiPago: a plataforma foi encerrada pela
+        // Rede em 15/10/2026 e os gateways maxiPago saem do plugin em
+        // 23/11/2026. Um único aviso, dispensável, só para lojas com
+        // credenciais maxiPago salvas.
+        $maxipago_deprecation = new LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice();
+        $this->loader->add_action('admin_enqueue_scripts', $maxipago_deprecation, 'enqueue_assets');
+        $this->loader->add_action('admin_notices', $maxipago_deprecation, 'maybe_render_notice');
+        $this->loader->add_action('wp_ajax_' . LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice::AJAX_DISMISS, $maxipago_deprecation, 'dismiss_notice');
+
         // Aviso + tela de atualização do PRO (padrão woo-better/shipping-simulator).
         // Aparece quando o PRO está INSTALADO (ativo ou não) e desatualizado, e
         // atualiza o PRO pelo endpoint de update (json + zip).
