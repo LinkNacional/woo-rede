@@ -1004,7 +1004,10 @@ final class LknIntegrationRedeForWoocommerceWcRedeDebit extends LknIntegrationRe
                 'desc_tip' => esc_attr__('Your Rede PV (affiliation number).', 'woo-rede'),
                 'description' => esc_attr__('Rede credentials.', 'woo-rede'),
                 'custom_attributes' => array(
-                    'data-title-description' => esc_attr__('Your Rede PV (affiliation number) should be provided here.', 'woo-rede')
+                    'data-title-description' => esc_attr__('Your Rede PV (affiliation number) should be provided here.', 'woo-rede'),
+                    // Marcador lido pelo layout JS: insere o bloco de MCC abaixo
+                    // da descrição do PV (ver MccInfo).
+                    'data-rede-mcc-info' => '1'
                 ),
                 'default' => $options['pv'] ?? '',
             ),

@@ -349,6 +349,59 @@ textarea:disabled {
     margin-top: 8px;
 }
 
+/* Bloco de MCC (programas de monitoramento das bandeiras) do campo PV.
+   Fica dentro do .lkn-rede-field-body, abaixo da descrição do campo. */
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc {
+    width: 100%;
+    max-width: 720px;
+    margin: 10px 0 4px;
+    padding: 10px 12px;
+    border-left: 3px solid #dba617;
+    background: #fcf9e8;
+    border-radius: 3px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #2c3338;
+    box-sizing: border-box;
+}
+
+.lkn-rede-mcc__intro,
+.lkn-rede-mcc__footer {
+    margin: 0 0 8px;
+}
+
+.lkn-rede-mcc__footer {
+    margin: 8px 0 0;
+    color: #50575e;
+}
+
+.lkn-rede-mcc__details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #2271b1;
+}
+
+.lkn-rede-mcc__table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 8px;
+    background: #fff;
+}
+
+.lkn-rede-mcc__table th,
+.lkn-rede-mcc__table td {
+    border: 1px solid #dcdcde;
+    padding: 4px 8px;
+    text-align: left;
+    vertical-align: top;
+    font-size: 12px;
+}
+
+.lkn-rede-mcc__table th {
+    background: #f6f7f7;
+    font-weight: 600;
+}
+
 .pro-version-info {
     color: red;
     font-weight: bold;

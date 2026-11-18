@@ -156,7 +156,10 @@ final class LknIntegrationRedeForWoocommerceGooglePay extends LknIntegrationRede
                         'desc_tip' => esc_attr__('Your Rede PV number.', 'woo-rede'),
                         'description' => esc_attr__('Rede credentials.', 'woo-rede'),
                         'custom_attributes' => array(
-                            'data-title-description' => esc_attr__("Your PV (Point of Sale) number provided by Rede.", 'woo-rede')
+                            'data-title-description' => esc_attr__("Your PV (Point of Sale) number provided by Rede.", 'woo-rede'),
+                            // Marcador lido pelo layout JS: insere o bloco de MCC abaixo
+                            // da descrição do PV (ver MccInfo).
+                            'data-rede-mcc-info' => '1'
                         ),
                         'default' => '',
                         'required' => true,

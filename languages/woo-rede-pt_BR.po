@@ -5764,6 +5764,62 @@ msgstr "Migre sua loja para os gateways da Rede antes dessa data para o checkout
 msgid "Configure the Rede gateways"
 msgstr "Configurar os gateways da Rede"
 
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Some business activities, identified by the MCC code, must be registered with the card brand monitoring programs. Without this registration Rede may decline the transaction — that is not a failure of this plugin."
+msgstr "Algumas atividades comerciais, identificadas pelo código MCC, precisam de cadastro nos programas de monitoramento das bandeiras. Sem esse cadastro a Rede pode recusar a transação — isso não é uma falha do plugin."
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Which MCCs require registration?"
+msgstr "Quais MCCs exigem cadastro?"
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "MCC"
+msgstr "MCC"
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Activity"
+msgstr "Atividade"
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Brands"
+msgstr "Bandeiras"
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "To register, contact Rede and request enrollment in the monitoring program of each brand."
+msgstr "Para se cadastrar, procure a Rede e solicite a inclusão no programa de monitoramento de cada bandeira."
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Pharmaceuticals and pharmacies — wholesale"
+msgstr "Farmacêuticas e farmácias — atacado"
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Pharmacies — retail"
+msgstr "Farmácias — varejo"
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Tobacco stores"
+msgstr "Tabacarias"
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Government lotteries"
+msgstr "Loterias do governo"
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Skill games"
+msgstr "Jogos de habilidade"
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Cyberlockers"
+msgstr "Cyberlockers"
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Financial trading platforms"
+msgstr "Plataformas de negociação financeira"
+
+#: Includes/LknIntegrationRedeForWoocommerceMccInfo.php
+msgid "Person-to-person transactions — P2P"
+msgstr "Transações entre pessoas — P2P"
+
 #, php-format
 #~ msgid "%dx of %s"
 #~ msgstr "%dx de %s"

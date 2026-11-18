@@ -269,6 +269,12 @@ final class LknIntegrationRedeForWoocommerce
         $this->loader->add_action('admin_notices', $maxipago_deprecation, 'maybe_render_notice');
         $this->loader->add_action('wp_ajax_' . LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice::AJAX_DISMISS, $maxipago_deprecation, 'dismiss_notice');
 
+        // Bloco de MCC (programas de monitoramento das bandeiras) junto do campo PV.
+        // O bloco é impresso como <template> e o layout JS o clona para dentro do
+        // corpo do campo, abaixo da descrição "Credenciais da Rede.".
+        $mcc_info = new LknIntegrationRedeForWoocommerceMccInfo();
+        $this->loader->add_action('admin_footer', $mcc_info, 'maybe_render_template');
+
         // Aviso + tela de atualização do PRO (padrão woo-better/shipping-simulator).
         // Aparece quando o PRO está INSTALADO (ativo ou não) e desatualizado, e
         // atualiza o PRO pelo endpoint de update (json + zip).
