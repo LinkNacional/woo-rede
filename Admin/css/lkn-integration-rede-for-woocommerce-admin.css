@@ -381,25 +381,80 @@ textarea:disabled {
     color: #2271b1;
 }
 
-.lkn-rede-mcc__table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-top: 8px;
+/* A tabela de MCC fica ANINHADA dentro do form-table que o layout move para
+   #lknIntegrationRedeForWoocommerceSettingsLayoutDiv, então ela também casa com
+   as regras genéricas do layout (linhas ~274-311): `#...LayoutDiv table`
+   (table-layout: fixed), `#...LayoutDiv tr th` (th de 200px) e
+   `.form-table tbody tr td` / `#...LayoutDiv tr td` (td de 100%, fundo branco
+   e padding de 10px 30px). Sem reafirmar com especificidade maior, o cabeçalho
+   fica com colunas de 200px e o corpo estica — tabela torta e desalinhada.
+   Por isso o seletor longo abaixo: mesmo id + 2 classes vence aquelas regras. */
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table {
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    margin: 8px 0 0;
     background: #fff;
+    box-sizing: border-box;
 }
 
-.lkn-rede-mcc__table th,
-.lkn-rede-mcc__table td {
-    border: 1px solid #dcdcde;
-    padding: 4px 8px;
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table th,
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table td {
+    width: auto !important;
+    background: transparent;
+    border: 1px solid #dcdcde !important;
+    padding: 4px 8px !important;
     text-align: left;
     vertical-align: top;
     font-size: 12px;
+    line-height: 1.4;
+    font-weight: 400;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;
+    box-sizing: border-box;
 }
 
-.lkn-rede-mcc__table th {
+/* O layout força `.form-table tr { display: table }` (regra acima): como a
+   tabela de MCC é ANINHADA no form-table, cada <tr> dela também vira uma tabela
+   — as células param de ficar lado a lado e a "linha" estica na largura toda.
+   Reafirmamos a estrutura de tabela para os descendentes do bloco. */
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table thead {
+    display: table-header-group !important;
+}
+
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table tbody {
+    display: table-row-group !important;
+}
+
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table tr {
+    display: table-row !important;
+    float: none !important;
+}
+
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table th,
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table td {
+    display: table-cell !important;
+    float: none !important;
+}
+
+/* Larguras vêm do thead (table-layout: fixed): MCC curto, Bandeiras médio e a
+   atividade ocupa o resto. Assim cabeçalho e corpo dividem as mesmas colunas. */
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table th:first-child,
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table td:first-child {
+    width: 90px !important;
+}
+
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table th:last-child,
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table td:last-child {
+    width: 150px !important;
+}
+
+#lknIntegrationRedeForWoocommerceSettingsLayoutDiv tr td div.lkn-rede-mcc table.lkn-rede-mcc__table th {
     background: #f6f7f7;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .pro-version-info {
