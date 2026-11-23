@@ -509,8 +509,7 @@ textarea:disabled {
 #woocommerce_integration_rede_pix_clear_order_records,
 #woocommerce_rede_credit_clear_order_records,
 #woocommerce_rede_debit_clear_order_records,
-#woocommerce_maxipago_credit_clear_order_records,
-#woocommerce_maxipago_debit_clear_order_records {
+{
     display: flex;
     justify-content: center;
     width: fit-content;

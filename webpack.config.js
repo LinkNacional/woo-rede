@@ -3,8 +3,6 @@ const path = require('path');
 module.exports = {
   mode: 'production',
   entry: {
-    creditCardMaxipago: './Public/js/creditCard/maxipago/lknIntegrationMaxipagoForWoocommerceCheckout.js',
-    debitCardMaxipago: './Public/js/debitCard/maxipago/lknIntegrationMaxipagoForWoocommerceCheckout.js',
     creditCardRede: './Public/js/creditCard/rede/lknIntegrationRedeForWoocommerceCheckout.js',
     debitCardRede: './Public/js/debitCard/rede/lknIntegrationRedeForWoocommerceCheckout.js',
     lknRedeAnalytics: './Admin/js/analytics/lknRedeAnalytics.tsx',

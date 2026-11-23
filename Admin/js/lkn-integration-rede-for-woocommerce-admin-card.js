@@ -15,11 +15,8 @@
   $(window).on('load', function () {
     const adminPage = lknFindGetParameter('section')
     const pluginPages = [
-      'maxipago_credit',
-      'maxipago_debit',
       'rede_google_pay',
       'rede_apple_pay',
-      'maxipago_pix',
       'rede_credit',
       'rede_debit',
       'rede_pix',

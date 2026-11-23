@@ -41,10 +41,8 @@ window.jQuery(function ($) {
       resetInstallmentSelects();
       // Não chamar updateInstallmentSession para outros métodos - deixar seus próprios scripts handlearem
       // updateInstallmentSession('rede_credit', 1);
-    } else if (selectedMethod === 'maxipago_credit') {
       resetInstallmentSelects();
       // Não chamar updateInstallmentSession para outros métodos - deixar seus próprios scripts handlearem
-      // updateInstallmentSession('maxipago_credit', 1);
     } else {
       // Para outros métodos, apenas trigger update_checkout
       $(document.body).trigger('update_checkout');
@@ -73,13 +71,6 @@ window.jQuery(function ($) {
       redeCreditInstallmentSelect.value = '1';
     }
     
-    const maxipagoCreditInstallmentSelect = document.querySelector('#maxipago-card-installments');
-    if (maxipagoCreditInstallmentSelect && maxipagoCreditInstallmentSelect.value !== '1') {
-      maxipagoCreditInstallmentSelect.value = '1';
-    }
-  }
-
-  function lknRedeDebitCardRender() {
     if (!document.querySelector('.wc-block-checkout')) {
       // Cria o card somente quando a requisição for concluida
       let $form = $('.woocommerce .woocommerce-checkout')

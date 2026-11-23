@@ -106,13 +106,10 @@ final class LknIntegrationRedeForWoocommerceAdmin
         ));
 
         $gateways = array(
-            'maxipago_credit',
-            'maxipago_debit',
             'rede_google_pay',
             'rede_apple_pay',
             'rede_credit',
             'rede_debit',
-            'maxipago_pix',
             'rede_pix',
             'integration_rede_pix'
         );
@@ -1241,7 +1238,6 @@ final class LknIntegrationRedeForWoocommerceAdmin
             'lkn_wcip_subscription_limit',
             'lkn_wcip_subscription_interval_type',
             'lkn_wcip_subscription_interval_number',
-            'lknMaxipagoProdutctInterest',
             'lknRedeProdutctInterest'
         );
 

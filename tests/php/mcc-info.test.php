@@ -108,7 +108,7 @@ foreach (array('rede_credit', 'rede_debit', 'integration_rede_pix', 'rede_google
     check("$section => template impresso uma vez", 1 === substr_count($out, '<template id="lkn-rede-mcc-info">') && false !== strpos($out, '<div class="lkn-rede-mcc">'));
 }
 
-foreach (array('maxipago_credit', 'maxipago_debit', 'maxipago_pix', '') as $section) {
+foreach (array('cod', 'bacs', 'cheque', '') as $section) {
     setRequest(array('page' => 'wc-settings', 'tab' => 'checkout', 'section' => $section));
     check("'" . $section . "' => sem template", '' === renderTemplate());
 }

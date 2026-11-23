@@ -1,5 +1,4 @@
 /**
- * Script otimizado para testar hooks do WooCommerce Blocks - Rede/Maxipago Credit Payment Gateway
  */
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -105,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (selectedPaymentRadio) {
             const selectedMethod = selectedPaymentRadio.value;
-            const isRede = selectedMethod === 'rede_credit' || selectedMethod === 'maxipago_credit' || selectedMethod === 'rede_debit';
+            const isRede = selectedMethod === 'rede_credit' || selectedMethod === 'rede_debit';
             return isRede;
         }
 
@@ -215,8 +214,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const fallbackSelects = document.querySelectorAll(
             'select[name*="installments"], select[name*="parcelas"], ' +
-            '.rede_credit_select select, .maxipago_credit_select select, ' +
-            'select[id*="rede"], select[id*="maxipago"], ' +
+            '.rede_credit_select select, ' +
+            'select[id*="rede"], ' +
             '#card_installment_selector'
         );
 
@@ -556,7 +555,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const checkedInput = document.querySelector('input[name="radio-control-wc-payment-method-options"]:checked');
         const selectedMethod = checkedInput ? checkedInput.value : null;
 
-        if (selectedMethod === 'rede_credit' || selectedMethod === 'maxipago_credit' || selectedMethod === 'rede_debit') {
+        if (selectedMethod === 'rede_credit' || selectedMethod === 'rede_debit') {
             // Reset o controle de parcelas para forçar nova verificação
             lastInstallmentCount = -1;
             

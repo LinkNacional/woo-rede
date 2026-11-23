@@ -3,9 +3,6 @@
     // Detectar a página atual
     const adminPage = lknFindGetParameter('section')
     const pluginPages = [
-      'maxipago_credit',
-      'maxipago_debit',
-      'maxipago_pix',
       'rede_credit',
       'rede_debit',
       'rede_pix',
