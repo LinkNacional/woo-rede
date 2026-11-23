@@ -1,3 +1,7 @@
+# 5.5.7 - 19/11/26
+* Ajuste: o gateway Apple Pay (`rede_apple_pay`, do plugin PRO) entra nas listas deste plugin gratuito — tela de configuração do gateway, prefixo das notas do pedido, bloco informativo de MCC junto do campo PV e, no admin, as duas listas de seções em JavaScript (o card da Link Nacional e o aviso de campos PRO). Sem isso a tela do novo gateway ficava sem o card e sem o bloco de MCC.
+* Ajuste: os scripts `admin.js` e `admin-card.js` passaram a usar cache-bust por `filemtime` (como o script de layout já fazia), para que mudanças nas listas de gateways não fiquem presas no cache do navegador.
+
 # 5.5.6 - 18/11/26
 * Novo: aviso no painel sobre a descontinuação da maxiPago. A plataforma foi encerrada pela Rede em 15/10/2026 e apenas os gateways da Rede (crédito, débito, PIX e Google Pay) continuam com suporte; os gateways maxiPago do plugin serão removidos em 23/11/2026. O aviso aparece uma única vez, só para lojas com credenciais maxiPago salvas, e pode ser dispensado.
 * Novo: bloco informativo sobre os programas de monitoramento das bandeiras (MCC) abaixo da descrição do campo PV, nos gateways de crédito, débito, PIX e Google Pay. Atividades como farmácias, tabacarias, loterias, jogos de habilidade, cyberlockers, plataformas de negociação financeira e transações P2P exigem cadastro na Visa, Mastercard e/ou Amex; sem ele a Rede recusa a transação e o problema não é do plugin.

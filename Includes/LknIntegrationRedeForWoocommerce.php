@@ -1434,7 +1434,7 @@ final class LknIntegrationRedeForWoocommerce
             if ($order && is_a($order, 'WC_Order')) {
 
                 // Metodos do plugin integration rede (free) e integration rede pro
-                $methods = ['maxipago_credit', 'maxipago_debit', 'maxipago_pix', 'integration_rede_pix', 'rede_credit', 'rede_debit', 'rede_pix', 'rede_google_pay'];
+                $methods = ['maxipago_credit', 'maxipago_debit', 'maxipago_pix', 'integration_rede_pix', 'rede_credit', 'rede_debit', 'rede_pix', 'rede_google_pay', 'rede_apple_pay'];
                 $payment_method = $order->get_payment_method();
 
                 if (in_array($payment_method, $methods)) {

@@ -18,6 +18,7 @@
       'maxipago_credit',
       'maxipago_debit',
       'rede_google_pay',
+      'rede_apple_pay',
       'maxipago_pix',
       'rede_credit',
       'rede_debit',

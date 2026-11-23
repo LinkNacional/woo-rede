@@ -22,7 +22,7 @@ if (! defined('INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR_URL')) {
     define('INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR_URL', 'http://exemplo.local/wp-content/plugins/woo-rede/');
 }
 if (! defined('INTEGRATION_REDE_FOR_WOOCOMMERCE_VERSION')) {
-    define('INTEGRATION_REDE_FOR_WOOCOMMERCE_VERSION', '5.5.6');
+    define('INTEGRATION_REDE_FOR_WOOCOMMERCE_VERSION', '5.5.7');
 }
 
 $GLOBALS['lkn_opts'] = array();

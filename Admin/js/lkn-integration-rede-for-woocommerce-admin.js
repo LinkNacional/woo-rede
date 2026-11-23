@@ -9,7 +9,8 @@
       'rede_credit',
       'rede_debit',
       'rede_pix',
-      'integration_rede_pix'
+      'integration_rede_pix',
+      'rede_apple_pay'
     ]
 
     // Function to create feature message components

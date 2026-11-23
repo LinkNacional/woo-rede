@@ -5,7 +5,7 @@ Donate link: https://www.linknacional.com/wordpress/plugins/
 Tags: rede, pix, cartao credito, itau, pagamento  
 Requires at least: 6.0
 Tested up to: 7.1  
-Stable tag: 5.5.6
+Stable tag: 5.5.7
 Requires PHP: 8.2
 License: GPL-3.0+  
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -128,6 +128,9 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Changelog ==
+
+### 5.5.7 - 2026-11-19
+* Fix: the Apple Pay gateway (`rede_apple_pay`, shipped by the PRO plugin) is now part of the FREE plugin lists — the gateway settings screen layout, the order note prefix, the MCC information block below the PV field, and the two JavaScript section lists used by the admin (the Link Nacional card and the PRO fields notice). Without it the new gateway screen was missing the card and the MCC block.
 
 ### 5.5.6 - 2026-11-18
 * New: admin notice about the MaxiPago shutdown. Rede discontinued the MaxiPago platform on 2026-10-15 and only the Rede gateways (credit, debit, PIX and Google Pay) keep receiving support and updates, so the plugin's maxiPago gateways will be removed on 2026-11-23. The warning is shown once, only for stores with maxiPago credentials saved, and can be dismissed.
@@ -333,6 +336,9 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Upgrade Notice ==
+
+### 5.5.7 - 2026-11-19
+* Preparing the FREE plugin for the new Apple Pay gateway of the PRO plugin (settings layout, order notes and MCC block on its screen).
 
 ### 5.5.6 - 2026-11-18
 * MaxiPago was discontinued by Rede on 2026-10-15 and its gateways will be removed from the plugin on 2026-11-23 — migrate your store to the Rede gateways. The dashboard now shows a warning about it.
