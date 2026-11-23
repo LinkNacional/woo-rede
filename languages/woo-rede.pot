@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-23T13:00:42+00:00\n"
+"POT-Creation-Date: 2026-11-23T13:13:48+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: woo-rede\n"
@@ -3222,7 +3222,7 @@ msgstr ""
 msgid "Failed"
 msgstr ""
 
-#: Includes/LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice.php:88
+#: Includes/LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice.php:93
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateEmail.php:71
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateEmail.php:148
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:248
@@ -3231,7 +3231,7 @@ msgstr ""
 msgid "Integration Rede Itaú for WooCommerce"
 msgstr ""
 
-#: Includes/LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice.php:104
+#: Includes/LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice.php:109
 msgid "You do not have permission to dismiss this notice."
 msgstr ""
 
@@ -3408,7 +3408,7 @@ msgid "An important update for the %1$s plugin is available (version %2$s or hig
 msgstr ""
 
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:364
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:40
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:43
 msgid "Dismiss this notice."
 msgstr ""
 
@@ -4830,23 +4830,27 @@ msgstr ""
 msgid "Dismiss this notice"
 msgstr ""
 
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:27
-msgid "Removed"
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:29
+msgid "MaxiPago gateway"
 msgstr ""
 
 #: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:30
-msgid "As previously announced, the MaxiPago gateways were removed from this plugin. Rede discontinued the MaxiPago payment platform on October 15, 2026."
+msgid "Removed"
 msgstr ""
 
 #: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:33
-msgid "Your store now has the Rede gateways only (credit, debit, PIX and Google Pay)."
+msgid "The MaxiPago gateway is no longer available in this plugin. Rede discontinued the MaxiPago payment platform on October 15, 2026, and the Rede gateways remain available as usual."
 msgstr ""
 
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:34
-msgid "If your checkout was using MaxiPago, enable the matching Rede gateway so payments keep working."
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:36
+msgid "Your store keeps working normally with the Rede gateways (credit, debit, PIX and Google Pay)."
 msgstr ""
 
 #: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:37
+msgid "If your checkout was using MaxiPago, simply enable the matching Rede gateway in the plugin settings."
+msgstr ""
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:40
 msgid "Configure the Rede gateways"
 msgstr ""
 

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Integration Rede Itaú for WooCommerce — Payment PIX, "
 "Credit Card and Debit\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woo-rede\n"
-"POT-Creation-Date: 2026-11-23T13:00:42+00:00\n"
+"POT-Creation-Date: 2026-11-23T13:13:48+00:00\n"
 "PO-Revision-Date: 2020-08-17 03:33+0000\n"
 "Last-Translator: \n"
 "Language-Team: Português do Brasil\n"
@@ -3479,7 +3479,7 @@ msgstr "Timeout do gateway"
 msgid "Failed"
 msgstr "Falhou"
 
-#: Includes/LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice.php:88
+#: Includes/LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice.php:93
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateEmail.php:71
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateEmail.php:148
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:248
@@ -3488,7 +3488,7 @@ msgstr "Falhou"
 msgid "Integration Rede Itaú for WooCommerce"
 msgstr "Integration Rede Itaú for WooCommerce"
 
-#: Includes/LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice.php:104
+#: Includes/LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice.php:109
 msgid "You do not have permission to dismiss this notice."
 msgstr "Você não tem permissão para dispensar este aviso."
 
@@ -3700,7 +3700,7 @@ msgstr ""
 "ou superior). Atualize-o para evitar falhas na configuração e na finalização."
 
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:364
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:40
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:43
 msgid "Dismiss this notice."
 msgstr "Dispensar este aviso."
 
@@ -5438,35 +5438,41 @@ msgstr "Baixar"
 msgid "Dismiss this notice"
 msgstr "Dispensar este aviso"
 
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:27
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:29
+msgid "MaxiPago gateway"
+msgstr "Gateway MaxiPago"
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:30
 msgid "Removed"
 msgstr "Removido"
 
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:30
-msgid ""
-"As previously announced, the MaxiPago gateways were removed from this "
-"plugin. Rede discontinued the MaxiPago payment platform on October 15, 2026."
-msgstr ""
-"Como havíamos avisado, os gateways MaxiPago foram removidos deste plugin. A "
-"Rede encerrou a plataforma de pagamentos MaxiPago em 15 de outubro de 2026."
-
 #: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:33
 msgid ""
-"Your store now has the Rede gateways only (credit, debit, PIX and Google "
-"Pay)."
+"The MaxiPago gateway is no longer available in this plugin. Rede "
+"discontinued the MaxiPago payment platform on October 15, 2026, and the Rede "
+"gateways remain available as usual."
 msgstr ""
-"Sua loja agora conta apenas com os gateways da Rede (crédito, débito, PIX e "
-"Google Pay)."
+"O gateway MaxiPago não está mais disponível neste plugin. A Rede encerrou a "
+"plataforma de pagamentos MaxiPago em 15 de outubro de 2026, e os gateways da "
+"Rede seguem disponíveis normalmente."
 
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:34
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:36
 msgid ""
-"If your checkout was using MaxiPago, enable the matching Rede gateway so "
-"payments keep working."
+"Your store keeps working normally with the Rede gateways (credit, debit, PIX "
+"and Google Pay)."
 msgstr ""
-"Se o seu checkout usava o MaxiPago, habilite o gateway equivalente da Rede "
-"para que os pagamentos continuem funcionando."
+"Sua loja continua funcionando normalmente com os gateways da Rede (crédito, "
+"débito, PIX e Google Pay)."
 
 #: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:37
+msgid ""
+"If your checkout was using MaxiPago, simply enable the matching Rede gateway "
+"in the plugin settings."
+msgstr ""
+"Se o seu checkout usava o MaxiPago, basta habilitar o gateway equivalente da "
+"Rede nas configurações do plugin."
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:40
 msgid "Configure the Rede gateways"
 msgstr "Configurar os gateways da Rede"
 
