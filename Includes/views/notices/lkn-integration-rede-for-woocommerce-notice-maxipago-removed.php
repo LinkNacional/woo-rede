@@ -2,8 +2,9 @@
 /**
  * Aviso de remoção do gateway maxiPago (a remoção já aconteceu).
  *
- * Tom informativo: comunica o que mudou e o que a loja deve fazer, sem soar
- * como cobrança e sem alarmar quem nunca usou o maxiPago.
+ * Tom informativo e linguagem simples: boa parte dos lojistas não é técnica,
+ * então o aviso diz o que mudou e o que continua funcionando, sem jargão e sem
+ * alarmar quem nunca usou o maxiPago.
  *
  * @var string $notice_id    Identificador do aviso (data-dismissible).
  * @var string $action      Ação AJAX de dispensa.
@@ -16,6 +17,12 @@
 if (! defined('ABSPATH')) {
     exit;
 }
+
+$removal_text = sprintf(
+    /* translators: %s: the gateway name MaxiPago, shown in bold. */
+    __('The %s gateway is no longer available in this plugin. Rede ended this payment service on October 15, 2026.', 'woo-rede'),
+    '<strong>MaxiPago</strong>'
+);
 ?>
 <div class="notice notice-warning is-dismissible lkn-rede-notice lkn-rede-notice--removed"
     data-dismissible="<?php echo esc_attr($notice_id); ?>"
@@ -30,14 +37,14 @@ if (! defined('ABSPATH')) {
             <span class="lkn-rede-notice__badge"><?php esc_html_e('Removed', 'woo-rede'); ?></span>
         </p>
         <p>
-            <?php esc_html_e('The MaxiPago gateway is no longer available in this plugin. Rede discontinued the MaxiPago payment platform on October 15, 2026, and the Rede gateways remain available as usual.', 'woo-rede'); ?>
+            <?php echo wp_kses($removal_text, array('strong' => array())); ?>
         </p>
         <p>
-            <strong><?php esc_html_e('Your store keeps working normally with the Rede gateways (credit, debit, PIX and Google Pay).', 'woo-rede'); ?></strong>
-            <?php esc_html_e('If your checkout was using MaxiPago, simply enable the matching Rede gateway in the plugin settings.', 'woo-rede'); ?>
+            <strong><?php esc_html_e('Payments by credit card, debit card, PIX and Google Pay keep working normally.', 'woo-rede'); ?></strong>
+            <?php esc_html_e('If you were using MaxiPago at checkout, choose the equivalent Rede option in your payment settings.', 'woo-rede'); ?>
         </p>
         <p class="lkn-rede-notice__actions">
-            <a class="button button-secondary" href="<?php echo esc_url($settings_url); ?>"><?php esc_html_e('Configure the Rede gateways', 'woo-rede'); ?></a>
+            <a class="button button-secondary" href="<?php echo esc_url($settings_url); ?>"><?php esc_html_e('Go to payment settings', 'woo-rede'); ?></a>
         </p>
     </div>
     <button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e('Dismiss this notice.', 'woo-rede'); ?></span></button>
