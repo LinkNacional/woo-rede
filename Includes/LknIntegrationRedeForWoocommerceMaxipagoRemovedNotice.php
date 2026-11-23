@@ -36,8 +36,13 @@ final class LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice
     /** Opção que marca o aviso como dispensado. */
     private const OPTION_DISMISSED = 'lkn_rede_maxipago_removed_notice_dismissed';
 
-    /** Gateways maxiPago que existiam no plugin gratuito. */
-    private const MAXIPAGO_GATEWAYS = array('maxipago_credit', 'maxipago_debit');
+    /**
+     * Gateways/credenciais maxiPago que podem ter sobrado na loja. O
+     * `maxipago_pix` vem do PRO, mas o aviso mora aqui (no FREE) e quem usa o
+     * PRO tem este plugin instalado — sem ele, uma loja que só vendia por PIX
+     * maxiPago nunca saberia por que o gateway sumiu.
+     */
+    private const MAXIPAGO_GATEWAYS = array('maxipago_credit', 'maxipago_debit', 'maxipago_pix');
 
     /**
      * Garante UM único aviso por requisição.

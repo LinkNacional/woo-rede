@@ -144,6 +144,16 @@ $notice = new Notice();
 check('gateway desligado com credenciais salvas => aparece', true === $notice->notice_would_show());
 
 resetOptions();
+$GLOBALS['lkn_opts']['woocommerce_maxipago_pix_settings'] = array('enabled' => 'yes', 'merchant_id' => '789');
+$notice = new Notice();
+check('loja que so usava o PIX maxiPago (PRO) => aparece', true === $notice->notice_would_show());
+
+resetOptions();
+$GLOBALS['lkn_opts']['woocommerce_maxipago_pix_settings'] = array();
+$notice = new Notice();
+check('maxipago_pix vazio => nao aparece', false === $notice->notice_would_show());
+
+resetOptions();
 $GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'no');
 $notice = new Notice();
 check('gateway desligado e sem credenciais => nao aparece', false === $notice->notice_would_show());
