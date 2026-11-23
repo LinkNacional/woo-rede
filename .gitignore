@@ -6,3 +6,4 @@ vendor
 Includes/logs/*.log
 wp-content
 languages/*.po~
+languages/*.mo
