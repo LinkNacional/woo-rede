@@ -6,10 +6,10 @@
  * substituto: informa que a remoção já aconteceu, mantém o mesmo layout
  * (ícone + nome + selo + ação) e é dispensável pelo lojista.
  *
- * Cobre: aparece SÓ quando a loja tem credenciais maxiPago salvas, UMA única
- * vez por requisição, respeita a dispensa, exige `manage_options` e o wp-admin,
- * e a dispensa usa option/ação próprias (quem dispensou o aviso antigo de
- * descontinuação PRECISA ver este).
+ * Cobre: aparece para TODOS os administradores (sem exigir que a loja tenha
+ * usado a maxiPago), UMA única vez por requisição, respeita a dispensa, exige
+ * `manage_options` e o wp-admin, e a dispensa usa option/ação próprias (quem
+ * dispensou o aviso antigo de descontinuação PRECISA ver este).
  *
  * Rodar:
  *   php tests/php/maxipago-removed-notice.test.php
@@ -128,22 +128,12 @@ echo "=== Quando o aviso aparece ===\n";
 
 resetOptions();
 $notice = new Notice();
-check('loja sem maxiPago configurado => nao aparece', false === $notice->notice_would_show() && '' === renderNotice($notice));
+check('loja que nunca usou maxiPago => APARECE (aviso e para todos)', true === $notice->notice_would_show() && '' !== renderNotice($notice));
 
 resetOptions();
 $GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes', 'merchant_id' => '123');
 $notice = new Notice();
-check('maxipago_credit configurado => aparece', true === $notice->notice_would_show());
-
-resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_debit_settings'] = array('enabled' => 'yes', 'merchant_id' => '456');
-$notice = new Notice();
-check('maxipago_debit configurado => aparece', true === $notice->notice_would_show());
-
-resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'no', 'merchant_id' => '123');
-$notice = new Notice();
-check('gateway desligado com credenciais salvas => aparece', true === $notice->notice_would_show());
+check('loja com maxipago_credit configurado => aparece', true === $notice->notice_would_show());
 
 resetOptions();
 $GLOBALS['lkn_opts']['woocommerce_maxipago_pix_settings'] = array('enabled' => 'yes', 'merchant_id' => '789');
@@ -151,45 +141,26 @@ $notice = new Notice();
 check('loja que so usava o PIX maxiPago (PRO) => aparece', true === $notice->notice_would_show());
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_pix_settings'] = array();
-$notice = new Notice();
-check('maxipago_pix vazio => nao aparece', false === $notice->notice_would_show());
-
-resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'no');
-$notice = new Notice();
-check('option salva sem credenciais => aparece (loja ja tocou no gateway)', true === $notice->notice_would_show());
-
-resetOptions();
 $GLOBALS['lkn_opts']['woocommerce_maxipago_debit_settings'] = array('enabled_fix_load_script' => 'yes');
 $notice = new Notice();
-check('option com apenas enabled_fix_load_script => aparece (caso real do ambiente-dev)', true === $notice->notice_would_show());
+check('option residual maxiPago => aparece (nao depende dela)', true === $notice->notice_would_show());
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array();
-$notice = new Notice();
-check('option vazia => nao aparece', false === $notice->notice_would_show());
-
-resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes');
 $GLOBALS['lkn_opts']['lkn_rede_maxipago_removed_notice_dismissed'] = 'yes';
 $notice = new Notice();
 check('aviso de remocao ja dispensado => nao aparece', false === $notice->notice_would_show() && '' === renderNotice($notice));
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes');
 $GLOBALS['lkn_opts']['lkn_rede_maxipago_deprecation_notice_dismissed'] = 'yes';
 $notice = new Notice();
 check('quem dispensou o aviso antigo de descontinuacao AINDA ve o de remocao', true === $notice->notice_would_show());
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes');
 $GLOBALS['lkn_can'] = false;
 $notice = new Notice();
 check('usuario sem manage_options => nao aparece', false === $notice->notice_would_show());
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes');
 $GLOBALS['lkn_is_admin'] = false;
 $notice = new Notice();
 check('fora do wp-admin => nao aparece', false === $notice->notice_would_show());
@@ -197,12 +168,10 @@ check('fora do wp-admin => nao aparece', false === $notice->notice_would_show())
 echo "\n=== Conteudo e UM aviso só ===\n";
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes', 'merchant_id' => '123');
-$GLOBALS['lkn_opts']['woocommerce_maxipago_debit_settings'] = array('enabled' => 'yes', 'merchant_id' => '456');
 $notice = new Notice();
 $html = renderNotice($notice) . renderNotice($notice);
 
-check('credito + debito maxiPago => UMA vez', 1 === substr_count($html, 'lkn-rede-notice--removed'));
+check('duas chamadas na mesma requisicao => UMA vez', 1 === substr_count($html, 'lkn-rede-notice--removed'));
 check('usa o padrao de aviso do woo-better (gif + nome + selo)', false !== strpos($html, 'Includes/assets/WordpressAssets/icon-256x256.gif') && false !== strpos($html, 'lkn-rede-notice__badge') && false !== strpos($html, 'Integration Rede Itaú for WooCommerce'));
 check('titulo traz o gateway no formato pedido', false !== strpos($html, 'Integration Rede Itaú for WooCommerce - MaxiPago gateway'));
 check('avisa que o gateway nao esta mais disponivel (tom neutro, sem cobranca)', false !== strpos($html, 'gateway is no longer available in this plugin'));
@@ -221,17 +190,17 @@ check('dismiss com data-action e nonce', false !== strpos($html, 'data-dismissib
 echo "\n=== Assets e dispensa (AJAX) ===\n";
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes', 'merchant_id' => '123');
 $GLOBALS['lkn_queued'] = array();
 $notice = new Notice();
 $notice->enqueue_assets();
 check('enfileira CSS e JS do aviso', 2 === count($GLOBALS['lkn_queued']));
 
 resetOptions();
+$GLOBALS['lkn_opts']['lkn_rede_maxipago_removed_notice_dismissed'] = 'yes';
 $GLOBALS['lkn_queued'] = array();
 $notice = new Notice();
 $notice->enqueue_assets();
-check('sem nenhuma option maxiPago => nao enfileira nada', 0 === count($GLOBALS['lkn_queued']));
+check('aviso dispensado => nao enfileira assets', 0 === count($GLOBALS['lkn_queued']));
 
 resetOptions();
 $notice = new Notice();

@@ -15,9 +15,11 @@ if (! defined('ABSPATH')) {
  * tinha migrado entender o motivo de o gateway ter desaparecido do checkout.
  *
  * Segue o mesmo layout do aviso anterior (ícone + nome do plugin + selo +
- * botão de ação), é dispensável e é UM só mesmo com crédito e débito maxiPago
- * configurados ao mesmo tempo. Usa option/ação próprias: quem já tinha
- * dispensado o aviso de descontinuação PRECISA ver este.
+ * botão de ação) e é dispensável. Aparece para TODOS os administradores da
+ * loja, independentemente de a loja ter ou não usado a maxiPago: o aviso é
+ * institucional (comunicado de descontinuidade), não um diagnóstico da loja.
+ * Usa option/ação próprias: quem já tinha dispensado o aviso de
+ * descontinuação PRECISA ver este.
  *
  * Só existe no plugin gratuito — quem usa o PRO tem o FREE instalado também,
  * então não há aviso duplicado.
@@ -35,14 +37,6 @@ final class LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice
 
     /** Opção que marca o aviso como dispensado. */
     private const OPTION_DISMISSED = 'lkn_rede_maxipago_removed_notice_dismissed';
-
-    /**
-     * Gateways/credenciais maxiPago que podem ter sobrado na loja. O
-     * `maxipago_pix` vem do PRO, mas o aviso mora aqui (no FREE) e quem usa o
-     * PRO tem este plugin instalado — sem ele, uma loja que só vendia por PIX
-     * maxiPago nunca saberia por que o gateway sumiu.
-     */
-    private const MAXIPAGO_GATEWAYS = array('maxipago_credit', 'maxipago_debit', 'maxipago_pix');
 
     /**
      * Garante UM único aviso por requisição.
@@ -120,8 +114,8 @@ final class LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice
      * O aviso deve aparecer nesta requisição?
      *
      * Regras: só no admin, só para quem administra a loja, só uma vez por
-     * requisição, nunca depois de dispensado e só quando existem credenciais
-     * maxiPago salvas (loja que realmente usava o gateway).
+     * requisição e nunca depois de dispensado. Não há checagem de uso da
+     * maxiPago: o aviso é um comunicado de descontinuidade para toda a base.
      */
     public function notice_would_show(): bool
     {
@@ -141,36 +135,12 @@ final class LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice
             return false;
         }
 
-        $show = $this->has_maxipago_credentials();
-
         /**
-         * Permite esconder/exibir o aviso de remoção da maxiPago.
+         * Permite esconder o aviso de remoção da maxiPago.
          *
          * @param bool $show O aviso deve ser exibido?
          */
-        return (bool) apply_filters('integration_rede_for_woocommerce_show_maxipago_removed_notice', $show);
+        return (bool) apply_filters('integration_rede_for_woocommerce_show_maxipago_removed_notice', true);
     }
 
-    /**
-     * A loja já usou a maxiPago?
-     *
-     * O sinal confiável é a EXISTÊNCIA da option de configuração do gateway:
-     * uma option que só era criada quando alguém abria/salvava aquela tela de
-     * pagamento. Não exige `enabled` nem `merchant_id` porque o gateway saiu do
-     * plugin — quem já o removeu ou limpou as credenciais continua sendo uma
-     * loja afetada e precisa saber por que ele desapareceu. Lê direto das
-     * options porque a instância do gateway já não existe neste ponto.
-     */
-    private function has_maxipago_credentials(): bool
-    {
-        foreach (self::MAXIPAGO_GATEWAYS as $gateway_id) {
-            $settings = get_option('woocommerce_' . $gateway_id . '_settings', array());
-
-            if (is_array($settings) && array() !== $settings) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
