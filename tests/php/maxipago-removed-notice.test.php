@@ -158,7 +158,17 @@ check('maxipago_pix vazio => nao aparece', false === $notice->notice_would_show(
 resetOptions();
 $GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'no');
 $notice = new Notice();
-check('gateway desligado e sem credenciais => nao aparece', false === $notice->notice_would_show());
+check('option salva sem credenciais => aparece (loja ja tocou no gateway)', true === $notice->notice_would_show());
+
+resetOptions();
+$GLOBALS['lkn_opts']['woocommerce_maxipago_debit_settings'] = array('enabled_fix_load_script' => 'yes');
+$notice = new Notice();
+check('option com apenas enabled_fix_load_script => aparece (caso real do ambiente-dev)', true === $notice->notice_would_show());
+
+resetOptions();
+$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array();
+$notice = new Notice();
+check('option vazia => nao aparece', false === $notice->notice_would_show());
 
 resetOptions();
 $GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes');
@@ -218,11 +228,10 @@ $notice->enqueue_assets();
 check('enfileira CSS e JS do aviso', 2 === count($GLOBALS['lkn_queued']));
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'no');
 $GLOBALS['lkn_queued'] = array();
 $notice = new Notice();
 $notice->enqueue_assets();
-check('sem maxiPago configurado => nao enfileira nada', 0 === count($GLOBALS['lkn_queued']));
+check('sem nenhuma option maxiPago => nao enfileira nada', 0 === count($GLOBALS['lkn_queued']));
 
 resetOptions();
 $notice = new Notice();

@@ -152,26 +152,21 @@ final class LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice
     }
 
     /**
-     * A loja tem credenciais maxiPago salvas (gateway habilitado ou apenas
-     * configurado)? Lê direto das options para não depender da instância do
-     * gateway — que já não existe mais neste ponto.
+     * A loja já usou a maxiPago?
+     *
+     * O sinal confiável é a EXISTÊNCIA da option de configuração do gateway:
+     * uma option que só era criada quando alguém abria/salvava aquela tela de
+     * pagamento. Não exige `enabled` nem `merchant_id` porque o gateway saiu do
+     * plugin — quem já o removeu ou limpou as credenciais continua sendo uma
+     * loja afetada e precisa saber por que ele desapareceu. Lê direto das
+     * options porque a instância do gateway já não existe neste ponto.
      */
     private function has_maxipago_credentials(): bool
     {
         foreach (self::MAXIPAGO_GATEWAYS as $gateway_id) {
             $settings = get_option('woocommerce_' . $gateway_id . '_settings', array());
 
-            if (! is_array($settings) || array() === $settings) {
-                continue;
-            }
-
-            if (isset($settings['enabled']) && 'yes' === $settings['enabled']) {
-                return true;
-            }
-
-            $merchant_id = isset($settings['merchant_id']) ? trim((string) $settings['merchant_id']) : '';
-
-            if ('' !== $merchant_id) {
+            if (is_array($settings) && array() !== $settings) {
                 return true;
             }
         }
