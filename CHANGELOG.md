@@ -1,3 +1,7 @@
+# 5.6.0 - 23/11/26
+* Remoção: os gateways maxiPago (crédito e débito) saem do plugin. A Rede encerrou a plataforma em 15/10/2026, então só os gateways da Rede (crédito, débito, PIX, Google Pay e Apple Pay) seguem com suporte. Lojas que ainda usavam maxiPago precisam migrar para os gateways da Rede.
+* Remoção: junto com os gateways, saem o aviso de descontinuação, as telas de configuração, os scripts e estilos de checkout, o webhook `maxipagoDebitListener` e as strings de tradução correspondentes.
+
 # 5.5.7 - 19/11/26
 * Ajuste: o gateway Apple Pay (`rede_apple_pay`, do plugin PRO) entra nas listas deste plugin gratuito — tela de configuração do gateway, prefixo das notas do pedido, bloco informativo de MCC junto do campo PV e, no admin, as duas listas de seções em JavaScript (o card da Link Nacional e o aviso de campos PRO). Sem isso a tela do novo gateway ficava sem o card e sem o bloco de MCC.
 * Ajuste: os scripts `admin.js` e `admin-card.js` passaram a usar cache-bust por `filemtime` (como o script de layout já fazia), para que mudanças nas listas de gateways não fiquem presas no cache do navegador.
