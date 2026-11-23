@@ -1,14 +1,18 @@
 <?php
 /**
- * Teste puro (sem WordPress) do aviso de descontinuação da maxiPago.
+ * Teste puro (sem WordPress) do aviso de REMOÇÃO dos gateways maxiPago.
  *
- * Cobre as regras do aviso: aparece SÓ quando a loja tem credenciais maxiPago
- * salvas, UMA única vez por requisição (mesmo com crédito e débito maxiPago
- * habilitados juntos), respeita a dispensa do lojista, exige `manage_options`
- * e o wp-admin, e o AJAX de dispensa grava a option apenas com permissão.
+ * O aviso de descontinuação saiu junto com os gateways na 5.6.0; este é o
+ * substituto: informa que a remoção já aconteceu, mantém o mesmo layout
+ * (ícone + nome + selo + ação) e é dispensável pelo lojista.
+ *
+ * Cobre: aparece para TODOS os administradores (sem exigir que a loja tenha
+ * usado a maxiPago), UMA única vez por requisição, respeita a dispensa, exige
+ * `manage_options` e o wp-admin, e a dispensa usa option/ação próprias (quem
+ * dispensou o aviso antigo de descontinuação PRECISA ver este).
  *
  * Rodar:
- *   php tests/php/maxipago-deprecation-notice.test.php
+ *   php tests/php/maxipago-removed-notice.test.php
  */
 
 // ── Stubs mínimos para carregar a classe sem o WordPress ────────────────────
@@ -22,7 +26,7 @@ if (! defined('INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR_URL')) {
     define('INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR_URL', 'http://exemplo.local/wp-content/plugins/woo-rede/');
 }
 if (! defined('INTEGRATION_REDE_FOR_WOOCOMMERCE_VERSION')) {
-    define('INTEGRATION_REDE_FOR_WOOCOMMERCE_VERSION', '5.5.6');
+    define('INTEGRATION_REDE_FOR_WOOCOMMERCE_VERSION', '5.6.0');
 }
 
 $GLOBALS['lkn_opts'] = array();
@@ -32,7 +36,7 @@ $GLOBALS['lkn_queued'] = array();
 $GLOBALS['lkn_json'] = null;
 
 /** Simula o wp_die() que encerra as respostas JSON no WordPress. */
-final class LknMaxipagoTestDie extends Exception {}
+final class LknMaxipagoRemovedTestDie extends Exception {}
 
 if (! function_exists('is_admin')) {
     function is_admin() { return $GLOBALS['lkn_is_admin']; }
@@ -52,21 +56,23 @@ if (! function_exists('is_admin')) {
     function esc_html_e($text, $domain = null) { echo esc_html($text); }
     function esc_attr_e($text, $domain = null) { echo esc_attr($text); }
     function __($text, $domain = null) { return $text; }
+    function wp_kses($text, $allowed = array()) { return $text; }
+    function esc_html__($text, $domain = null) { return htmlspecialchars((string) $text, ENT_QUOTES); }
     function wp_enqueue_style($handle = '', ...$rest) { $GLOBALS['lkn_queued'][] = 'style:' . $handle; }
     function wp_enqueue_script($handle = '', ...$rest) { $GLOBALS['lkn_queued'][] = 'script:' . $handle; }
     function wp_send_json_success($data = null) {
         $GLOBALS['lkn_json'] = array('success' => true, 'data' => $data);
-        throw new LknMaxipagoTestDie();
+        throw new LknMaxipagoRemovedTestDie();
     }
     function wp_send_json_error($data = null, $code = null) {
         $GLOBALS['lkn_json'] = array('success' => false, 'data' => $data, 'code' => $code);
-        throw new LknMaxipagoTestDie();
+        throw new LknMaxipagoRemovedTestDie();
     }
 }
 
-require INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR . 'Includes/LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice.php';
+require INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR . 'Includes/LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice.php';
 
-use Lknwoo\IntegrationRedeForWoocommerce\Includes\LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice as Notice;
+use Lknwoo\IntegrationRedeForWoocommerce\Includes\LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice as Notice;
 
 $passed = 0;
 $failed = 0;
@@ -105,7 +111,7 @@ function dismissNotice(Notice $notice): void
 {
     try {
         $notice->dismiss_notice();
-    } catch (LknMaxipagoTestDie $die) {
+    } catch (LknMaxipagoRemovedTestDie $die) {
         // wp_send_json_* encerra a requisição no WordPress.
     }
 }
@@ -122,42 +128,39 @@ echo "=== Quando o aviso aparece ===\n";
 
 resetOptions();
 $notice = new Notice();
-check('loja sem maxiPago configurado => nao aparece', false === $notice->notice_would_show() && '' === renderNotice($notice));
+check('loja que nunca usou maxiPago => APARECE (aviso e para todos)', true === $notice->notice_would_show() && '' !== renderNotice($notice));
 
 resetOptions();
 $GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes', 'merchant_id' => '123');
 $notice = new Notice();
-check('maxipago_credit habilitado => aparece', true === $notice->notice_would_show());
+check('loja com maxipago_credit configurado => aparece', true === $notice->notice_would_show());
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_debit_settings'] = array('enabled' => 'yes', 'merchant_id' => '456');
+$GLOBALS['lkn_opts']['woocommerce_maxipago_pix_settings'] = array('enabled' => 'yes', 'merchant_id' => '789');
 $notice = new Notice();
-check('maxipago_debit habilitado => aparece', true === $notice->notice_would_show());
+check('loja que so usava o PIX maxiPago (PRO) => aparece', true === $notice->notice_would_show());
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'no', 'merchant_id' => '123');
+$GLOBALS['lkn_opts']['woocommerce_maxipago_debit_settings'] = array('enabled_fix_load_script' => 'yes');
 $notice = new Notice();
-check('gateway desligado com credenciais salvas => aparece', true === $notice->notice_would_show());
+check('option residual maxiPago => aparece (nao depende dela)', true === $notice->notice_would_show());
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'no');
+$GLOBALS['lkn_opts']['lkn_rede_maxipago_removed_notice_dismissed'] = 'yes';
 $notice = new Notice();
-check('gateway desligado e sem credenciais => nao aparece', false === $notice->notice_would_show());
+check('aviso de remocao ja dispensado => nao aparece', false === $notice->notice_would_show() && '' === renderNotice($notice));
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes');
 $GLOBALS['lkn_opts']['lkn_rede_maxipago_deprecation_notice_dismissed'] = 'yes';
 $notice = new Notice();
-check('aviso ja dispensado pelo lojista => nao aparece', false === $notice->notice_would_show() && '' === renderNotice($notice));
+check('quem dispensou o aviso antigo de descontinuacao AINDA ve o de remocao', true === $notice->notice_would_show());
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes');
 $GLOBALS['lkn_can'] = false;
 $notice = new Notice();
 check('usuario sem manage_options => nao aparece', false === $notice->notice_would_show());
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes');
 $GLOBALS['lkn_is_admin'] = false;
 $notice = new Notice();
 check('fora do wp-admin => nao aparece', false === $notice->notice_would_show());
@@ -165,46 +168,52 @@ check('fora do wp-admin => nao aparece', false === $notice->notice_would_show())
 echo "\n=== Conteudo e UM aviso só ===\n";
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes', 'merchant_id' => '123');
-$GLOBALS['lkn_opts']['woocommerce_maxipago_debit_settings'] = array('enabled' => 'yes', 'merchant_id' => '456');
 $notice = new Notice();
 $html = renderNotice($notice) . renderNotice($notice);
 
-check('credito + debito maxiPago => UMA vez', 1 === substr_count($html, 'lkn-rede-notice--deprecation'));
+check('duas chamadas na mesma requisicao => UMA vez', 1 === substr_count($html, 'lkn-rede-notice--removed'));
 check('usa o padrao de aviso do woo-better (gif + nome + selo)', false !== strpos($html, 'Includes/assets/WordpressAssets/icon-256x256.gif') && false !== strpos($html, 'lkn-rede-notice__badge') && false !== strpos($html, 'Integration Rede Itaú for WooCommerce'));
-check('avisa que so os gateways Rede continuam (credito, debito, PIX e Google Pay)', false !== strpos($html, 'October 15, 2026') && false !== strpos($html, 'Only the Rede gateways (credit, debit, PIX and Google Pay)'));
-check('informa a data de remocao (23/11/2026)', false !== strpos($html, 'November 23, 2026'));
+check('titulo traz o gateway no formato pedido', false !== strpos($html, 'Integration Rede Itaú for WooCommerce - MaxiPago gateway'));
+check('avisa que o gateway nao esta mais disponivel (tom neutro, sem cobranca)', false !== strpos($html, 'gateway is no longer available in this plugin'));
+check('nome MaxiPago em negrito', false !== strpos($html, '<strong>MaxiPago</strong>'));
+check('destaca "Rede payments" em negrito', false !== strpos($html, '<strong>Rede payments</strong>'));
+check('lista as formas de pagamento que continuam funcionando', false !== strpos($html, 'by credit card, debit card, PIX and Google Pay keep working normally'));
+check('nao usa a frase de cobranca (as previously announced)', false === stripos($html, 'as previously announced'));
+check('lembra o encerramento da plataforma pela Rede (15/10/2026)', false !== strpos($html, 'October 15, 2026'));
+
+check('orienta a migracao em tom formal', false !== strpos($html, 'we ask that you migrate to the Rede gateways'));
+check('nao usa o tom informal antigo', false === strpos($html, 'If you were using MaxiPago at checkout'));
+check('botao com rotulo simples', false !== strpos($html, 'Go to payment settings'));
 check('leva para a tela de configuracoes de pagamento (sem section)', false !== strpos($html, 'page=wc-settings&amp;tab=checkout') && false === strpos($html, 'section='));
-check('dismiss com data-action e nonce', false !== strpos($html, 'data-dismissible="lkn-rede-maxipago-deprecation"') && false !== strpos($html, 'data-action="lkn_rede_dismiss_maxipago_deprecation"') && false !== strpos($html, 'data-nonce="nonce-'));
+check('dismiss com data-action e nonce', false !== strpos($html, 'data-dismissible="lkn-rede-maxipago-removed"') && false !== strpos($html, 'data-action="lkn_rede_dismiss_maxipago_removed"') && false !== strpos($html, 'data-nonce="nonce-'));
 
 echo "\n=== Assets e dispensa (AJAX) ===\n";
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'yes', 'merchant_id' => '123');
 $GLOBALS['lkn_queued'] = array();
 $notice = new Notice();
 $notice->enqueue_assets();
 check('enfileira CSS e JS do aviso', 2 === count($GLOBALS['lkn_queued']));
 
 resetOptions();
-$GLOBALS['lkn_opts']['woocommerce_maxipago_credit_settings'] = array('enabled' => 'no');
+$GLOBALS['lkn_opts']['lkn_rede_maxipago_removed_notice_dismissed'] = 'yes';
 $GLOBALS['lkn_queued'] = array();
 $notice = new Notice();
 $notice->enqueue_assets();
-check('sem maxiPago configurado => nao enfileira nada', 0 === count($GLOBALS['lkn_queued']));
+check('aviso dispensado => nao enfileira assets', 0 === count($GLOBALS['lkn_queued']));
 
 resetOptions();
 $notice = new Notice();
 $GLOBALS['lkn_json'] = null;
 dismissNotice($notice);
-check('dismiss grava a option de dispensa', 'yes' === ($GLOBALS['lkn_opts']['lkn_rede_maxipago_deprecation_notice_dismissed'] ?? null) && true === ($GLOBALS['lkn_json']['success'] ?? null));
+check('dismiss grava a option de dispensa', 'yes' === ($GLOBALS['lkn_opts']['lkn_rede_maxipago_removed_notice_dismissed'] ?? null) && true === ($GLOBALS['lkn_json']['success'] ?? null));
 
 resetOptions();
 $GLOBALS['lkn_can'] = false;
 $GLOBALS['lkn_json'] = null;
 $notice = new Notice();
 dismissNotice($notice);
-check('dismiss sem manage_options => 403 e nada gravado', 403 === ($GLOBALS['lkn_json']['code'] ?? null) && ! isset($GLOBALS['lkn_opts']['lkn_rede_maxipago_deprecation_notice_dismissed']));
+check('dismiss sem manage_options => 403 e nada gravado', 403 === ($GLOBALS['lkn_json']['code'] ?? null) && ! isset($GLOBALS['lkn_opts']['lkn_rede_maxipago_removed_notice_dismissed']));
 
 echo "\n----------------------------------------\n";
 echo "Passou: $passed  |  Falhou: $failed\n";

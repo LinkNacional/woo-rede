@@ -42,6 +42,7 @@ final class LknIntegrationRedeForWoocommerceMccInfo
         'integration_rede_pix',
         'rede_google_pay',
         'rede_pix',
+        'rede_apple_pay',
     );
 
     /**

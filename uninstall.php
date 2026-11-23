@@ -32,8 +32,6 @@ if ( ! defined('WP_UNINSTALL_PLUGIN')) {
 
 delete_option('woocommerce_rede_credit_settings');
 delete_option('woocommerce_rede_debit_settings');
-delete_option('woocommerce_maxipago_credit_settings');
-delete_option('woocommerce_maxipago_debit_settings');
 
 // Metadados das notificações de atualização do plugin PRO (aviso, tela e e-mail).
 // Removê-los na desinstalação permite reinstalar e testar o fluxo do zero, sem
@@ -42,5 +40,7 @@ delete_option('lkn_rede_pro_update_screen_shown');
 delete_option('lkn_rede_pro_update_notice_dismissed');
 delete_option('lkn_rede_pro_update_email_sent');
 
-// Aviso de descontinuação da maxiPago (dispensa definitiva do lojista).
+// Marcador do aviso de remoção da maxiPago (5.6.0). Sem isso, reinstalar o
+// plugin traria o aviso de volta mesmo depois de dispensado.
+delete_option('lkn_rede_maxipago_removed_notice_dismissed');
 delete_option('lkn_rede_maxipago_deprecation_notice_dismissed');

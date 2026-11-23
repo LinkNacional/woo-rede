@@ -5,7 +5,7 @@ Donate link: https://www.linknacional.com/wordpress/plugins/
 Tags: rede, pix, cartao credito, itau, pagamento  
 Requires at least: 6.0
 Tested up to: 7.1  
-Stable tag: 5.5.6
+Stable tag: 5.6.0
 Requires PHP: 8.2
 License: GPL-3.0+  
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -14,7 +14,7 @@ Payment Gateway for Rede Itaú for WooCommerce - PIX, Credit Card and Debit Card
 
 == Transform Your WooCommerce Store with Seamless Payments with PIX and Debit and credit card ==
 
-[WordPress](https://www.linknacional.com.br/wordpress/)  Integration [Rede for WooCommerce plugin](https://www.linknacional.com.br/wordpress/woocommerce/rede/) is the ultimate solution for enabling secure and efficient payment options in your online store with [Rede](https://www.userede.com.br/) and [Maxipago](https://www.userede.com.br/n/gateway-de-pagamento-rede). With support for credit cards, debit cards, and PIX payments, this plugin empowers your business to offer a seamless checkout experience. Whether you want to enable installment payments, tokenized card storage for returning customers, or 3DS authentication, this plugin has you covered.
+[WordPress](https://www.linknacional.com.br/wordpress/)  Integration [Rede for WooCommerce plugin](https://www.linknacional.com.br/wordpress/woocommerce/rede/) is the ultimate solution for enabling secure and efficient payment options in your online store with [Rede](https://www.userede.com.br/). With support for credit cards, debit cards, and PIX payments, this plugin empowers your business to offer a seamless checkout experience. Whether you want to enable installment payments, tokenized card storage for returning customers, or 3DS authentication, this plugin has you covered.
 
 ### Why Choose Integration Rede Itaú for WooCommerce — Payment PIX, Credit Card and Debit?
 
@@ -72,10 +72,9 @@ Payment Gateway for Rede Itaú for WooCommerce - PIX, Credit Card and Debit Card
 == Configuration ==
 
 Go to [WooCommerce](https://www.linknacional.com.br/wordpress/woocommerce/) → Settings → Payments.  
-Select Rede or Maxipago as your payment gateway and enter the required credentials:
+Select Rede as your payment gateway and enter the required credentials:
 
 - Rede: PV and Token
-- Maxipago: Merchant ID and Merchant Key
 
 Configure additional options like installments, 3DS authentication, and logging. Save your settings.
 
@@ -89,9 +88,8 @@ This plugin utilizes the following external libraries/services:
 
 - **Google Pay API**: Integrates Google Pay as a payment method, allowing customers to pay quickly and securely. For more information, visit the [Google Pay API documentation](https://developers.google.com/pay/api/web) and the [Terms of Service](https://payments.developers.google.com/terms/sellertos).
 - **Rede API**: Used to process credit, debit, and PIX payments through the Rede gateway. For details, see the [Rede API documentation](https://developer.userede.com.br/e-rede).
-- **Maxipago API**: Enables payment processing via the Maxipago gateway for credit and debit cards. More information is available at the [Maxipago API documentation](https://www.maxipago.com/developers/apidocs/maxipago/)
 
-The external libraries and APIs used by this plugin (Google Pay, Rede, Maxipago) are provided by trusted and established payment platforms. These services handle sensitive payment data in accordance with industry security standards and privacy regulations. For more information about data handling and privacy, please refer to the documentation of each service or contact plugin support.
+The external libraries and APIs used by this plugin (Google Pay, Rede) are provided by trusted and established payment platforms. These services handle sensitive payment data in accordance with industry security standards and privacy regulations. For more information about data handling and privacy, please refer to the documentation of each service or contact plugin support.
 
 == Frequently Asked Questions ==
 
@@ -128,6 +126,13 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Changelog ==
+
+### 5.6.0 - 2026-11-23
+* Removed: the MaxiPago gateways (credit and debit) were removed from the plugin. Rede discontinued the MaxiPago platform on 2026-10-15, so only the Rede gateways (credit, debit, PIX, Google Pay and Apple Pay) remain supported. Stores that still used MaxiPago must migrate to the Rede gateways.
+* Removed: the MaxiPago deprecation notice, its settings screens, checkout scripts, styles, webhook endpoint and translations are gone along with the gateways.
+
+### 5.5.7 - 2026-11-19
+* Fix: the Apple Pay gateway (`rede_apple_pay`, shipped by the PRO plugin) is now part of the FREE plugin lists — the gateway settings screen layout, the order note prefix, the MCC information block below the PV field, and the two JavaScript section lists used by the admin (the Link Nacional card and the PRO fields notice). Without it the new gateway screen was missing the card and the MCC block.
 
 ### 5.5.6 - 2026-11-18
 * New: admin notice about the MaxiPago shutdown. Rede discontinued the MaxiPago platform on 2026-10-15 and only the Rede gateways (credit, debit, PIX and Google Pay) keep receiving support and updates, so the plugin's maxiPago gateways will be removed on 2026-11-23. The warning is shown once, only for stores with maxiPago credentials saved, and can be dismissed.
@@ -324,15 +329,19 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 1. Payment methods list  
 2. Rede Credit settings page  
 3. Rede Credit front inputs page  
-4. Maxipago Credit front inputs page  
-5. Maxipago Credit summary page  
-6. Rede Credit front page (legacy) with installments  
-7. Rede Debit settings page  
-8. Rede and Maxipago payment list
+4. Rede Credit front page (legacy) with installments  
+5. Rede Debit settings page  
+6. Rede payment list
 
 ---
 
 == Upgrade Notice ==
+
+### 5.6.0 - 2026-11-23
+* The MaxiPago gateways were removed. Migrate any store still using MaxiPago credit/debit to the Rede gateways before updating.
+
+### 5.5.7 - 2026-11-19
+* Preparing the FREE plugin for the new Apple Pay gateway of the PRO plugin (settings layout, order notes and MCC block on its screen).
 
 ### 5.5.6 - 2026-11-18
 * MaxiPago was discontinued by Rede on 2026-10-15 and its gateways will be removed from the plugin on 2026-11-23 — migrate your store to the Rede gateways. The dashboard now shows a warning about it.

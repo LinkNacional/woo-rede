@@ -1,3 +1,12 @@
+# 5.6.0 - 23/11/26
+* Remoção: os gateways maxiPago (crédito e débito) saem do plugin. A Rede encerrou a plataforma em 15/10/2026, então só os gateways da Rede (crédito, débito, PIX, Google Pay e Apple Pay) seguem com suporte. Lojas que ainda usavam maxiPago precisam migrar para os gateways da Rede.
+* Remoção: junto com os gateways, saem o aviso de descontinuação, as telas de configuração, os scripts e estilos de checkout, o webhook `maxipagoDebitListener` e as strings de tradução correspondentes.
+* Novo: aviso no painel confirmando que os gateways maxiPago foram removidos, com o mesmo layout do aviso anterior (ícone, nome do plugin, selo e botão para as configurações da Rede). Aparece só para lojas que tinham credenciais maxiPago salvas, é dispensável e a dispensa é independente da do aviso de descontinuação.
+
+# 5.5.7 - 19/11/26
+* Ajuste: o gateway Apple Pay (`rede_apple_pay`, do plugin PRO) entra nas listas deste plugin gratuito — tela de configuração do gateway, prefixo das notas do pedido, bloco informativo de MCC junto do campo PV e, no admin, as duas listas de seções em JavaScript (o card da Link Nacional e o aviso de campos PRO). Sem isso a tela do novo gateway ficava sem o card e sem o bloco de MCC.
+* Ajuste: os scripts `admin.js` e `admin-card.js` passaram a usar cache-bust por `filemtime` (como o script de layout já fazia), para que mudanças nas listas de gateways não fiquem presas no cache do navegador.
+
 # 5.5.6 - 18/11/26
 * Novo: aviso no painel sobre a descontinuação da maxiPago. A plataforma foi encerrada pela Rede em 15/10/2026 e apenas os gateways da Rede (crédito, débito, PIX e Google Pay) continuam com suporte; os gateways maxiPago do plugin serão removidos em 23/11/2026. O aviso aparece uma única vez, só para lojas com credenciais maxiPago salvas, e pode ser dispensado.
 * Novo: bloco informativo sobre os programas de monitoramento das bandeiras (MCC) abaixo da descrição do campo PV, nos gateways de crédito, débito, PIX e Google Pay. Atividades como farmácias, tabacarias, loterias, jogos de habilidade, cyberlockers, plataformas de negociação financeira e transações P2P exigem cadastro na Visa, Mastercard e/ou Amex; sem ele a Rede recusa a transação e o problema não é do plugin.

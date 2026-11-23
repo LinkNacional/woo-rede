@@ -7,37 +7,39 @@ if (! defined('ABSPATH')) {
 }
 
 /**
- * Aviso de descontinuação dos gateways maxiPago.
+ * Aviso de REMOÇÃO dos gateways maxiPago.
  *
- * A Rede encerrou a plataforma maxiPago em 15/10/2026 e só os gateways Rede
- * (crédito, débito, PIX e Google Pay) seguem com suporte. Os gateways maxiPago do plugin
- * serão removidos em 23/11/2026 — este aviso existe para ninguém ser pego de
- * surpresa: aparece ANTES da remoção, é dispensável e é UM só, mesmo com
- * crédito e débito maxiPago habilitados ao mesmo tempo.
+ * A Rede encerrou a plataforma maxiPago em 15/10/2026. O aviso anterior (de
+ * descontinuação) saiu do plugin junto com os gateways na 5.6.0; este é o
+ * sucessor: informa que a remoção JÁ aconteceu, para o lojista que ainda não
+ * tinha migrado entender o motivo de o gateway ter desaparecido do checkout.
  *
- * Layout segue o padrão de avisos do woo-better / shipping-simulator
- * (ícone + nome do plugin + selo + botão de ação).
+ * Segue o mesmo layout do aviso anterior (ícone + nome do plugin + selo +
+ * botão de ação) e é dispensável. Aparece para TODOS os administradores da
+ * loja, independentemente de a loja ter ou não usado a maxiPago: o aviso é
+ * institucional (comunicado de descontinuidade), não um diagnóstico da loja.
+ * Usa option/ação próprias: quem já tinha dispensado o aviso de
+ * descontinuação PRECISA ver este.
+ *
+ * Só existe no plugin gratuito — quem usa o PRO tem o FREE instalado também,
+ * então não há aviso duplicado.
  */
-final class LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice
+final class LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice
 {
     /** Identificador do aviso (data-dismissible) — isola o JS de cada aviso. */
-    public const NOTICE_ID = 'lkn-rede-maxipago-deprecation';
+    public const NOTICE_ID = 'lkn-rede-maxipago-removed';
 
     /** Ação AJAX que dispensa o aviso definitivamente. */
-    public const AJAX_DISMISS = 'lkn_rede_dismiss_maxipago_deprecation';
+    public const AJAX_DISMISS = 'lkn_rede_dismiss_maxipago_removed';
 
     /** Ação do nonce de dispensa. */
-    private const NONCE_DISMISS = 'lkn_rede_dismiss_maxipago_deprecation_nonce';
+    private const NONCE_DISMISS = 'lkn_rede_dismiss_maxipago_removed_nonce';
 
     /** Opção que marca o aviso como dispensado. */
-    private const OPTION_DISMISSED = 'lkn_rede_maxipago_deprecation_notice_dismissed';
-
-    /** Gateways maxiPago existentes no plugin gratuito. */
-    private const MAXIPAGO_GATEWAYS = array('maxipago_credit', 'maxipago_debit');
+    private const OPTION_DISMISSED = 'lkn_rede_maxipago_removed_notice_dismissed';
 
     /**
-     * Garante UM único aviso por requisição. Sem isso, cada hook registrado (ou
-     * um gateway extra no futuro) poderia renderizar o mesmo aviso novamente.
+     * Garante UM único aviso por requisição.
      *
      * @var bool
      */
@@ -86,7 +88,7 @@ final class LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice
         $icon_url     = INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR_URL . 'Includes/assets/WordpressAssets/icon-256x256.gif';
         $settings_url = admin_url('admin.php?page=wc-settings&tab=checkout');
 
-        require INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR . 'Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-deprecation.php';
+        require INTEGRATION_REDE_FOR_WOOCOMMERCE_DIR . 'Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php';
     }
 
     /**
@@ -112,8 +114,8 @@ final class LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice
      * O aviso deve aparecer nesta requisição?
      *
      * Regras: só no admin, só para quem administra a loja, só uma vez por
-     * requisição, nunca depois de dispensado e só quando existem credenciais
-     * maxiPago salvas (loja que realmente usa o gateway).
+     * requisição e nunca depois de dispensado. Não há checagem de uso da
+     * maxiPago: o aviso é um comunicado de descontinuidade para toda a base.
      */
     public function notice_would_show(): bool
     {
@@ -133,41 +135,12 @@ final class LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice
             return false;
         }
 
-        $show = $this->has_maxipago_credentials();
-
         /**
-         * Permite esconder/exibir o aviso de descontinuação da maxiPago.
+         * Permite esconder o aviso de remoção da maxiPago.
          *
          * @param bool $show O aviso deve ser exibido?
          */
-        return (bool) apply_filters('integration_rede_for_woocommerce_show_maxipago_deprecation_notice', $show);
+        return (bool) apply_filters('integration_rede_for_woocommerce_show_maxipago_removed_notice', true);
     }
 
-    /**
-     * A loja tem credenciais maxiPago salvas (gateway habilitado ou apenas
-     * configurado)? Lê direto das options para não depender da instância do
-     * gateway — o aviso precisa funcionar mesmo com o gateway desligado.
-     */
-    private function has_maxipago_credentials(): bool
-    {
-        foreach (self::MAXIPAGO_GATEWAYS as $gateway_id) {
-            $settings = get_option('woocommerce_' . $gateway_id . '_settings', array());
-
-            if (! is_array($settings) || array() === $settings) {
-                continue;
-            }
-
-            if (isset($settings['enabled']) && 'yes' === $settings['enabled']) {
-                return true;
-            }
-
-            $merchant_id = isset($settings['merchant_id']) ? trim((string) $settings['merchant_id']) : '';
-
-            if ('' !== $merchant_id) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

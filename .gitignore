@@ -5,3 +5,4 @@ vendor
 .devcontainer/devcontainer.json
 Includes/logs/*.log
 wp-content
+languages/*.po~

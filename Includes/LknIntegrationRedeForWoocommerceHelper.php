@@ -109,8 +109,6 @@ class LknIntegrationRedeForWoocommerceHelper
             $enabledFixLoadScript = isset($_POST["woocommerce_" . $id . "_enabled_fix_load_script"]) ? 'yes' : 'no';
 
             $optionsToUpdate = array(
-                'maxipago_credit',
-                'maxipago_debit',
                 'rede_credit',
                 'rede_debit',
             );
@@ -1287,7 +1285,7 @@ class LknIntegrationRedeForWoocommerceHelper
      * (lkn-pro-badge). São inertes: o lojista pode interagir à vontade para explorar
      * os recursos, mas nada é gravado nas opções reais do PRO.
      *
-     * @param string $gatewayId ID do gateway (ex.: rede_credit, rede_debit, maxipago_credit, maxipago_debit).
+     * @param string $gatewayId ID do gateway (ex.: rede_credit, rede_debit).
      * @param array  $proFields Campos retornados pelo PRO (para preservar os campos reais de licença).
      * @param array  $existing  Chaves já presentes no formulário do FREE (para não duplicar campos).
      * @return array Campos fake no formato de form_fields do WooCommerce.
@@ -1384,8 +1382,8 @@ class LknIntegrationRedeForWoocommerceHelper
             'custom_attributes' => array_merge(array('readonly' => 'readonly'), $badge),
         );
 
-        // Extras (cartão de crédito tem auto-capture; maxipago_debit também expõe status).
-        if (in_array($gatewayId, array('rede_credit', 'maxipago_credit'), true)) {
+        // Extras (cartão de crédito tem auto-capture).
+        if (in_array($gatewayId, array('rede_credit'), true)) {
             $fields['auto_capture_fake'] = array(
                 'title' => __('Automatic Capture', 'woo-rede'),
                 'type' => 'checkbox',
@@ -1424,7 +1422,7 @@ class LknIntegrationRedeForWoocommerceHelper
             ),
         );
 
-        if (in_array($gatewayId, array('rede_credit', 'maxipago_credit', 'maxipago_debit'), true)) {
+        if (in_array($gatewayId, array('rede_credit'), true)) {
             $fields['payment_complete_status_fake'] = array(
                 'title' => esc_attr__('Complete Payment Status', 'woo-rede'),
                 'type' => 'select',
@@ -1474,7 +1472,7 @@ class LknIntegrationRedeForWoocommerceHelper
         }
 
         // Bloco de parcelamento (apenas crédito).
-        if (in_array($gatewayId, array('rede_credit', 'maxipago_credit'), true)) {
+        if (in_array($gatewayId, array('rede_credit'), true)) {
             $fields['Installment_fake'] = array(
                 'title' => esc_attr__('Installment', 'woo-rede'),
                 'type' => 'title',

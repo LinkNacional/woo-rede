@@ -88,7 +88,11 @@ final class LknIntegrationRedeForWoocommerceAdmin
             'fakeProNotice' => __('The features marked with the PRO badge are a preview in the free plan. You can adjust them freely to explore them, but they only take effect with an active PRO license.', 'woo-rede'),
         ));
 
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin.js', array('jquery'), $this->version, false);
+        // Cache-bust por filemtime: a lista de gateways fica no JS e precisa
+        // acompanhar mudanças sem depender de bump da versão do plugin.
+        $admin_js_path = plugin_dir_path(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin.js';
+        $admin_js_ver  = $this->version . '.' . (file_exists($admin_js_path) ? filemtime($admin_js_path) : '0');
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin.js', array('jquery'), $admin_js_ver, false);
 
         // Localize the script with custom data
         wp_localize_script($this->plugin_name, 'lknPhpVariables', array(
@@ -102,12 +106,10 @@ final class LknIntegrationRedeForWoocommerceAdmin
         ));
 
         $gateways = array(
-            'maxipago_credit',
-            'maxipago_debit',
             'rede_google_pay',
+            'rede_apple_pay',
             'rede_credit',
             'rede_debit',
-            'maxipago_pix',
             'rede_pix',
             'integration_rede_pix'
         );
@@ -171,7 +173,9 @@ final class LknIntegrationRedeForWoocommerceAdmin
             wp_enqueue_style('lknRedeFieldsPreviewShortcode', $rede_public_css . 'rede/LknIntegrationRedeForWoocommerceCardShortcode.css', array(), $this->version);
             wp_enqueue_style('lknRedeFieldsPreviewModern', $rede_public_css . 'rede/LknIntegrationRedeForWoocommerceModernTemplate.css', array(), $this->version);
             wp_enqueue_style('lknRedeFieldsPreviewCompact', $rede_public_css . 'rede/LknIntegrationRedeForWoocommerceCompactTemplate.css', array(), $this->version);
-            wp_enqueue_script('lknIntegrationRedeForWoocommerceCard', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-card.js', array('jquery'), $this->version, false);
+            $admin_card_js_path = plugin_dir_path(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-card.js';
+            $admin_card_js_ver  = $this->version . '.' . (file_exists($admin_card_js_path) ? filemtime($admin_card_js_path) : '0');
+            wp_enqueue_script('lknIntegrationRedeForWoocommerceCard', plugin_dir_url(__FILE__) . 'js/lkn-integration-rede-for-woocommerce-admin-card.js', array('jquery'), $admin_card_js_ver, false);
             wc_get_template(
                 'adminCard/adminSettingsCard.php',
                 array(
@@ -1234,7 +1238,6 @@ final class LknIntegrationRedeForWoocommerceAdmin
             'lkn_wcip_subscription_limit',
             'lkn_wcip_subscription_interval_type',
             'lkn_wcip_subscription_interval_number',
-            'lknMaxipagoProdutctInterest',
             'lknRedeProdutctInterest'
         );
 

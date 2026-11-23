@@ -3,13 +3,11 @@
     // Detectar a página atual
     const adminPage = lknFindGetParameter('section')
     const pluginPages = [
-      'maxipago_credit',
-      'maxipago_debit',
-      'maxipago_pix',
       'rede_credit',
       'rede_debit',
       'rede_pix',
-      'integration_rede_pix'
+      'integration_rede_pix',
+      'rede_apple_pay'
     ]
 
     // Function to create feature message components

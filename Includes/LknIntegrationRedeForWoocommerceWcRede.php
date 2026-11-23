@@ -36,15 +36,11 @@ final class LknIntegrationRedeForWoocommerceWcRede
         $wc_rede_credit_class = new LknIntegrationRedeForWoocommerceWcRedeCredit();
         $wc_rede_debit_class = new LknIntegrationRedeForWoocommerceWcRedeDebit();
         $wc_rede_pix_class = new LknIntegrationRedeForWoocommerceWcPixRede();
-        $wc_maxipago_credit_class = new LknIntegrationRedeForWoocommerceWcMaxipagoCredit();
-        $wc_maxipago_debit_class = new LknIntegrationRedeForWoocommerceWcMaxipagoDebit();
         $wc_google_pay_class = new LknIntegrationRedeForWoocommerceGooglePay();
 
         array_push($methods, $wc_rede_credit_class);
         array_push($methods, $wc_rede_debit_class);
         array_push($methods, $wc_rede_pix_class);
-        array_push($methods, $wc_maxipago_credit_class);
-        array_push($methods, $wc_maxipago_debit_class);
         array_push($methods, $wc_google_pay_class);
 
         return $methods;

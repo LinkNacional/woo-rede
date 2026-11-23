@@ -140,8 +140,6 @@ final class LknIntegrationRedeForWoocommerce
     public $wc_rede_class;
     public $wc_rede_credit_class;
     public $wc_rede_debit_class;
-    public $wc_maxipago_credit_class;
-    public $wc_maxipago_debit_class;
     public $LknIntegrationRedeForWoocommercePixRedeClass;
     public $LknIntegrationRedeForWoocommerceEndpointClass;
     public $LknIntegrationRedeForWoocommercePixHelperClass;
@@ -156,8 +154,6 @@ final class LknIntegrationRedeForWoocommerce
             $this->LknIntegrationRedeForWoocommerceGooglePayClass = new LknIntegrationRedeForWoocommerceGooglePay();
             $this->wc_rede_credit_class = new LknIntegrationRedeForWoocommerceWcRedeCredit();
             $this->wc_rede_debit_class = new LknIntegrationRedeForWoocommerceWcRedeDebit();
-            $this->wc_maxipago_credit_class = new LknIntegrationRedeForWoocommerceWcMaxipagoCredit();
-            $this->wc_maxipago_debit_class = new LknIntegrationRedeForWoocommerceWcMaxipagoDebit();
             $this->LknIntegrationRedeForWoocommercePixRedeClass = new LknIntegrationRedeForWoocommerceWcPixRede();
 
             $this->define_admin_hooks();
@@ -226,18 +222,11 @@ final class LknIntegrationRedeForWoocommerce
         $this->loader->add_filter('woocommerce_get_order_item_totals', $this->wc_rede_debit_class, 'order_items_payment_details', 10, 2);
         $this->loader->add_action('woocommerce_admin_order_data_after_billing_address', $this->wc_rede_debit_class, 'displayMeta', 10, 1);
 
-        $this->loader->add_action('woocommerce_update_options_payment_gateways_' . $this->wc_maxipago_credit_class->id, $this->wc_maxipago_credit_class, 'process_admin_options');
-        $this->loader->add_action('woocommerce_admin_order_data_after_billing_address', $this->wc_maxipago_credit_class, 'displayMeta', 10, 1);
-
         $this->loader->add_action('admin_notices', $this->wc_rede_class, 'softDescriptorNotice');
-
-        $this->loader->add_action('woocommerce_update_options_payment_gateways_' . $this->wc_maxipago_debit_class->id, $this->wc_maxipago_debit_class, 'process_admin_options');
-        $this->loader->add_action('woocommerce_admin_order_data_after_billing_address', $this->wc_maxipago_debit_class, 'displayMeta', 10, 1);
-        $this->loader->add_filter('lknRedeGetMerchantAuth', $this->wc_maxipago_credit_class, 'getMerchantAuth');
 
         // Recursos PRO dos gateways de cartão: ao salvar, força os padrões quando não há
         // licença ativa (cobre HTML manipulado e os campos "fake" replicados no FREE).
-        foreach (array($this->wc_rede_credit_class->id, $this->wc_rede_debit_class->id, $this->wc_maxipago_credit_class->id, $this->wc_maxipago_debit_class->id) as $lknRedeProGateway) {
+        foreach (array($this->wc_rede_credit_class->id, $this->wc_rede_debit_class->id) as $lknRedeProGateway) {
             $this->loader->add_filter('woocommerce_settings_api_sanitized_fields_' . $lknRedeProGateway, $this, 'enforceRedeProFieldsOnSave', 10, 1);
         }
 
@@ -260,14 +249,14 @@ final class LknIntegrationRedeForWoocommerce
         // Aviso crítico para atualização do plugin PRO
         $this->loader->add_action('admin_notices', $this, 'lkn_pro_update_critical_notice');
 
-        // Aviso de descontinuação da maxiPago: a plataforma foi encerrada pela
-        // Rede em 15/10/2026 e os gateways maxiPago saem do plugin em
-        // 23/11/2026. Um único aviso, dispensável, só para lojas com
-        // credenciais maxiPago salvas.
-        $maxipago_deprecation = new LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice();
-        $this->loader->add_action('admin_enqueue_scripts', $maxipago_deprecation, 'enqueue_assets');
-        $this->loader->add_action('admin_notices', $maxipago_deprecation, 'maybe_render_notice');
-        $this->loader->add_action('wp_ajax_' . LknIntegrationRedeForWoocommerceMaxipagoDeprecationNotice::AJAX_DISMISS, $maxipago_deprecation, 'dismiss_notice');
+        // Aviso de REMOÇÃO da maxiPago: a Rede encerrou a plataforma em
+        // 15/10/2026 e os gateways maxiPago saíram do plugin na 5.6.0. Um único
+        // aviso, dispensável, só para lojas com credenciais maxiPago salvas.
+        // Vive só aqui (no FREE): quem usa o PRO tem este plugin instalado.
+        $maxipago_removed = new LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice();
+        $this->loader->add_action('admin_enqueue_scripts', $maxipago_removed, 'enqueue_assets');
+        $this->loader->add_action('admin_notices', $maxipago_removed, 'maybe_render_notice');
+        $this->loader->add_action('wp_ajax_' . LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice::AJAX_DISMISS, $maxipago_removed, 'dismiss_notice');
 
         // Bloco de MCC (programas de monitoramento das bandeiras) junto do campo PV.
         // O bloco é impresso como <template> e o layout JS o clona para dentro do
@@ -312,10 +301,6 @@ final class LknIntegrationRedeForWoocommerce
         // Adiciona endpoint AJAX para parcelas Rede Debit
         $this->loader->add_action('wp_ajax_lkn_get_rede_debit_data', $this, 'ajax_get_rede_debit_data');
         $this->loader->add_action('wp_ajax_nopriv_lkn_get_rede_debit_data', $this, 'ajax_get_rede_debit_data');
-
-        // Adiciona endpoint AJAX para parcelas Maxipago
-        $this->loader->add_action('wp_ajax_lkn_get_maxipago_credit_data', $this, 'ajax_get_maxipago_credit_data');
-        $this->loader->add_action('wp_ajax_nopriv_lkn_get_maxipago_credit_data', $this, 'ajax_get_maxipago_credit_data');
 
         // Hooks para atualizar tokens OAuth2 no checkout (blocks e shortcode)
         $this->loader->add_action('wp_enqueue_scripts', $this, 'lkn_rede_refresh_oauth_token_on_checkout');
@@ -397,118 +382,6 @@ final class LknIntegrationRedeForWoocommerce
         } else {
             wp_send_json_error(__('Error updating option.', 'woo-rede'));
         }
-    }
-
-    /**
-     * Endpoint AJAX para retornar dados de parcelas do Maxipago
-     */
-    public function ajax_get_maxipago_credit_data()
-    {
-        $cart_total = 0;
-        if (function_exists('WC') && WC()->cart) {
-            // Soma dos produtos + taxa de entrega + impostos
-            $cart_total = floatval(WC()->cart->get_cart_contents_total());
-            $cart_total += floatval(WC()->cart->get_shipping_total());
-            $cart_total += floatval(WC()->cart->get_taxes_total());
-
-            WC()->cart->calculate_totals();
-
-            $fees_objects = WC()->cart->get_fees();
-            $extra_fees = 0;
-            foreach ($fees_objects as $fee) {
-                if (!LknIntegrationRedeForWoocommerceHelper::isOwnInterestDiscountFee($fee->name)) {
-                    $extra_fees += floatval($fee->amount);
-                }
-            }
-
-            $cart_total += $extra_fees;
-        }
-        $max_installments = 12;
-        $min_parcels_value = 5;
-        if (isset($this->wc_maxipago_credit_class) && method_exists($this->wc_maxipago_credit_class, 'get_option')) {
-            $max_installments = intval($this->wc_maxipago_credit_class->get_option('max_parcels_number'));
-            $min_parcels_value = $this->wc_maxipago_credit_class->get_option('min_parcels_value');
-            if (!is_numeric($min_parcels_value) || $min_parcels_value < 1) {
-                $min_parcels_value = 5;
-            } else {
-                $min_parcels_value = floatval($min_parcels_value);
-            }
-            if ($max_installments < 1) {
-                $max_installments = 12;
-            }
-        }
-
-        if (function_exists('WC') && WC()->cart && !WC()->cart->is_empty()) {
-            foreach (WC()->cart->get_cart() as $cart_item) {
-                $product_id = $cart_item['product_id'];
-                $product_limit = get_post_meta($product_id, 'lknMaxipagoProdutctInterest', true);
-                if ($product_limit !== 'default' && is_numeric($product_limit)) {
-                    $product_limit = (int) $product_limit;
-                    if ($product_limit > 0 && $product_limit < $max_installments) {
-                        $max_installments = $product_limit;
-                    }
-                }
-            }
-        }
-
-        // Verificar se a licença PRO está ativa
-        $is_pro_active = false;
-        if (is_plugin_active('rede-for-woocommerce-pro/rede-for-woocommerce-pro.php')) {
-            $pro_license = get_option('lknRedeForWoocommerceProLicense');
-            if ($pro_license) {
-                $license_data = base64_decode($pro_license);
-                $is_pro_active = (strpos($license_data, 'active') !== false);
-            }
-        }
-
-        // Obter valor mínimo da parcela das configurações
-        $min_installment_value = 5; // Valor padrão
-        if (isset($this->wc_maxipago_credit_class) && method_exists($this->wc_maxipago_credit_class, 'get_option')) {
-            $configured_min_value = floatval($this->wc_maxipago_credit_class->get_option('min_parcels_value'));
-            if ($configured_min_value > 0) {
-                $min_installment_value = $configured_min_value;
-            }
-        }
-
-        $installments = [];
-        for ($i = 1; $i <= $max_installments; $i++) {
-            $installment_value = $cart_total / $i;
-            if ($installment_value < $min_parcels_value) {
-                // Se nem mesmo 1x atende o valor mínimo, força 1x à vista
-                if ($i === 1) {
-                    /* translators: %1$d: number of installments, %2$s: installment price */
-                    $base_label = sprintf(__('%1$dx of %2$s', 'woo-rede'), 1, wc_price($cart_total));
-                    $label = $is_pro_active ? $this->get_installment_label_with_interest(1, $base_label, 'maxipago_credit') : $base_label;
-                    $installments[] = [
-                        'key' => 1,
-                        'label' => $label
-                    ];
-                }
-                break;
-            }
-            $base_label = sprintf(
-                /* translators: %1$d is the number of installments, %2$s is the formatted price per installment */
-                __('%1$dx of %2$s', 'woo-rede'), 
-                $i, 
-                wc_price($installment_value)
-            );
-
-            // Se a licença PRO estiver ativa, aplicar lógica de juros/desconto
-            if ($is_pro_active) {
-                $label = $this->get_installment_label_with_interest($i, $base_label, 'maxipago_credit');
-            } else {
-                $label = $base_label;
-            }
-
-            $installments[] = [
-                'key' => $i,
-                'label' => $label
-            ];
-        }
-        wp_send_json([
-            'cartTotal' => $cart_total,
-            'installments' => $installments
-        ]);
     }
 
     /**
@@ -811,9 +684,6 @@ final class LknIntegrationRedeForWoocommerce
             case self::GATEWAY_DEBIT:
                 $nonce_action = 'rede_debit_payment_fields_nonce';
                 break;
-            case 'maxipago_credit':
-                $nonce_action = 'maxipago_payment_fields_nonce';
-                break;
             default:
                 wp_send_json_error(['message' => __('Unsupported payment method', 'woo-rede')]);
                 return;
@@ -838,9 +708,6 @@ final class LknIntegrationRedeForWoocommerce
                 break;
             case self::GATEWAY_DEBIT:
                 $session_key = 'lkn_installments_number_rede_debit';
-                break;
-            case 'maxipago_credit':
-                $session_key = 'lkn_installments_number_maxipago_credit';
                 break;
             default:
                 wp_send_json_error(['message' => __('Unsupported payment method', 'woo-rede')]);
@@ -1301,12 +1168,8 @@ final class LknIntegrationRedeForWoocommerce
 
         $this->loader->add_action('woocommerce_thankyou_' . $this->wc_rede_credit_class->id, $this->wc_rede_credit_class, 'thankyou_page');
         $this->loader->add_action('woocommerce_thankyou_' . $this->wc_rede_debit_class->id, $this->wc_rede_debit_class, 'thankyou_page');
-        $this->loader->add_action('woocommerce_checkout_fields', $this->wc_maxipago_credit_class, 'addNeighborhoodFieldToCheckout');
-        $this->loader->add_action('woocommerce_checkout_fields', $this->wc_maxipago_debit_class, 'addNeighborhoodFieldToCheckout');
         $this->loader->add_action('wp_enqueue_scripts', $this->wc_rede_credit_class, 'checkoutScripts');
         $this->loader->add_action('wp_enqueue_scripts', $this->wc_rede_debit_class, 'checkoutScripts');
-        $this->loader->add_action('wp_enqueue_scripts', $this->wc_maxipago_credit_class, 'checkoutScripts');
-        $this->loader->add_action('wp_enqueue_scripts', $this->wc_maxipago_debit_class, 'checkoutScripts');
 
         $this->loader->add_action('before_woocommerce_init', $this, 'wcEditorBlocksActive');
         $this->loader->add_action('woocommerce_blocks_payment_method_type_registration', $this, 'wcEditorBlocksAddPaymentMethod');
@@ -1346,8 +1209,6 @@ final class LknIntegrationRedeForWoocommerce
             return;
         }
 
-        $payment_method_registry->register(new LknIntegrationRedeForWoocommerceWcMaxipagoCreditBlocks());
-        $payment_method_registry->register(new LknIntegrationRedeForWoocommerceWcMaxipagoDebitBlocks());
         $payment_method_registry->register(new LknIntegrationRedeForWoocommerceWcRedeCreditBlocks());
         $payment_method_registry->register(new LknIntegrationRedeForWoocommerceWcRedeDebitBlocks());
         $payment_method_registry->register(new LknIntegrationRedeForWoocommerceWcPixRedeBlocks());
@@ -1434,7 +1295,7 @@ final class LknIntegrationRedeForWoocommerce
             if ($order && is_a($order, 'WC_Order')) {
 
                 // Metodos do plugin integration rede (free) e integration rede pro
-                $methods = ['maxipago_credit', 'maxipago_debit', 'maxipago_pix', 'integration_rede_pix', 'rede_credit', 'rede_debit', 'rede_pix', 'rede_google_pay'];
+                $methods = ['integration_rede_pix', 'rede_credit', 'rede_debit', 'rede_pix', 'rede_google_pay', 'rede_apple_pay'];
                 $payment_method = $order->get_payment_method();
 
                 if (in_array($payment_method, $methods)) {
@@ -1478,8 +1339,8 @@ final class LknIntegrationRedeForWoocommerce
 
         $chosen_payment_method = WC()->session->get('chosen_payment_method');
 
-        // Verificar se é um método de pagamento Rede ou Maxipago
-        if (!in_array($chosen_payment_method, ['rede_credit', 'rede_debit', 'maxipago_credit'])) {
+        // Verificar se é um método de pagamento Rede
+        if (!in_array($chosen_payment_method, ['rede_credit', 'rede_debit'])) {
             return;
         }
 
@@ -1529,8 +1390,6 @@ final class LknIntegrationRedeForWoocommerce
             $installment_session_key = 'lkn_installments_number_rede_credit';
         } elseif ($chosen_payment_method === 'rede_debit') {
             $installment_session_key = 'lkn_installments_number_rede_debit';
-        } elseif ($chosen_payment_method === 'maxipago_credit') {
-            $installment_session_key = 'lkn_installments_number_maxipago_credit';
         }
 
         $installment = WC()->session->get($installment_session_key);
@@ -1553,8 +1412,6 @@ final class LknIntegrationRedeForWoocommerce
             $payment_method_name = __('Rede Credit Card', 'woo-rede');
         } elseif ($chosen_payment_method === 'rede_debit') {
             $payment_method_name = __('Rede Debit/Credit Card', 'woo-rede');
-        } elseif ($chosen_payment_method === 'maxipago_credit') {
-            $payment_method_name = __('Maxipago Credit Card', 'woo-rede');
         }
 
         // Gerar a informação de pagamento e label dinâmico
@@ -1599,7 +1456,7 @@ final class LknIntegrationRedeForWoocommerce
             $installments = isset($_POST['installments']) ? intval(sanitize_text_field(wp_unslash($_POST['installments']))) : 1;
 
             // Valida gateway
-            if (!in_array($gateway, ['rede_credit', 'rede_debit', 'maxipago_credit'])) {
+            if (!in_array($gateway, ['rede_credit', 'rede_debit'])) {
                 wp_send_json_error(['message' => 'Invalid gateway']);
                 return;
             }

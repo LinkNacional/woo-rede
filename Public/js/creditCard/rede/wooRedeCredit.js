@@ -7,10 +7,6 @@ window.jQuery(function ($) {
     if (selectedMethod === 'rede_credit') {
       resetInstallmentSelects();
       updateInstallmentSession('rede_credit', 1);
-    } else if (selectedMethod === 'maxipago_credit') {
-      resetInstallmentSelects();
-      updateInstallmentSession('maxipago_credit', 1);
-    } else {
       // Para outros métodos, apenas trigger update_checkout
       $(document.body).trigger('update_checkout');
     }
@@ -33,13 +29,6 @@ window.jQuery(function ($) {
       redeInstallmentSelect.value = '1';
     }
     
-    const maxipagoInstallmentSelect = document.querySelector('#maxipago-card-installments');
-    if (maxipagoInstallmentSelect && maxipagoInstallmentSelect.value !== '1') {
-      maxipagoInstallmentSelect.value = '1';
-    }
-  }
-
-  function lknRedeCreditCardRender() {
     // Não carrega para formulário em bloco
     if (!document.querySelector('.wc-block-checkout')) {
       // Verifica se é página de fatura ou se é página de checkout
@@ -149,13 +138,6 @@ window.jQuery(function ($) {
     let ajaxurl = wooRedeVars.ajaxurl;
     let nonce = wooRedeVars.nonce;
     
-    if (paymentMethod === 'maxipago_credit') {
-      // Usar variáveis do Maxipago se disponível
-      if (typeof wooMaxipagoVars !== 'undefined') {
-        ajaxurl = wooMaxipagoVars.ajaxurl;
-        nonce = wooMaxipagoVars.nonce;
-      }
-    }
     
     $.ajax({
       url: ajaxurl,

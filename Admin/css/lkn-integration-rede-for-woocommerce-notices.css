@@ -10,7 +10,8 @@
     border-left: 4px solid transparent;
 }
 
-.lkn-rede-notice--deprecation {
+.lkn-rede-notice--deprecation,
+.lkn-rede-notice--removed {
     border-left-color: #d63638;
 }
 
@@ -51,7 +52,8 @@
     font-weight: 600;
 }
 
-.lkn-rede-notice--deprecation .lkn-rede-notice__badge {
+.lkn-rede-notice--deprecation .lkn-rede-notice__badge,
+.lkn-rede-notice--removed .lkn-rede-notice__badge {
     background: #d63638;
     color: #fff;
 }

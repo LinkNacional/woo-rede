@@ -617,11 +617,7 @@ final class LknIntegrationRedeForWoocommerceWcRedeCredit extends LknIntegrationR
         if (function_exists('WC') && WC()->cart && !WC()->cart->is_empty()) {
             foreach (WC()->cart->get_cart() as $cart_item) {
                 $product_id = $cart_item['product_id'];
-                if ($this->id == 'rede_credit') {
                     $product_limit = get_post_meta($product_id, 'lknRedeProdutctInterest', true);
-                } else {
-                    $product_limit = get_post_meta($product_id, 'lknMaxipagoProdutctInterest', true);
-                }
                 
                 if ($product_limit !== 'default' && is_numeric($product_limit)) {
                     $product_limit = (int) $product_limit;
