@@ -249,6 +249,15 @@ final class LknIntegrationRedeForWoocommerce
         // Aviso crítico para atualização do plugin PRO
         $this->loader->add_action('admin_notices', $this, 'lkn_pro_update_critical_notice');
 
+        // Aviso de REMOÇÃO da maxiPago: a Rede encerrou a plataforma em
+        // 15/10/2026 e os gateways maxiPago saíram do plugin na 5.6.0. Um único
+        // aviso, dispensável, só para lojas com credenciais maxiPago salvas.
+        // Vive só aqui (no FREE): quem usa o PRO tem este plugin instalado.
+        $maxipago_removed = new LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice();
+        $this->loader->add_action('admin_enqueue_scripts', $maxipago_removed, 'enqueue_assets');
+        $this->loader->add_action('admin_notices', $maxipago_removed, 'maybe_render_notice');
+        $this->loader->add_action('wp_ajax_' . LknIntegrationRedeForWoocommerceMaxipagoRemovedNotice::AJAX_DISMISS, $maxipago_removed, 'dismiss_notice');
+
         // Bloco de MCC (programas de monitoramento das bandeiras) junto do campo PV.
         // O bloco é impresso como <template> e o layout JS o clona para dentro do
         // corpo do campo, abaixo da descrição "Credenciais da Rede.".

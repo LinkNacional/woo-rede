@@ -39,3 +39,8 @@ delete_option('woocommerce_rede_debit_settings');
 delete_option('lkn_rede_pro_update_screen_shown');
 delete_option('lkn_rede_pro_update_notice_dismissed');
 delete_option('lkn_rede_pro_update_email_sent');
+
+// Marcador do aviso de remoção da maxiPago (5.6.0). Sem isso, reinstalar o
+// plugin traria o aviso de volta mesmo depois de dispensado.
+delete_option('lkn_rede_maxipago_removed_notice_dismissed');
+delete_option('lkn_rede_maxipago_deprecation_notice_dismissed');
