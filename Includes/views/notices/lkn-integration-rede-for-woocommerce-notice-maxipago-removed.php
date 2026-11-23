@@ -2,9 +2,8 @@
 /**
  * Aviso de remoção do gateway maxiPago (a remoção já aconteceu).
  *
- * Tom informativo e linguagem simples: boa parte dos lojistas não é técnica,
- * então o aviso diz o que mudou e o que continua funcionando, sem jargão e sem
- * alarmar quem nunca usou o maxiPago.
+ * Tom informativo e formal: comunica o que mudou, destaca o que continua
+ * funcionando e orienta a migração sem alarmar quem nunca usou o maxiPago.
  *
  * @var string $notice_id    Identificador do aviso (data-dismissible).
  * @var string $action      Ação AJAX de dispensa.
@@ -23,6 +22,12 @@ $removal_text = sprintf(
     __('The %s gateway is no longer available in this plugin. Rede ended this payment service on October 15, 2026.', 'woo-rede'),
     '<strong>MaxiPago</strong>'
 );
+
+$working_text = sprintf(
+    /* translators: %s: the words "Rede payments", shown in bold. */
+    __('%s by credit card, debit card, PIX and Google Pay keep working normally.', 'woo-rede'),
+    '<strong>' . esc_html__('Rede payments', 'woo-rede') . '</strong>'
+);
 ?>
 <div class="notice notice-warning is-dismissible lkn-rede-notice lkn-rede-notice--removed"
     data-dismissible="<?php echo esc_attr($notice_id); ?>"
@@ -40,8 +45,10 @@ $removal_text = sprintf(
             <?php echo wp_kses($removal_text, array('strong' => array())); ?>
         </p>
         <p>
-            <strong><?php esc_html_e('Payments by credit card, debit card, PIX and Google Pay keep working normally.', 'woo-rede'); ?></strong>
-            <?php esc_html_e('If you were using MaxiPago at checkout, choose the equivalent Rede option in your payment settings.', 'woo-rede'); ?>
+            <?php echo wp_kses($working_text, array('strong' => array())); ?>
+        </p>
+        <p>
+            <?php esc_html_e('If you use the MaxiPago payment gateway, we ask that you migrate to the Rede gateways.', 'woo-rede'); ?>
         </p>
         <p class="lkn-rede-notice__actions">
             <a class="button button-secondary" href="<?php echo esc_url($settings_url); ?>"><?php esc_html_e('Go to payment settings', 'woo-rede'); ?></a>

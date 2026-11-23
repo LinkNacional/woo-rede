@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Integration Rede Itaú for WooCommerce — Payment PIX, "
 "Credit Card and Debit\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woo-rede\n"
-"POT-Creation-Date: 2026-11-23T13:22:07+00:00\n"
+"POT-Creation-Date: 2026-11-23T13:27:25+00:00\n"
 "PO-Revision-Date: 2020-08-17 03:33+0000\n"
 "Last-Translator: \n"
 "Language-Team: Português do Brasil\n"
@@ -3700,7 +3700,7 @@ msgstr ""
 "ou superior). Atualize-o para evitar falhas na configuração e na finalização."
 
 #: Includes/LknIntegrationRedeForWoocommerceProUpdateNotice.php:364
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:50
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:57
 msgid "Dismiss this notice."
 msgstr "Dispensar este aviso."
 
@@ -5439,7 +5439,7 @@ msgid "Dismiss this notice"
 msgstr "Dispensar este aviso"
 
 #. translators: %s: the gateway name MaxiPago, shown in bold.
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:23
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:22
 #, php-format
 msgid ""
 "The %s gateway is no longer available in this plugin. Rede ended this "
@@ -5448,31 +5448,36 @@ msgstr ""
 "O gateway %s não está mais disponível neste plugin. A Rede encerrou este "
 "serviço de pagamento em 15 de outubro de 2026."
 
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:36
+#. translators: %s: the words "Rede payments", shown in bold.
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:28
+#, php-format
+msgid ""
+"%s by credit card, debit card, PIX and Google Pay keep working normally."
+msgstr ""
+"%s por cartão de crédito, cartão de débito, PIX e Google Pay continuam "
+"funcionando normalmente."
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:29
+msgid "Rede payments"
+msgstr "Os pagamentos da Rede"
+
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:41
 msgid "MaxiPago gateway"
 msgstr "Gateway MaxiPago"
 
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:37
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:42
 msgid "Removed"
 msgstr "Removido"
 
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:43
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:51
 msgid ""
-"Payments by credit card, debit card, PIX and Google Pay keep working "
-"normally."
+"If you use the MaxiPago payment gateway, we ask that you migrate to the Rede "
+"gateways."
 msgstr ""
-"Os pagamentos por cartão de crédito, cartão de débito, PIX e Google Pay "
-"continuam funcionando normalmente."
+"Caso utilize o gateway de pagamento MaxiPago, solicitamos que migre para os "
+"gateways da Rede."
 
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:44
-msgid ""
-"If you were using MaxiPago at checkout, choose the equivalent Rede option in "
-"your payment settings."
-msgstr ""
-"Se você usava o MaxiPago no checkout, escolha a opção equivalente da Rede "
-"nas configurações de pagamento."
-
-#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:47
+#: Includes/views/notices/lkn-integration-rede-for-woocommerce-notice-maxipago-removed.php:54
 msgid "Go to payment settings"
 msgstr "Ir para as configurações de pagamento"
 
@@ -5499,6 +5504,13 @@ msgstr "% de juros"
 #: Public/LknIntegrationRedeForWoocommercePublic.php:103
 msgid "Loading price..."
 msgstr "Carregando preço..."
+
+#~ msgid ""
+#~ "If you were using MaxiPago at checkout, choose the equivalent Rede option "
+#~ "in your payment settings."
+#~ msgstr ""
+#~ "Se você usava o MaxiPago no checkout, escolha a opção equivalente da Rede "
+#~ "nas configurações de pagamento."
 
 #~ msgid ""
 #~ "Your store keeps working normally with the Rede gateways (credit, debit, "

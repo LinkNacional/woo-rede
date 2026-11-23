@@ -57,6 +57,7 @@ if (! function_exists('is_admin')) {
     function esc_attr_e($text, $domain = null) { echo esc_attr($text); }
     function __($text, $domain = null) { return $text; }
     function wp_kses($text, $allowed = array()) { return $text; }
+    function esc_html__($text, $domain = null) { return htmlspecialchars((string) $text, ENT_QUOTES); }
     function wp_enqueue_style($handle = '', ...$rest) { $GLOBALS['lkn_queued'][] = 'style:' . $handle; }
     function wp_enqueue_script($handle = '', ...$rest) { $GLOBALS['lkn_queued'][] = 'script:' . $handle; }
     function wp_send_json_success($data = null) {
@@ -196,11 +197,13 @@ check('usa o padrao de aviso do woo-better (gif + nome + selo)', false !== strpo
 check('titulo traz o gateway no formato pedido', false !== strpos($html, 'Integration Rede Itaú for WooCommerce - MaxiPago gateway'));
 check('avisa que o gateway nao esta mais disponivel (tom neutro, sem cobranca)', false !== strpos($html, 'gateway is no longer available in this plugin'));
 check('nome MaxiPago em negrito', false !== strpos($html, '<strong>MaxiPago</strong>'));
-check('usa linguagem simples em vez de "gateways da Rede seguem disponiveis"', false !== strpos($html, 'Payments by credit card, debit card, PIX and Google Pay keep working normally'));
+check('destaca "Rede payments" em negrito', false !== strpos($html, '<strong>Rede payments</strong>'));
+check('lista as formas de pagamento que continuam funcionando', false !== strpos($html, 'by credit card, debit card, PIX and Google Pay keep working normally'));
 check('nao usa a frase de cobranca (as previously announced)', false === stripos($html, 'as previously announced'));
 check('lembra o encerramento da plataforma pela Rede (15/10/2026)', false !== strpos($html, 'October 15, 2026'));
-check('lista as formas de pagamento que continuam funcionando', false !== strpos($html, 'credit card, debit card, PIX and Google Pay'));
-check('diz o que fazer se usava o maxipago (linguagem simples)', false !== strpos($html, 'choose the equivalent Rede option in your payment settings'));
+
+check('orienta a migracao em tom formal', false !== strpos($html, 'we ask that you migrate to the Rede gateways'));
+check('nao usa o tom informal antigo', false === strpos($html, 'If you were using MaxiPago at checkout'));
 check('botao com rotulo simples', false !== strpos($html, 'Go to payment settings'));
 check('leva para a tela de configuracoes de pagamento (sem section)', false !== strpos($html, 'page=wc-settings&amp;tab=checkout') && false === strpos($html, 'section='));
 check('dismiss com data-action e nonce', false !== strpos($html, 'data-dismissible="lkn-rede-maxipago-removed"') && false !== strpos($html, 'data-action="lkn_rede_dismiss_maxipago_removed"') && false !== strpos($html, 'data-nonce="nonce-'));
