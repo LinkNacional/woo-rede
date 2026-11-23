@@ -30,6 +30,9 @@ jobs:
         run: |
           mkdir -p build/${{ env.PLUGIN_NAME }}
           mv ./Admin ./Includes ./languages ./Public *.php *.txt ./build/${{ env.PLUGIN_NAME }}
+          # FREE: o pacote leva apenas o .po. O .mo é gerado pelo poedit e as
+          # traduções vêm do language pack do WordPress.org (translate.wordpress.org).
+          rm -f ./build/${{ env.PLUGIN_NAME }}/languages/*.mo
           cp -r vendor build/${{ env.PLUGIN_NAME }}/vendor
           find ./build -type f -exec chmod 0644 {} +
           find ./build -type d -exec chmod 0755 {} +
