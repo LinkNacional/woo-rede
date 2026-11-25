@@ -1,0 +1,1041 @@
+# Translation of Plugins - Rede Itaú for WooCommerce — Payment PIX, Credit Card and Debit - Stable Readme (latest release) in Portuguese (Brazil)
+# This file is distributed under the same license as the Plugins - Rede Itaú for WooCommerce — Payment PIX, Credit Card and Debit - Stable Readme (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-11-23 18:20:03+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: GlotPress/4.1.0\n"
+"Language: pt_BR\n"
+"Project-Id-Version: Plugins - Rede Itaú for WooCommerce — Payment PIX, Credit Card and Debit - Stable Readme (latest release)\n"
+
+#. Found in description paragraph.
+#, gp-priority: high
+msgid "Payment Gateway for Rede Itaú for WooCommerce - PIX, Credit Card and Debit Cards."
+msgstr "Gateway de Pagamento para Rede Itaú para WooCommerce - PIX, Cartão de Crédito e Cartões de Débito."
+
+#. Plugin name.
+#, gp-priority: high
+msgid "Rede Itaú for WooCommerce — Payment PIX, Credit Card and Debit"
+msgstr "Rede Itaú para WooCommerce - Pagamento PIX, Cartão de Crédito e Débito"
+
+#. Screenshot description.
+msgid "Rede payment list"
+msgstr "Lista de pagamentos da rede"
+
+#. Found in description paragraph.
+msgid ""
+"Try Integration Rede Itaú for <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> — Payment PIX, Credit Card and Debit Today!<br>\n"
+"Enhance your <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> store with a reliable, secure, and feature-rich payment gateway. Start accepting payments with credit cards, debit cards, and PIX today!"
+msgstr ""
+"Experimente a Integração Rede Itaú para o <a href=\\\"https://www.linknacional.com.br/wordpress/woocommerce/\\\">WooCommerce</a> — Pagamento PIX, Cartão de Crédito e Cartão de Débito Hoje!<br>\n"
+"Aprimore sua loja <a href=\\\"https://www.linknacional.com.br/wordpress/woocommerce/\\\">WooCommerce</a> com um gateway de pagamento confiável, seguro e cheio de recursos. Inicie a aceitação de pagamentos com cartões de crédito, cartões de débito e PIX hoje!"
+
+#. Found in description paragraph.
+msgid "For any issues or questions, visit our support page or open a ticket on the <a href=\"https://www.linknacional.com.br/wordpress/\">WordPress</a> plugin repository."
+msgstr "Para quaisquer problemas ou perguntas, visite nossa página de suporte ou abra um ticket no repositório do <a href=\"https://www.linknacional.com.br/wordpress/\">plugin</a> do WordPress."
+
+#. Found in description paragraph.
+msgid ""
+"Go to <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> → Settings → Payments.<br>\n"
+"Select Rede as your payment gateway and enter the required credentials:"
+msgstr ""
+"Vá para <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> → Configurações → Pagamentos.<br>\n"
+"Selecione Rede como sua operadora de pagamento e digite as credenciais obrigatórias:"
+
+#. Found in description paragraph.
+msgid ""
+"** Recommended Plugins **\n"
+"* <a href=\"https://wordpress.org/plugins/invoice-payment-for-woocommerce/\">Link Invoice Payment for WooCommerce</a> - Integrate custom payment methods and offer invoice-based payments in your <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> store.\n"
+"* <a href=\"https://wordpress.org/plugins/woo-better-shipping-calculator-for-brazil/\">Shipping Calculator for Brazil</a> - Provide accurate freight calculation for Brazilian addresses directly in your <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> checkout."
+msgstr ""
+"**Plugins Recomendados**\n"
+"* <a href=\"https://wordpress.org/plugins/invoice-payment-for-woocommerce/\">Link Invoice Payment for WooCommerce</a> - Integre métodos de pagamento personalizados e ofereça pagamentos baseados em fatura na sua <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a>.\n"
+"* <a href=\"https://wordpress.org/plugins/woo-better-shipping-calculator-for-brazil/\">Shipping Calculator for Brazil</a> - Forneça um cálculo de frete preciso para endereços no Brasil diretamente na finalização de compra da sua <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a>."
+
+#. Found in description list item.
+msgid "Visual Fields Editor: Preview and customize each field label/placeholder per layout (PRO)."
+msgstr "Editor de Campos de Visualização: pré-visualize e personalize cada rótulo/conteúdo de marcação do campo por layout (PRO)."
+
+#. Found in description list item.
+msgid "Compact &amp; Modern Layouts: Choose between basic, modern and compact checkout templates."
+msgstr "Layouts compactos e modernos: escolha entre modelos de finalização de compra básicos, modernos e compactos."
+
+#. Found in description list item.
+msgid "Google Pay: Accept quick and secure payments with Google Pay."
+msgstr "Google Pay: Aceite pagamentos rápidos e seguros com o Google Pay."
+
+#. Found in description list item.
+msgid "Refunds and Captures: Manage refunds and payment captures directly from your <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> dashboard."
+msgstr "Reembolsos e capturas: gerencie reembolsos e capturas de pagamento diretamente no seu painel do <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a>."
+
+#. Found in description list item.
+msgid "Easy Integration: Works seamlessly with <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> and <a href=\"https://www.linknacional.com.br/wordpress/\">WordPress</a>."
+msgstr "Integração fácil: Funciona perfeitamente com <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> e <a href=\"https://www.linknacional.com.br/wordpress/\">WordPress</a>."
+
+#. Found in faq paragraph.
+msgid ""
+"Q: Is the plugin compatible with the latest <a href=\"https://www.linknacional.com.br/wordpress/\">WordPress</a> version?<br>\n"
+"A: Yes — tested up to <a href=\"https://www.linknacional.com.br/wordpress/\">WordPress</a> 6.8."
+msgstr ""
+"Q: O plugin é compatível com a versão mais recente do <a href=\"https://www.linknacional.com.br/wordpress/\">WordPress</a>?<br>\n"
+"A: Sim — testado até o <a href=\"https://www.linknacional.com.br/wordpress/\">WordPress</a> 6.8."
+
+#. Found in faq paragraph.
+msgid ""
+"Q: Can I process refunds through the plugin?<br>\n"
+"A: Yes, refunds can be processed directly from the <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> admin dashboard."
+msgstr ""
+"Q: Posso processar reembolsos pelo plugin?<br>\n"
+"A: Sim, os reembolsos podem ser processados diretamente do painel administrativo do <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a>."
+
+#. Found in faq paragraph.
+msgid ""
+"Q: What do I need to use this plugin?<br>\n"
+"A: You need to have the <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> plugin installed and activated."
+msgstr ""
+"Q: O que eu preciso para usar este plugin?<br>\n"
+"A: Você precisa ter o plugin <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce</a> instalado e ativado."
+
+#. Found in installation list item.
+msgid "Activate the plugin in the <a href=\"https://www.linknacional.com.br/wordpress/\">WordPress</a> admin dashboard under Plugins."
+msgstr "Ative o Plugin no painel de administração do <a href=\"https://www.linknacional.com.br/wordpress/\">WordPress</a> em Plugins."
+
+#. Found in description paragraph.
+msgid "The external libraries and APIs used by this plugin (Google Pay, Rede) are provided by trusted and established payment platforms. These services handle sensitive payment data in accordance with industry security standards and privacy regulations. For more information about data handling and privacy, please refer to the documentation of each service or contact plugin support."
+msgstr "As bibliotecas externas e APIs usadas por este Plugin (Google Pay, Rede) são fornecidas por plataformas de pagamento confiáveis e estabelecidas. Esses serviços lidam com dados de pagamento sensíveis de acordo com padrões de segurança do setor e regulamentos de privacidade. Para mais informações sobre tratamento de dados e privacidade, consulte a documentação de cada serviço ou entre em contato com o suporte do plugin."
+
+#. Found in description paragraph.
+msgid "This plugin utilizes the following external libraries/services:"
+msgstr "Este plugin utiliza as seguintes bibliotecas/serviços externos:"
+
+#. Found in description list item.
+msgid "<strong>Rede API</strong>: Used to process credit, debit, and PIX payments through the Rede gateway. For details, see the <a href=\"https://developer.userede.com.br/e-rede\">Rede API documentation</a>."
+msgstr "<strong>Rede API</strong>: Usada para processar pagamentos com cartão de crédito, débito e PIX através da Rede. Para mais detalhes, consulte a <a href=\"https://developer.userede.com.br/e-rede\">documentação da Rede API</a>."
+
+#. Found in description list item.
+msgid "<strong>Google Pay API</strong>: Integrates Google Pay as a payment method, allowing customers to pay quickly and securely. For more information, visit the <a href=\"https://developers.google.com/pay/api/web\">Google Pay API documentation</a> and the <a href=\"https://payments.developers.google.com/terms/sellertos\">Terms of Service</a>."
+msgstr "<strong>API do Google Pay</strong>: Integra o Google Pay como um método de pagamento, permitindo que os clientes paguem de forma rápida e segura. Para mais informações, visite a <a href=\"https://developers.google.com/pay/api/web\">documentação da API do Google Pay</a> e os <a href=\"https://payments.developers.google.com/terms/sellertos\">Termos de Serviço</a>."
+
+#. Found in description header.
+msgid "External Libraries"
+msgstr "Bibliotecas Externas"
+
+#. Found in description header.
+msgid "Why Choose Integration Rede Itaú for WooCommerce — Payment PIX, Credit Card and Debit?"
+msgstr "Por que escolher a integração da Rede Itaú para WooCommerce - Pagamentos com PIX, Cartão de Crédito e Débito?"
+
+#. Found in description paragraph.
+msgid "Note: Do not hardcode credentials in source files. Use the plugin settings or environment-safe methods."
+msgstr "Nota: Não insira credenciais diretamente nos arquivos de origem. Utilize as configurações do plugin ou métodos seguros para o ambiente."
+
+#. Found in description paragraph.
+msgid "Configure additional options like installments, 3DS authentication, and logging. Save your settings."
+msgstr "Configure opções adicionais como parcelamento, autenticação 3DS e registro. Salve suas configurações."
+
+#. Found in description paragraph.
+msgid "[youtube https://www.youtube.com/watch?v=g8IA3QUiV8o]"
+msgstr "[youtube https://www.youtube.com/watch?v=g8IA3QUiV8o]"
+
+#. Found in description paragraph.
+msgid "<a href=\"https://www.linknacional.com.br/wordpress/\">WordPress</a>  Integration <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/rede/\">Rede for WooCommerce plugin</a> is the ultimate solution for enabling secure and efficient payment options in your online store with <a href=\"https://www.userede.com.br/\">Rede</a>. With support for credit cards, debit cards, and PIX payments, this plugin empowers your business to offer a seamless checkout experience. Whether you want to enable installment payments, tokenized card storage for returning customers, or 3DS authentication, this plugin has you covered."
+msgstr "A integração do <a href=\"https://www.linknacional.com.br/wordpress/\">WordPress</a> <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/rede/\">plugin Rede para WooCommerce</a> é a solução definitiva para habilitar opções de pagamento seguras e eficientes na sua loja on-line com <a href=\"https://www.userede.com.br/\">Rede</a>. Com suporte a pagamentos por cartão de crédito, cartão de débito e PIX, este plugin capacita seu negócio a oferecer uma experiência de checkout sem complicações. Quer você queira ativar pagamentos parcelados, armazenamento de cartão com token para clientes recorrentes ou autenticação 3DS, este plugin atende tudo isso."
+
+#. Found in description list item.
+msgid "Rede: PV and Token"
+msgstr "Rede: PV e Token"
+
+#. Found in description list item.
+msgid "Detailed Logs: Debug and troubleshoot with comprehensive logging."
+msgstr "Registros detalhados: Depurar e resolver problemas com registros abrangentes."
+
+#. Found in description list item.
+msgid "Webhooks: Stay updated with real-time payment notifications."
+msgstr "Webhooks: Mantenha-se atualizado com notificações de pagamento em tempo real."
+
+#. Found in description list item.
+msgid "3DS Authentication: Ensure secure transactions with strong customer authentication."
+msgstr "Autenticação 3DS: Garantir transações seguras com autenticação forte do cliente."
+
+#. Found in description list item.
+msgid "Installment Plans: Allow customers to split payments into manageable installments."
+msgstr "Planos de Parcelamento: Permita aos clientes dividir os pagamentos em parcelas gerenciáveis."
+
+#. Found in description list item.
+msgid "PIX Payments: Enable instant bank transfers with PIX."
+msgstr "Pagamentos PIX: Ativar transferências bancárias instantâneas com o PIX."
+
+#. Found in description list item.
+msgid "Credit and Debit Card Payments: Accept payments from major card brands like Visa, Mastercard, Elo, and more."
+msgstr "Pagamentos com Cartão de Crédito e Débito: Aceite pagamentos das principais bandeiras de cartão como Visa, Mastercard, Elo e muito mais."
+
+#. Found in description list item.
+msgid "Sandbox Mode: Test transactions in a secure environment before going live."
+msgstr "Modo de Teste: Teste transações em um ambiente seguro antes de ir ao ar."
+
+#. Found in description list item.
+msgid "Customizable: Configure payment settings to match your business needs."
+msgstr "Personalizado: Configure as configurações de pagamento de acordo com as necessidades do seu negócio."
+
+#. Found in description list item.
+msgid "Tokenization: Save card details securely for returning customers."
+msgstr "Tokenização: Salvar detalhes do cartão de forma segura para clientes que retornam."
+
+#. Found in description list item.
+msgid "Secure Transactions: Includes 3DS authentication and advanced fraud prevention."
+msgstr "Transações Seguras: Inclui autenticação 3DS e prevenção avançada de fraudes."
+
+#. Found in description list item.
+msgid "Installments: Offer flexible installment plans to your customers."
+msgstr "Parcelas: Ofereça planos de parcelamento flexíveis aos seus clientes."
+
+#. Found in description list item.
+msgid "Multiple Payment Options: Accept payments via credit cards, debit cards, and PIX."
+msgstr "Opções de Pagamento Múltiplas: Aceite pagamentos via cartões de crédito, cartões de débito e PIX."
+
+#. Found in description header.
+msgid "Support"
+msgstr "Suporte"
+
+#. Found in description header.
+msgid "Configuration"
+msgstr "Configuração"
+
+#. Found in description header.
+msgid "Features at a Glance"
+msgstr "Recursos Disponíveis"
+
+#. Found in description header.
+msgid "Transform Your WooCommerce Store with Seamless Payments with PIX and Debit and credit card"
+msgstr "Transforme sua loja WooCommerce com pagamentos sem emendas com PIX e cartão de débito e crédito."
+
+#. Found in faq paragraph.
+msgid ""
+"Q: Is 3DS authentication supported?<br>\n"
+"A: Yes, the plugin supports 3DS authentication for secure transactions."
+msgstr ""
+"Q: A autenticação 3DS é suportada?<br>\n"
+"A: Sim, o plugin oferece suporte à autenticação 3DS para transações seguras."
+
+#. Found in faq paragraph.
+msgid ""
+"Q: Can I test the plugin before going live?<br>\n"
+"A: Yes — the plugin includes a Sandbox Mode for testing transactions."
+msgstr ""
+"Q: Posso testar o plugin antes de entrar no ar? <br>  \n"
+"A: Sim — o plugin inclui um Modo Sandbox para testar transações."
+
+#. Found in faq paragraph.
+msgid ""
+"Q: Does the plugin support installment payments?<br>\n"
+"A: Yes, you can configure installment options directly in the plugin settings."
+msgstr ""
+"Q: O plugin oferece suporte a pagamentos parcelados?<br>\n"
+"A: Sim, você pode configurar as opções de parcelamento diretamente nas configurações do plugin.”"
+
+#. Found in faq paragraph.
+msgid ""
+"Q: What is the license of the plugin?<br>\n"
+"A: This plugin is released under the GPLv3 license."
+msgstr ""
+"Q: Qual é a licença do plugin?<br>  \n"
+"A: Este plugin é lançado sob a licença GPLv3."
+
+#. Found in installation list item.
+msgid ""
+"Run:\n"
+"    <code>bash\n"
+"wp plugin activate integration-rede-for-woocommerce</code>"
+msgstr ""
+"Execute:\n"
+"    <code>bash\n"
+"wp plugin activate integration-rede-for-woocommerce</code>"
+
+#. Found in installation list item.
+msgid "Upload the plugin folder to <code>wp-content/plugins/</code>."
+msgstr "Enviar a pasta do plugin para <code>wp-content/plugins/</code>."
+
+#. Found in installation list item.
+msgid "Upload the extracted folder to <code>wp-content/plugins/</code>."
+msgstr "Enviar a pasta extraída para <code>wp-content/plugins/</code>."
+
+#. Found in installation list item.
+msgid "Extract the plugin ZIP file."
+msgstr "Extrair o arquivo ZIP do plugin."
+
+#. Found in installation list item.
+msgid "Go to <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">WooCommerce plugin</a>  → Settings → Payments to configure the plugin."
+msgstr "Acesse <a href=\"https://www.linknacional.com.br/wordpress/woocommerce/\">plugin WooCommerce</a> → Configurações → Pagamentos para configurar o plugin."
+
+#. Found in installation list item.
+msgid "Click Install Now and then Activate."
+msgstr "Clique em Instalar Agora e então Ativar."
+
+#. Found in installation list item.
+msgid "Click Upload Plugin and select the <code>integration-rede-for-woocommerce-master.zip</code> file."
+msgstr "Clique em Enviar Plugin e selecione o arquivo <code>integration-rede-for-woocommerce-master.zip</code>."
+
+#. Found in installation list item.
+msgid "Navigate to Plugins → Add New."
+msgstr "Navegue até Plugins → Adicionar Novo."
+
+#. Found in installation header.
+msgid "3. WP-CLI Installation"
+msgstr "3. Instalação do WP-CLI"
+
+#. Found in installation header.
+msgid "2. Manual Installation via FTP"
+msgstr "2. Instalação Manual via FTP"
+
+#. Found in installation header.
+msgid "1. Using the WordPress Admin Dashboard (Recommended)"
+msgstr "1. Utilizando o Painel de Administração do WordPress (Recomendado)"
+
+#. Screenshot description.
+msgid "Rede Debit settings page"
+msgstr "Página de configurações de débito da rede"
+
+#. Screenshot description.
+msgid "Rede Credit front page (legacy) with installments"
+msgstr "Página inicial da Rede de Crédito (legado) com parcelas"
+
+#. Screenshot description.
+msgid "Rede Credit front inputs page"
+msgstr "Página de entrada da frente de entrada da Rede de Crédito"
+
+#. Screenshot description.
+msgid "Rede Credit settings page"
+msgstr "Página de configurações da Rede de Crédito"
+
+#. Screenshot description.
+msgid "Payment methods list"
+msgstr "Lista de métodos de pagamento"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix: the Apple Pay gateway (<code>rede_apple_pay</code>, shipped by the PRO plugin) is now part of the FREE plugin lists — the gateway settings screen layout, the order note prefix, the MCC information block below the PV field, and the two JavaScript section lists used by the admin (the Link Nacional card and the PRO fields notice). Without it the new gateway screen was missing the card and the MCC block."
+msgstr "Correção: o gateway do Apple Pay (<code>rede_apple_pay</code>, enviado pelo plugin PRO) agora faz parte das listas do plugin GRÁTIS — o layout da tela de configurações do gateway, o prefixo da observação do pedido, o bloco de informações do MCC abaixo do campo PV e as duas listas da seção de JavaScript usadas pelo administrador (o cartão Link Nacional e o aviso dos campos PRO). Sem isso, a nova tela do gateway estava sem o cartão e o bloco de MCC."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Removed: the MaxiPago deprecation notice, its settings screens, checkout scripts, styles, webhook endpoint and translations are gone along with the gateways."
+msgstr "Removido: o aviso de descontinuação do MaxiPago, suas telas de configurações, scripts de finalização de compra, estilos, endpoint do webhook e traduções foram removidos junto com as gateways."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Removed: the MaxiPago gateways (credit and debit) were removed from the plugin. Rede discontinued the MaxiPago platform on 2026-10-15, so only the Rede gateways (credit, debit, PIX, Google Pay and Apple Pay) remain supported. Stores that still used MaxiPago must migrate to the Rede gateways."
+msgstr "Removido: as gateways MaxiPago (crédito e débito) foram removidas do plugin. A Rede descontinuou a plataforma MaxiPago em 2026-10-15, portanto apenas as gateways da Rede (crédito, débito, PIX, Google Pay e Apple Pay) permanecem suportadas. As lojas que ainda usavam a MaxiPago devem migrar para as gateways da Rede."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.5.7 - 2026-11-19"
+msgstr "5.5.7 - 19/11/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.6.0 - 2026-11-23"
+msgstr "5.6.0 - 23/11/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "New: informational block about the card brand monitoring programs (MCC) below the PV field description, in the credit, debit, PIX and Google Pay gateways. Activities such as pharmacies, tobacco stores, lotteries, skill games, cyberlockers, financial trading platforms and P2P transactions require registration with Visa, Mastercard and/or Amex; without it Rede declines the transaction and the problem is not in the plugin."
+msgstr "Novo: bloco informativo sobre os programas de monitoramento da marca do cartão (MCC) abaixo da descrição do campo PV, nos gateways de crédito, débito, PIX e Google Pay. Atividades como farmácias, casas de apostas, loterias, jogos de habilidade, cyberlockers, plataformas de negociação financeira e transações P2P exigem cadastro com a Visa, Mastercard e/ou Amex; sem isso, a Rede recusa a transação e o problema não está no plugin."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "New: admin notice about the MaxiPago shutdown. Rede discontinued the MaxiPago platform on 2026-10-15 and only the Rede gateways (credit, debit, PIX and Google Pay) keep receiving support and updates, so the plugin's maxiPago gateways will be removed on 2026-11-23. The warning is shown once, only for stores with maxiPago credentials saved, and can be dismissed."
+msgstr "Novo: aviso do administrador sobre o encerramento do MaxiPago. A Rede descontinuou a plataforma MaxiPago em 2026-10-15 e apenas as gateways da Rede (crédito, débito, PIX e Google Pay) continuam recebendo suporte e atualizações; portanto, as gateways do plugin do maxiPago serão removidas em 2026-11-23. O aviso é mostrado uma vez, apenas para lojas com credenciais do maxiPago salvas, e pode ser dispensado."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.5.6 - 2026-11-18"
+msgstr "5.5.6 - 18/11/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix: same nonce failure in the Rede Debit and maxiPago Credit/Debit gateways."
+msgstr "Correção: mesma falha de nonce nos gateways Rede Débito e maxiPago Crédito/Débito."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix: the payment was not sent to Rede when the customer created an account during checkout (guest checkout disabled). WooCommerce logs the customer in mid-request, which invalidated the gateway form nonce, so the gateway aborted silently — the order stayed pending and the page only reloaded. The nonce is now accepted in both contexts, and a genuinely expired session shows a message to the customer."
+msgstr "Correção: o pagamento não foi enviado à Rede quando o cliente criou uma conta durante a finalização de compra (finalização de compra como convidado desativada). O WooCommerce efetua login do cliente no meio da solicitação, o que invalidou o nonce do formulário do gateway; por isso, o gateway foi encerrado sem aviso — o pedido permaneceu como pendente e a página apenas recarregou. Agora, o nonce é aceito nos dois contextos, e uma sessão realmente expirada mostra uma mensagem ao cliente."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.5.5 - 2026-10-20"
+msgstr "5.5.5 - 2026-10-20"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix: the checkout animated card no longer throws a console error when the <code>jquery.card</code> library is loaded by another gateway (e.g. Cielo) while the Rede animation is disabled."
+msgstr "Correção: o cartão animado de finalização de compra não gera mais um erro no console quando a biblioteca <code>jquery.card</code> é carregada por outro gateway (por exemplo, Cielo) enquanto a animação Rede está desativada."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "New: \"Show animated card\" option in the Rede Credit gateway, allowing the animated card to be toggled on/off at checkout (previously it was always displayed)."
+msgstr "Novo: opção “Mostrar cartão animado” no gateway Rede Credit, permitindo alternar (ativado/desativado) o cartão animado na finalização de compra (anteriormente ele era sempre exibido)."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.5.4 - 2026-10-13"
+msgstr "5.5.4 - 13/10/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Security: the 3D Secure failure webhook no longer skips its authenticity check when the <code>tid</code> parameter is missing; the request is rejected unless the transaction is validated server-to-server against the Rede API."
+msgstr "Segurança: o webhook de falha do 3D Secure não ignora mais a verificação de autenticidade quando o parâmetro <code>tid</code> está ausente; a solicitação é rejeitada a menos que a transação seja validada server-to-server com a API da Rede."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Security: the maxiPago debit webhook now validates the transaction server-to-server against the maxiPago Reports API before changing an order status (it previously trusted the unsigned notification body)."
+msgstr "Segurança: o webhook de débito do maxiPago agora valida a transação de servidor para servidor na API de Relatórios do maxiPago antes de alterar o status de um pedido (antes, ele confiava no corpo da notificação sem assinatura)."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.5.3 - 2026-10-09"
+msgstr "5.5.3 - 09/10/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix: the card gateways (Rede Credit, Maxipago Credit and Maxipago Debit) no longer reject cards with a valid future expiration date (MM/YY was parsed as day/month by the legacy strtotime check; now they use the same month/year rule already applied to Debit)."
+msgstr "Correção: as passarelas de pagamento do cartão (Rede Credit, Maxipago Credit e Maxipago Debit) não rejeitam mais cartões com uma data de validade futura válida (MM/YY era interpretado como dia/mês pela validação legada do strtotime; agora elas usam a mesma regra de mês/ano já aplicada ao Debit)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix: the \"Update PRO plugin\" button no longer interferes with another LKN gateway when both are active (JS global and click handler isolated per plugin)."
+msgstr "Correção: o botão de \"atualização do plugin PRO\" não interfere mais com outro gateway LKN quando ambos estão ativos (JS global e handler de clique isolados por plugin)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix: the close button (✕) of the PRO update screen now permanently dismisses the follow-up notice."
+msgstr "Correção: o botão fechar (✕) da tela de atualização PRO agora dispensa permanentemente o aviso de acompanhamento."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix: infinite redirect loop (ERR_TOO_MANY_REDIRECTS) when another LKN plugin also opens its onboarding screen in the same request."
+msgstr "Correção: loop infinito de redirecionamento (ERR_TOO_MANY_REDIRECTS) quando outro plugin LKN também abre sua tela de onboarding na mesma solicitação."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.5.2 - 2026-10-05"
+msgstr "5.5.2 - 05/10/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Tweak: updated WhatsApp support group link and PRO notification metadata cleanup on uninstall."
+msgstr "Ajuste: atualização do link do grupo de suporte do WhatsApp e limpeza dos metadados de notificação PRO na desinstalação."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Tweak: success/error card on the PRO plugin update screen and removal of third-party notices."
+msgstr "Ajuste: cartão de sucesso/erro na tela de atualização do Plugin PRO e remoção de avisos de terceiros."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix: debit card expiration date (MM/YY) is now validated correctly, avoiding false \"expired\" errors for future dates."
+msgstr "Correção: a data de expiração do cartão de débito (MM/YY) agora é validada corretamente, evitando erros falsos de “expirado” para datas futuras."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.5.1 - 2026-10-01"
+msgstr "5.5.1 - 01/10/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Adjustment: standardized fields and finish-order button; gray input placeholders."
+msgstr "Ajuste: campos padronizados e botão de finalização do pedido; placeholders de entrada cinza."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Added: layout images per checkout type, with gallery enlargement (WordPress lightbox)."
+msgstr "Adicionado: imagens de layout por tipo de finalização de compra, com ampliação na Galeria (WordPress lightbox)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Added: \"Fields\" visual editor with checkout preview per type (Blocks/Shortcode) and per-layout label/placeholder editing (PRO)."
+msgstr "Adicionado: editor visual de campos com pré-visualização da finalização de compra por tipo (Blocos/Shortcode) e por edição de rótulo/conteúdo de marcação do layout (PRO)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Added: compact debit layout (shortcode and Blocks) and compact template option (basic/modern/compact)."
+msgstr "Adicionado: layout de débito compacto (shortcode e Blocos) e opção de modelo compacto (básico/moderno/compacto)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Adjustment: WhatsApp support and license validation buttons also shown on the free plan (decorative)."
+msgstr "Ajuste: botões de suporte do WhatsApp e validação de licença também exibidos no plano gratuito (decorativos)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Adjustment: dynamic display of interest/discount and installment limit (real and demonstration fields)."
+msgstr "Ajuste: exibição dinâmica de juros/desconto e limite de parcelas (campos real e demonstração)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Adjustment: card type restriction is now a PRO feature (without a license, accepts credit and debit)."
+msgstr "Ajuste: a restrição do tipo de cartão agora é um recurso PRO (sem licença, aceita crédito e débito)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Added: PRO features replicated as demonstration fields (PRO badge) on the free plan, with notice and without saving to the real options."
+msgstr "Adicionado: recursos PRO replicados como campos de demonstração (badge PRO) no plano gratuito, com aviso e sem salvar nas opções reais."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Tweak: Analytics texts adjusted for translation."
+msgstr "Ajuste: textos de análise ajustados para tradução."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Adjustment: Gateway logs updated to comply with ABECS standards."
+msgstr "Ajuste: registros do gateway atualizados para cumprir as normas da ABECS."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.5.0 - 2026-09-29"
+msgstr "5.5.0 - 29/09/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix: 3DS webhook security validation failure now redirects to checkout and adds an order note."
+msgstr "Correção: A validação de segurança do webhook 3DS falhou; agora redireciona para a finalização de compra e adiciona uma observação do pedido."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Adjustment: Cards not enrolled in 3D Secure (returnCode 204) are retried without 3DS when \"Continue without 3DS\" is enabled."
+msgstr "Ajuste: cartões não inscritos no 3D Secure (returnCode 204) são reenviados sem 3DS quando \"Continuar sem 3DS\" é ativado."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix: 3D Secure challenge cancellation/timeout now declines the transaction (onFailure always \"decline\")."
+msgstr "Correção: agora o cancelamento/timeout do desafio do 3D Secure rejeita a transação (onFailure sempre “decline”)."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.4.10 - 2026-08-26"
+msgstr "5.4.10 - 26/08/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Tweak: Webhook route validation."
+msgstr "Tweak: validação de rota do webhook."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.4.9 - 2026-08-17"
+msgstr "5.4.9 - 17/08/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Adjustment: Updated the notification text when detecting a frictionless 3DS payment."
+msgstr "Ajuste: Atualização do texto da notificação ao detectar um pagamento 3DS sem atrito."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.4.8 - 2026-08-14"
+msgstr "5.4.8 - 14/08/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Security: Server-to-server validation added to PIX FREE webhook (redePixListenerLegacy) to prevent unauthenticated webhook forgery."
+msgstr "Segurança: Validação de servidor para servidor adicionada ao webhook do PIX FREE (redePixListenerLegacy) para evitar falsificação de webhook não autenticada."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.4.7 - 2026-08-10"
+msgstr "5.4.7 - 10/08/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Component sanitization adjustment."
+msgstr "Ajuste de sanitização do componente."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.4.6 - 2026-07-28"
+msgstr "5.4.6 - 28/07/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix for duplicate payment attempt."
+msgstr "Correção para tentativa de pagamento duplicada."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.4.5 - 2026-07-28"
+msgstr "5.4.5 - 28/07/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Migrating order cancellation hook to PRO version."
+msgstr "Conectando o gancho de cancelamento de ordem migrada para a versão PRO."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix in error log logic for 3DS transactions."
+msgstr "Correção na lógica do registro de erros para transações 3DS."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix in order status update logic."
+msgstr "Correção na lógica de atualização do status na ordem."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix in custom order notes logic."
+msgstr "Correção na lógica das notas de pedidos personalizados."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.4.2 - 2026/05/21"
+msgstr "5.4.2 - 21/05/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.4.3 - 2026/05/28"
+msgstr "5.4.3 - 28/05/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.4.4 - 2026/06/03"
+msgstr "5.4.4 - 03/06/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fixed antifraud plugin notification."
+msgstr "Notificação do plugin antifraude corrigida."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "New spreadsheet export system (PRO)."
+msgstr "Novo sistema de exportação de planilhas (PRO)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Change in Order ID field type: Text -&gt; Link."
+msgstr "Alteração do tipo de campo do ID do pedido: Texto -&gt; Link."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix in installments with coupon."
+msgstr "Correção em parcelas com cupom."
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.0.2 - 2025/09/05"
+msgstr "4.0.2 - 05/09/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.0.3 - 2025/09/12"
+msgstr "4.0.3 - 12/09/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.0.4 - 2025/09/15"
+msgstr "4.0.4 - 15/09/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.0.5 - 2025/09/15"
+msgstr "4.0.5 - 15/09/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.0.6 - 2025/09/15"
+msgstr "4.0.6 - 15/09/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.0.7 - 2025/09/19"
+msgstr "4.0.7 - 19/09/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.0.8 - 2025/09/22"
+msgstr "4.0.8 - 22/09/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.0.9 - 2025/10/09"
+msgstr "4.0.9 - 09/10/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.1.0 - 2025/10/08"
+msgstr "4.1.0 - 08/10/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.1.1 - 2025/11/04"
+msgstr "4.1.1 - 04/11/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.1.2 - 2025/10/08"
+msgstr "4.1.2 - 08/10/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.1.3 - 2025/11/05"
+msgstr "4.1.3 - 05/11/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.1.4 - 2025/11/07"
+msgstr "4.1.4 - 2025/11/07"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.1.5 - 2025/11/14"
+msgstr "4.1.5 - 14/11/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.1.6 - 2025/11/24"
+msgstr "4.1.6 - 24/11/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.1.7 - 2025/11/24"
+msgstr "4.1.7 - 24/11/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.1.8 - 2025/11/24"
+msgstr "4.1.8 - 24/11/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "4.1.9 - 2025/11/25"
+msgstr "4.1.9 - 25/11/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.0.0 - 2025/11/26"
+msgstr "5.0.0 - 26/11/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.1.0 - 2025/12/04"
+msgstr "5.1.0 - 04/12/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.1.1 - 2025/12/30"
+msgstr "5.1.1 - 30/12/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.1.2 - 2025/12/07"
+msgstr "5.1.2 - 07/12/2025"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.1.3 - 2026/01/16"
+msgstr "5.1.3 - 16/01/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.1.4 - 2026/01/19"
+msgstr "5.1.4 - 19/01/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.1.5 - 2026/01/26"
+msgstr "5.1.5 - 26/01/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.1.6 - 2026/01/28"
+msgstr "5.1.6 – 28/01/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.1.7 - 2026/01/30"
+msgstr "5.1.7 - 30/01/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.2.0 - 2026/02/12"
+msgstr "5.2.0 - 12/02/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.3.0 - 2026/02/24"
+msgstr "5.3.0 - 24/02/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.3.1 - 2026/03/09"
+msgstr "5.3.1 - 09/03/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.3.2 - 2026/03/16"
+msgstr "5.3.2 - 16/03/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.3.3 - 2026/03/16"
+msgstr "5.3.3 - 16/03/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.4.0 - 2026/03/27"
+msgstr "5.4.0 - 27/03/2026"
+
+#. Found in changelog header.
+#, gp-priority: low
+msgid "5.4.1 - 2026/04/24"
+msgstr "5.4.1 - 24/04/2026"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fixed undefined variables $order_currency and $orderId in the Rede credit payment method."
+msgstr "Corrigidas variáveis indefinidas $order_currency e $orderId no método de pagamento de crédito da Rede."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fixed required field detection on configuration page."
+msgstr "Correção na detecção de campo obrigatório na página de configuração."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Addition of the network icon."
+msgstr "Adição do ícone da rede."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Addition of the new Google Pay payment method."
+msgstr "Adição do novo método de pagamento Google Pay."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "NEW Credentials submission system for support."
+msgstr "NOVO sistema de envio de credenciais para o suporte."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "NEW Rede transactions table."
+msgstr "NOVA tabela de transações da Rede."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Addition of reference field to order notes."
+msgstr "Adição de campo de referência às notas do pedido."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Added changelog link to plugin page."
+msgstr "Adicionado link do changelog à página do plugin."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fixed security vulnerability in logs deletion endpoint."
+msgstr "Corrigida vulnerabilidade de segurança no endpoint de exclusão de logs."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix order reference variable size."
+msgstr "Corrigido o tamanho da variável de referência do pedido."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix in card brand retrieval in order notes."
+msgstr "Correção na recuperação da bandeira do cartão nas notas do pedido."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix for errors found by WordPress."
+msgstr "Correção de erros encontrados pelo WordPress."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "3DS launch."
+msgstr "Lançamento do 3DS."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "New cron system linked to the PRO version of the plugin."
+msgstr "Novo sistema de cron vinculado à versão PRO do plugin."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "New 3DS request system for Rede debit transactions."
+msgstr "Novo sistema de solicitação de 3DS para transações de débito na Rede."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fixed installment display when payment is cash/upfront."
+msgstr "Exibição de parcela corrigida quando o pagamento é à vista."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Automatic installment reset on cart changes."
+msgstr "Redefinição automática de parcelamento ao alterar o carrinho."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "JavaScript script optimization for better performance."
+msgstr "Otimização de script JavaScript para um melhor desempenho."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Cron system for automatic PIX payment verification."
+msgstr "Sistema Cron para verificação automática de pagamento PIX."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Improvement in installment labels."
+msgstr "Melhoria nos rótulos de parcelamento."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "New Rede API request system (V2)."
+msgstr "Novo sistema de solicitação da API Rede (V2)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fixed minimum installment value."
+msgstr "Valor mínimo da parcela corrigido."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fixed minimum installment value calculation."
+msgstr "Correção no cálculo do valor mínimo da parcela."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fixed installment select when choosing a new shipping option."
+msgstr "Corrigido a seleção da parcela ao escolher uma nova opção de envio."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix in installment select generation."
+msgstr "Correção na geração de seleção de parcelas."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Adjustment in final payment installment calculation."
+msgstr "Ajuste no cálculo da última parcela de pagamento."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Adjustment in product installment limit."
+msgstr "Ajuste no limite de parcelamento do produto."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix plugin images."
+msgstr "Corrigir imagens do plugin."
+
+#. Found in changelog paragraph.
+#, gp-priority: low
+msgid "... (previous changelog entries retained) ..."
+msgstr "... (entradas anteriores do registro de alterações mantidas) ..."
+
+#. Found in faq paragraph.
+#, gp-priority: low
+msgid ""
+"Q: How do I enable logging for debugging?<br>\n"
+"A: Enable logging in the plugin settings under the Advanced tab."
+msgstr ""
+"Q: Como habilito o registro para depurar?<br>\n"
+"A: Ative o registro nas configurações do plugin na aba Avançado."
+
+#. Found in faq paragraph.
+#, gp-priority: low
+msgid ""
+"Q: What payment methods are supported?<br>\n"
+"A: Credit cards, debit cards, and PIX payments."
+msgstr ""
+"Q: Quais métodos de pagamento são suportados? <br>  \n"
+"A: Cartões de crédito, cartões de débito e pagamentos via PIX."
+
+#. Found in faq paragraph.
+#, gp-priority: low
+msgid ""
+"Q: Does the plugin support tokenization?<br>\n"
+"A: Yes, the plugin allows you to save card details securely for returning customers."
+msgstr ""
+"Q: O plugin suporta tokenização?<br>  \n"
+"A: Sim, o plugin permite que você salve os dados do cartão com segurança para clientes recorrentes."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "New custom configuration attributes."
+msgstr "Novos atributos de configuração personalizados."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix installment calculation in shortcode form."
+msgstr "Corrigir cálculo de parcelas no formulário shortcode."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "More detailed descriptions in the settings."
+msgstr "Descrições mais detalhadas nas configurações."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "New style for gateway settings."
+msgstr "Novo estilo para configurações do gateway."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix in tax calculation for installments."
+msgstr "Correção no cálculo de impostos para parcelas."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix in icons display."
+msgstr "Correção na exibição dos ícones."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix in version release."
+msgstr "Correção na versão de lançamento."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix in the PIX route."
+msgstr "Corrija na rota do PIX."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Plugin icon in the gateway settings."
+msgstr "Ícone do plugin nas configurações do gateway."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix in the plugin's textdomain."
+msgstr "Corrija no textdomain do plugin."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Update to the sales links."
+msgstr "Atualize os links de vendas."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix refund function."
+msgstr "Corrija a função de reembolso."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fixed the endpoint for the PIX verification route."
+msgstr "Corrigido o endpoint para a rota de verificação do PIX."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fixed payment refunds."
+msgstr "Reembolsos de pagamento corrigidos."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Fix installment values update."
+msgstr "Atualização dos valores das parcelas corrigidos."

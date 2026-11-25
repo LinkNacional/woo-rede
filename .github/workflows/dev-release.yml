@@ -67,11 +67,10 @@ jobs:
         mkdir -p dist
         mkdir -p build/${{ env.PLUGIN_NAME }}
         mv ./Admin ./Includes ./languages ./Public *.php *.txt ./build/${{ env.PLUGIN_NAME }}
-        # FREE: o pacote leva apenas o .po. O .mo e o .pot ficam só no
-        # repositório (controle de versão + insumo de tradução); no pacote e no
-        # envio ao WordPress.org as traduções vêm do language pack oficial.
-        rm -f ./build/${{ env.PLUGIN_NAME }}/languages/*.mo
-        rm -f ./build/${{ env.PLUGIN_NAME }}/languages/*.pot
+        # O pacote leva apenas o .pot. O .po e o .mo ficam só no repositório
+        # (controle de versão + insumo de tradução); no pacote e no envio ao
+        # WordPress.org as traduções vêm do language pack oficial.
+        rm -f ./build/${{ env.PLUGIN_NAME }}/languages/*.po ./build/${{ env.PLUGIN_NAME }}/languages/*.mo
         cp -r vendor ./build/${{ env.PLUGIN_NAME }}/vendor
         find ./build -type f -exec chmod 0644 {} +
         find ./build -type d -exec chmod 0755 {} +
