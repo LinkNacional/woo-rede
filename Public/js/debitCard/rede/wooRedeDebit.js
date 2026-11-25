@@ -70,7 +70,9 @@ window.jQuery(function ($) {
     if (redeCreditInstallmentSelect && redeCreditInstallmentSelect.value !== '1') {
       redeCreditInstallmentSelect.value = '1';
     }
-    
+  }
+
+  function lknRedeDebitCardRender() {
     if (!document.querySelector('.wc-block-checkout')) {
       // Cria o card somente quando a requisição for concluida
       let $form = $('.woocommerce .woocommerce-checkout')

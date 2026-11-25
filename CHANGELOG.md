@@ -1,3 +1,8 @@
+# 5.6.1 - 25/11/26
+* Correção: os juros do parcelamento ficavam travados na taxa de 1x nos gateways Rede Crédito e Rede Débito, qualquer que fosse a parcela escolhida. Ao remover o maxiPago na 5.6.0 saíram o `}` de `resetInstallmentSelects()` e a declaração de `lknRedeDebitCardRender()` em `wooRedeDebit.js` (e de `lknRedeCreditCardRender()` em `wooRedeCredit.js`); o script morria com `ReferenceError` antes de registrar o listener da parcela, então a sessão nunca era atualizada. Agora a troca de parcela volta a gravar a sessão e o checkout aplica a taxa correta de 1x a 12x.
+* Novo: cobertura de testes para o parcelamento dos dois gateways (JS executando os arquivos reais em DOM simulado e PHP validando o contrato do AJAX `lkn_update_installment_session`), além do workflow que roda a suíte em push e pull request.
+* Ajuste: o pacote `.zip` e o envio ao WordPress.org passam a levar apenas o `.pot`; `.po` e `.mo` continuam versionados no repositório.
+
 # 5.6.0 - 23/11/26
 * Remoção: os gateways maxiPago (crédito e débito) saem do plugin. A Rede encerrou a plataforma em 15/10/2026, então só os gateways da Rede (crédito, débito, PIX, Google Pay e Apple Pay) seguem com suporte. Lojas que ainda usavam maxiPago precisam migrar para os gateways da Rede.
 * Remoção: junto com os gateways, saem o aviso de descontinuação, as telas de configuração, os scripts e estilos de checkout, o webhook `maxipagoDebitListener` e as strings de tradução correspondentes.

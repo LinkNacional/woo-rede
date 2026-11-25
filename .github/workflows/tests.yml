@@ -1,0 +1,41 @@
+name: Tests
+
+on:
+  push:
+    branches-ignore:
+      - pre-release
+  pull_request:
+
+jobs:
+  js:
+    name: JS (Node)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Rodar testes de JavaScript
+        run: |
+          for f in tests/js/*.test.js; do
+            echo "== $f"
+            node "$f"
+          done
+
+  php:
+    name: PHP
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+      - name: Composer install
+        run: composer install --no-interaction --ignore-platform-reqs
+      - name: Rodar testes de PHP
+        run: |
+          for f in tests/php/*.test.php; do
+            echo "== $f"
+            php "$f"
+          done
