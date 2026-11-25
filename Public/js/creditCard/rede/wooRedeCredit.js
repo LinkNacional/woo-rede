@@ -28,7 +28,9 @@ window.jQuery(function ($) {
     if (redeInstallmentSelect && redeInstallmentSelect.value !== '1') {
       redeInstallmentSelect.value = '1';
     }
-    
+  }
+
+  function lknRedeCreditCardRender() {
     // Não carrega para formulário em bloco
     if (!document.querySelector('.wc-block-checkout')) {
       // Verifica se é página de fatura ou se é página de checkout
