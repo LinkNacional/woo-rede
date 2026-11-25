@@ -5,7 +5,7 @@ Donate link: https://www.linknacional.com/wordpress/plugins/
 Tags: rede, pix, cartao credito, itau, pagamento  
 Requires at least: 6.0
 Tested up to: 7.1  
-Stable tag: 5.6.0
+Stable tag: 5.6.1
 Requires PHP: 8.2
 License: GPL-3.0+  
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -126,6 +126,10 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Changelog ==
+
+### 5.6.1 - 2026-11-25
+* Fixed: installment interest was locked to the 1x rate on the Rede Credit and Rede Debit gateways, regardless of the installment chosen. Removing MaxiPago in 5.6.0 also removed the closing `}` of `resetInstallmentSelects()` and the `lknRedeDebitCardRender()` declaration in `wooRedeDebit.js` (and `lknRedeCreditCardRender()` in `wooRedeCredit.js`), so the script died before registering the installment listener and the session was never updated. Switching installments now updates the session again and checkout applies the correct 1x to 12x rate.
+* New: test coverage for installments on both gateways, plus the workflow that runs the suite on push and pull request.
 
 ### 5.6.0 - 2026-11-23
 * Removed: the MaxiPago gateways (credit and debit) were removed from the plugin. Rede discontinued the MaxiPago platform on 2026-10-15, so only the Rede gateways (credit, debit, PIX, Google Pay and Apple Pay) remain supported. Stores that still used MaxiPago must migrate to the Rede gateways.
@@ -336,6 +340,9 @@ A: Yes — tested up to [WordPress](https://www.linknacional.com.br/wordpress/) 
 ---
 
 == Upgrade Notice ==
+
+### 5.6.1 - 2026-11-25
+* Fixes installments being charged at the 1x interest rate on the Rede Credit and Rede Debit gateways. Update to restore the correct rate for every installment.
 
 ### 5.6.0 - 2026-11-23
 * The MaxiPago gateways were removed. Migrate any store still using MaxiPago credit/debit to the Rede gateways before updating.
